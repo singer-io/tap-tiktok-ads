@@ -97,6 +97,9 @@ env.sh
 config.json
 .autoenv.zsh
 
+# PyCharm idea folder
+.idea/
+
 rsa-key
 tags
 singer-check-tap-data
