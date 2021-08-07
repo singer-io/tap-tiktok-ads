@@ -7,7 +7,7 @@ from singer.catalog import Catalog, CatalogEntry
 from singer.schema import Schema
 
 
-REQUIRED_CONFIG_KEYS = ["start_date", "username", "password"]
+REQUIRED_CONFIG_KEYS = ["start_date", "user_agent", "access_token", "accounts"]
 LOGGER = singer.get_logger()
 
 
