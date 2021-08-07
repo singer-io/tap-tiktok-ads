@@ -6,6 +6,7 @@ from singer import utils, metadata
 from singer.catalog import Catalog, CatalogEntry
 from singer.schema import Schema
 
+from tap_tiktok_ads.client import TikTokClient
 
 REQUIRED_CONFIG_KEYS = ["start_date", "user_agent", "access_token", "accounts"]
 LOGGER = singer.get_logger()
@@ -93,18 +94,29 @@ def main():
     # Parse command line arguments
     args = utils.parse_args(REQUIRED_CONFIG_KEYS)
 
-    # If discover flag was passed, run discovery mode and dump output to stdout
-    if args.discover:
-        catalog = discover()
-        catalog.dump()
-    # Otherwise run in sync mode
-    else:
-        if args.catalog:
-            catalog = args.catalog
-        else:
-            catalog = discover()
-        sync(args.config, args.state, catalog)
+    with TikTokClient(access_token=args.config['access_token'],
+                      user_agent=args.config['user_agent']) as client:
+        # Test request for client
+        params = {
+            "access_token": args.config['access_token'],
+            "app_id": "xxx",
+            "secret": "xxx"
+        }
+        response = client.get(url="https://ads.tiktok.com/open_api/v1.2/oauth2/advertiser/get/",
+                              params=params)
+        print(json.dumps(response, indent=2))
 
+        # If discover flag was passed, run discovery mode and dump output to stdout
+        if args.discover:
+            catalog = discover()
+            catalog.dump()
+        # Otherwise run in sync mode
+        else:
+            if args.catalog:
+                catalog = args.catalog
+            else:
+                catalog = discover()
+            sync(args.config, args.state, catalog)
 
 if __name__ == "__main__":
     main()
