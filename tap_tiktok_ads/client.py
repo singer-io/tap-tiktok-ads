@@ -1,4 +1,5 @@
 import json
+from urllib.parse import urlencode
 
 import requests
 import singer
@@ -65,6 +66,11 @@ class TikTokClient:
         kwargs['headers']['Access-Token'] = self.__access_token
         kwargs['headers']['Accept'] = 'application/json'
 
+        query = ''
+        if 'params' in kwargs:
+            query = '?' + urlencode(kwargs['params'])
+            kwargs['params'] = {}
+
         if self.__user_agent:
             kwargs['headers']['User-Agent'] = self.__user_agent
 
@@ -72,7 +78,7 @@ class TikTokClient:
             kwargs['headers']['Content-Type'] = 'application/json'
 
         with metrics.http_request_timer(endpoint) as timer:
-            response = self.__session.request(method, url, **kwargs)
+            response = self.__session.request(method, url + path + query, **kwargs)
             timer.tags[metrics.Tag.http_status_code] = response.status_code
 
         if response.status_code != 200:

@@ -1,16 +1,18 @@
 #!/usr/bin/env python3
 import os
 import json
+
+import requests
 import singer
 from singer import utils, metadata
 from singer.catalog import Catalog, CatalogEntry
 from singer.schema import Schema
+from urllib.parse import urlencode
 
 from tap_tiktok_ads.client import TikTokClient
 
 REQUIRED_CONFIG_KEYS = ["start_date", "user_agent", "access_token", "accounts"]
 LOGGER = singer.get_logger()
-
 
 def get_abs_path(path):
     return os.path.join(os.path.dirname(os.path.realpath(__file__)), path)
@@ -97,26 +99,43 @@ def main():
     with TikTokClient(access_token=args.config['access_token'],
                       user_agent=args.config['user_agent']) as client:
         # Test request for client
-        params = {
-            "access_token": args.config['access_token'],
-            "app_id": "xxx",
-            "secret": "xxx"
+        headers = {
+            "Access-Token": "***REMOVED***"
         }
-        response = client.get(url="https://ads.tiktok.com/open_api/v1.2/oauth2/advertiser/get/",
+        params = {
+            "advertiser_id": 6812549881069043718,
+            "service_type": "AUCTION",
+            "report_type": "BASIC",
+            "data_level": "AUCTION_ADVERTISER",
+            "dimensions": """[
+                "advertiser_id",
+                "stat_time_day"
+            ]""",
+            "metrics": '["impressions","clicks","spend"]',
+            "start_date": "2020-05-01",
+            "end_date": "2020-05-30",
+            "page": 1,
+            "page_size": 5
+        }
+
+        response = client.get(url="https://ads.tiktok.com/open_api/v1.2/",
+                              path="reports/integrated/get/",
+                              headers=headers,
                               params=params)
+
         print(json.dumps(response, indent=2))
 
         # If discover flag was passed, run discovery mode and dump output to stdout
-        if args.discover:
-            catalog = discover()
-            catalog.dump()
-        # Otherwise run in sync mode
-        else:
-            if args.catalog:
-                catalog = args.catalog
-            else:
-                catalog = discover()
-            sync(args.config, args.state, catalog)
+        # if args.discover:
+        #     catalog = discover()
+        #     catalog.dump()
+        # # Otherwise run in sync mode
+        # else:
+        #     if args.catalog:
+        #         catalog = args.catalog
+        #     else:
+        #         catalog = discover()
+        #     sync(args.config, args.state, catalog)
 
 if __name__ == "__main__":
     main()
