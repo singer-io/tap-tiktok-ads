@@ -1,0 +1,231 @@
+{
+  "type": [
+    "null",
+    "object"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "ad_id": {
+      "type": [
+        "null",
+        "number"
+      ]
+    },
+    "ad_name": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "adgroup_id": {
+      "type": [
+        "null",
+        "number"
+      ]
+    },
+    "adgroup_name": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "campaign_id": {
+      "type": [
+        "null",
+        "number"
+      ]
+    },
+    "campaign_name": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "spend": {
+      "type": [
+        "null",
+        "number"
+      ]
+    },
+    "cpc": {
+      "type": [
+        "null",
+        "number"
+      ]
+    },
+    "cpm": {
+      "type": [
+        "null",
+        "number"
+      ]
+    },
+    "impressions": {
+      "type": [
+        "null",
+        "integer"
+      ]
+    },
+    "clicks": {
+      "type": [
+        "null",
+        "integer"
+      ]
+    },
+    "ctr": {
+      "type": [
+        "null",
+        "number"
+      ]
+    },
+    "reach": {
+      "type": [
+        "null",
+        "integer"
+      ]
+    },
+    "cost_per_100_reached": {
+      "type": [
+        "null",
+        "number"
+      ]
+    },
+    "conversion": {
+      "type": [
+        "null",
+        "integer"
+      ]
+    },
+    "cost_per_conversion": {
+      "type": [
+        "null",
+        "number"
+      ]
+    },
+    "conversion_rate": {
+      "type": [
+        "null",
+        "number"
+      ]
+    },
+    "real_time_conversion": {
+      "type": [
+        "null",
+        "integer"
+      ]
+    },
+    "real_time_cost_per_conversion": {
+      "type": [
+        "null",
+        "number"
+      ]
+    },
+    "real_time_conversion_rate": {
+      "type": [
+        "null",
+        "number"
+      ]
+    },
+    "result": {
+      "type": [
+        "null",
+        "integer"
+      ]
+    },
+    "cost_per_result": {
+      "type": [
+        "null",
+        "number"
+      ]
+    },
+    "result_rate": {
+      "type": [
+        "null",
+        "number"
+      ]
+    },
+    "real_time_result": {
+      "type": [
+        "null",
+        "integer"
+      ]
+    },
+    "real_time_cost_per_result": {
+      "type": [
+        "null",
+        "number"
+      ]
+    },
+    "real_time_result_rate": {
+      "type": [
+        "null",
+        "number"
+      ]
+    },
+    "secondary_goal_result": {
+      "type": [
+        "null",
+        "integer"
+      ]
+    },
+    "cost_per_secondary_goal_result": {
+      "type": [
+        "null",
+        "number"
+      ]
+    },
+    "secondary_goal_result_rate": {
+      "type": [
+        "null",
+        "number"
+      ]
+    },
+    "frequency": {
+      "type": [
+        "null",
+        "number"
+      ]
+    },
+    "profile_visits": {
+      "type": [
+        "null",
+        "integer"
+      ]
+    },
+    "profile_visits_rate": {
+      "type": [
+        "null",
+        "number"
+      ]
+    },
+    "likes": {
+      "type": [
+        "null",
+        "integer"
+      ]
+    },
+    "comments": {
+      "type": [
+        "null",
+        "integer"
+      ]
+    },
+    "shares": {
+      "type": [
+        "null",
+        "integer"
+      ]
+    },
+    "follows": {
+      "type": [
+        "null",
+        "integer"
+      ]
+    },
+    "clicks_on_music_disc": {
+      "type": [
+        "null",
+        "integer"
+      ]
+    }
+  }
+}
