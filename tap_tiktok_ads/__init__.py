@@ -1,55 +1,31 @@
 #!/usr/bin/env python3
-import os
 import json
 
-import requests
 import singer
-from singer import utils, metadata
+from singer import utils, Schema
 from singer.catalog import Catalog, CatalogEntry
-from singer.schema import Schema
-from urllib.parse import urlencode
 
 from tap_tiktok_ads.client import TikTokClient
+from tap_tiktok_ads.schemas import get_schemas, STREAMS
 
-REQUIRED_CONFIG_KEYS = ["start_date", "user_agent", "access_token", "accounts"]
+REQUIRED_CONFIG_KEYS = ['start_date', 'user_agent', 'access_token', 'accounts']
 LOGGER = singer.get_logger()
 
-def get_abs_path(path):
-    return os.path.join(os.path.dirname(os.path.realpath(__file__)), path)
-
-
-def load_schemas():
-    """ Load schemas from schemas folder """
-    schemas = {}
-    for filename in os.listdir(get_abs_path('schemas')):
-        path = get_abs_path('schemas') + '/' + filename
-        file_raw = filename.replace('.json', '')
-        with open(path) as file:
-            schemas[file_raw] = Schema.from_dict(json.load(file))
-    return schemas
-
-
 def discover():
-    raw_schemas = load_schemas()
+    schemas, field_metadata = get_schemas()
     streams = []
-    for stream_id, schema in raw_schemas.items():
+    for stream_name, raw_schema in schemas.items():
         # TODO: populate any metadata and stream's key properties here..
-        stream_metadata = []
-        key_properties = []
+        schema = Schema.from_dict(raw_schema)
+        mdata = field_metadata[stream_name]
+
         streams.append(
             CatalogEntry(
-                tap_stream_id=stream_id,
-                stream=stream_id,
+                tap_stream_id=stream_name,
+                stream=stream_name,
                 schema=schema,
-                key_properties=key_properties,
-                metadata=stream_metadata,
-                replication_key=None,
-                is_view=None,
-                database=None,
-                table=None,
-                row_count=None,
-                stream_alias=None,
-                replication_method=None,
+                key_properties=STREAMS[stream_name]['key_properties'],
+                metadata=mdata
             )
         )
     return Catalog(streams)
@@ -106,12 +82,49 @@ def main():
             "advertiser_id": 6812549881069043718,
             "service_type": "AUCTION",
             "report_type": "BASIC",
-            "data_level": "AUCTION_ADVERTISER",
+            "data_level": "AUCTION_AD",
             "dimensions": """[
-                "advertiser_id",
+                "ad_id",
                 "stat_time_day"
             ]""",
-            "metrics": '["impressions","clicks","spend"]',
+            "metrics": """[
+                "ad_name",
+                "adgroup_id",
+                "adgroup_name",
+                "campaign_id",
+                "campaign_name",
+                "spend",
+                "cpc",
+                "cpm",
+                "impressions",
+                "clicks",
+                "ctr",
+                "reach",
+                "cost_per_1000_reached",
+                "conversion",
+                "cost_per_conversion",
+                "conversion_rate",
+                "real_time_conversion",
+                "real_time_cost_per_conversion",
+                "real_time_conversion_rate",
+                "result",
+                "cost_per_result",
+                "result_rate",
+                "real_time_result",
+                "real_time_cost_per_result",
+                "real_time_result_rate",
+                "secondary_goal_result",
+                "cost_per_secondary_goal_result",
+                "secondary_goal_result_rate",
+                "frequency",
+                "profile_visits",
+                "profile_visits_rate",
+                "likes",
+                "comments",
+                "shares",
+                "follows",
+                "clicks_on_music_disc"
+            ]""",
             "start_date": "2020-05-01",
             "end_date": "2020-05-30",
             "page": 1,
@@ -126,16 +139,16 @@ def main():
         print(json.dumps(response, indent=2))
 
         # If discover flag was passed, run discovery mode and dump output to stdout
-        # if args.discover:
-        #     catalog = discover()
-        #     catalog.dump()
-        # # Otherwise run in sync mode
-        # else:
-        #     if args.catalog:
-        #         catalog = args.catalog
-        #     else:
-        #         catalog = discover()
-        #     sync(args.config, args.state, catalog)
+        if args.discover:
+            catalog = discover()
+            catalog.dump()
+        # Otherwise run in sync mode
+        else:
+            if args.catalog:
+                catalog = args.catalog
+            else:
+                catalog = discover()
+            sync(args.config, args.state, catalog)
 
 if __name__ == "__main__":
     main()
