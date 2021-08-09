@@ -17,6 +17,13 @@
         "string"
       ]
     },
+    "updated_at": {
+      "type": [
+        "null",
+        "string"
+      ],
+      "format": "date-time"
+    },
     "adgroup_id": {
       "type": [
         "null",
