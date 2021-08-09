@@ -15,7 +15,6 @@ def discover():
     schemas, field_metadata = get_schemas()
     streams = []
     for stream_name, raw_schema in schemas.items():
-        # TODO: populate any metadata and stream's key properties here..
         schema = Schema.from_dict(raw_schema)
         mdata = field_metadata[stream_name]
 
