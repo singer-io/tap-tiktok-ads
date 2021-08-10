@@ -1,6 +1,6 @@
 import json
 import os
-from singer import Schema, metadata
+from singer import metadata
 
 # Reference:
 #   https://github.com/singer-io/getting-started/blob/master/docs/DISCOVERY_MODE.md#Metadata
