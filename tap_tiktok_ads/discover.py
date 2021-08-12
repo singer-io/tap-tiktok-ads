@@ -15,7 +15,7 @@ def discover():
                 tap_stream_id=stream_name,
                 stream=stream_name,
                 schema=schema,
-                key_properties=STREAMS[stream_name]['key_properties'],
+                key_properties=STREAMS[stream_name]['table_key_properties'],
                 metadata=mdata
             )
         )
