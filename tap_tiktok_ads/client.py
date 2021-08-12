@@ -54,6 +54,8 @@ class TikTokClient:
 
         if not url and path:
             url = f'{self.__base_url}/{path}'
+        else:
+            url = f'{url}/{path}'
 
         if 'endpoint' in kwargs:
             endpoint = kwargs['endpoint']
@@ -78,7 +80,7 @@ class TikTokClient:
             kwargs['headers']['Content-Type'] = 'application/json'
 
         with metrics.http_request_timer(endpoint) as timer:
-            response = self.__session.request(method, url + path + query, **kwargs)
+            response = self.__session.request(method, url + query, **kwargs)
             timer.tags[metrics.Tag.http_status_code] = response.status_code
 
         if response.status_code != 200:
