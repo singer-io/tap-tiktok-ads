@@ -7,7 +7,8 @@ from singer import metadata
 
 STREAMS = {
     'auction_ad_reports': {
-        'table_key_properties': ['ad_id', 'adgroup_id', 'campaign_id', 'updated_at']
+        'table_key_properties': ['ad_id', 'adgroup_id', 'campaign_id', 'updated_at'],
+        'valid_replication_keys': ['updated_at']
     }
 }
 
@@ -28,7 +29,7 @@ def get_schemas():
             schema=schema,
             key_properties=stream_metadata.get('table_key_properties', None),
             replication_method=stream_metadata.get('replication_method', None),
-            valid_replication_keys=stream_metadata.get('valid_replication_keys', None,),
+            valid_replication_keys=stream_metadata.get('valid_replication_keys', None,)
         )
         mdata[0]['metadata']['selected'] = "true"
         field_metadata[stream_name] = mdata

@@ -16,6 +16,7 @@ def discover():
                 stream=stream_name,
                 schema=schema,
                 key_properties=STREAMS[stream_name]['table_key_properties'],
+                replication_key=STREAMS[stream_name]['valid_replication_keys'],
                 metadata=mdata
             )
         )
