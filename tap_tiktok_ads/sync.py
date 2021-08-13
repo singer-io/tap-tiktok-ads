@@ -54,7 +54,7 @@ def process_batch(stream, records):
             if bookmark_column:
                 # update bookmark to latest value
                 singer.write_state({stream.tap_stream_id: transformed_record[bookmark_column]})
-                
+
 def sync_with_endpoint(client: TikTokClient, config, state, stream, endpoint_config):
     records = []
     total_records = 0
@@ -124,6 +124,15 @@ def sync(client, config, state, catalog):
                         "cost_per_secondary_goal_result",
                         "secondary_goal_result_rate",
                         "frequency",
+                        "video_play_actions",
+                        "video_watched_2s",
+                        "video_watched_6s",
+                        "average_video_play",
+                        "average_video_play_per_user",
+                        "video_views_p25",
+                        "video_views_p50",
+                        "video_views_p75",
+                        "video_views_p100",
                         "profile_visits",
                         "profile_visits_rate",
                         "likes",
