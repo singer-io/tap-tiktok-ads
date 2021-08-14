@@ -96,6 +96,7 @@ ENV/
 env.sh
 config.json
 .autoenv.zsh
+*.csv
 
 # PyCharm idea folder
 .idea/
