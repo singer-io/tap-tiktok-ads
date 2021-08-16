@@ -40,10 +40,23 @@ def write_bookmark(state, stream, value):
     if 'bookmarks' not in state:
         state['bookmarks'] = {}
 
-    if state['bookmarks'][stream] != value:
+    if (stream in state['bookmarks']) and (state['bookmarks'][stream] != value):
         state['bookmarks'][stream] = value
         LOGGER.info(f'Write state for stream: {stream}, value: {value}')
         singer.write_state(state)
+
+def transform_ad_reports(data):
+    if data['secondary_goal_result'] == '-':
+        data['secondary_goal_result'] = None
+    if data['cost_per_secondary_goal_result'] == '-':
+        data['cost_per_secondary_goal_result'] = None
+    if data['secondary_goal_result_rate'] == '-':
+        data['secondary_goal_result_rate'] = None
+    return data
+
+def pre_transform(stream_name, data):
+    if stream_name == 'auction_ad_reports':
+        return transform_ad_reports(data)
 
 def process_batch(state, stream, records):
     bookmark_column = stream.replication_key[0]
@@ -60,6 +73,8 @@ def process_batch(state, stream, records):
         with Transformer(integer_datetime_fmt=UNIX_MILLISECONDS_INTEGER_DATETIME_PARSING) as transformer:
             usable_data = record['metrics'] | record['dimensions']
             usable_data['updated_at'] = usable_data.pop('stat_time_day')
+
+            usable_data = pre_transform(stream.tap_stream_id, usable_data)
 
             transformed_record = transformer.transform(usable_data, stream.schema.to_dict(),
                                                        metadata.to_map(stream.metadata))
@@ -174,4 +189,4 @@ def sync(client, config, state, catalog):
                     endpoint_config['params']['start_date'] = date_batch['start_date'].date()
                     endpoint_config['params']['end_date'] = date_batch['end_date'].date()
                     sync_with_endpoint(client, config, state, stream, endpoint_config)
-        update_currently_syncing(state, stream.tap_stream_id)
+        update_currently_syncing(state, None)
