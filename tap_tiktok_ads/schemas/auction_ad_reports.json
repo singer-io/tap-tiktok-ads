@@ -168,6 +168,24 @@
         "number"
       ]
     },
+    "secondary_goal_result": {
+      "type": [
+        "null",
+        "integer"
+      ]
+    },
+    "cost_per_secondary_goal_result": {
+      "type": [
+        "null",
+        "number"
+      ]
+    },
+    "secondary_goal_result_rate": {
+      "type": [
+        "null",
+        "number"
+      ]
+    },
     "frequency": {
       "type": [
         "null",
