@@ -30,7 +30,22 @@ def get_date_batches(config):
         return date_batches
     raise ValueError('end_date must not be greater than start_date')
 
-def process_batch(stream, records):
+def update_currently_syncing(state, stream_name):
+    if (stream_name is None) and ('currently_syncing' in state):
+        del state['currently_syncing']
+    else:
+        singer.set_currently_syncing(state, stream_name)
+
+def write_bookmark(state, stream, value):
+    if 'bookmarks' not in state:
+        state['bookmarks'] = {}
+
+    if state['bookmarks'][stream] != value:
+        state['bookmarks'][stream] = value
+        LOGGER.info(f'Write state for stream: {stream}, value: {value}')
+        singer.write_state(state)
+
+def process_batch(state, stream, records):
     bookmark_column = stream.replication_key[0]
     sorted_records = sorted(records, key=lambda x: x['dimensions']['stat_time_day'])
 
@@ -40,7 +55,6 @@ def process_batch(stream, records):
         key_properties=stream.key_properties,
     )
 
-    max_bookmark = None
     for record in sorted_records:
         # TODO: transform secondary-objective fields into correct type
         with Transformer(integer_datetime_fmt=UNIX_MILLISECONDS_INTEGER_DATETIME_PARSING) as transformer:
@@ -53,7 +67,7 @@ def process_batch(stream, records):
             singer.write_record(stream.tap_stream_id, transformed_record)
             if bookmark_column:
                 # update bookmark to latest value
-                singer.write_state({stream.tap_stream_id: transformed_record[bookmark_column]})
+                write_bookmark(state, stream.tap_stream_id, transformed_record[bookmark_column])
 
 def sync_with_endpoint(client: TikTokClient, config, state, stream, endpoint_config):
     records = []
@@ -72,7 +86,7 @@ def sync_with_endpoint(client: TikTokClient, config, state, stream, endpoint_con
             records = records + response['data']['list']
         page = page + 1
 
-    process_batch(stream, records)
+    process_batch(state, stream, records)
 
 def sync(client, config, state, catalog):
     """ Sync data from tap source """
@@ -151,6 +165,7 @@ def sync(client, config, state, catalog):
     # Loop over selected streams in catalog
     for stream in catalog.get_selected_streams(state):
         LOGGER.info("Syncing stream:" + stream.tap_stream_id)
+        update_currently_syncing(state, stream.tap_stream_id)
         endpoint_config = endpoints[stream.tap_stream_id]
         if 'accounts' in config and endpoint_config['req_advertiser_id']:
             for ad_account in config.get('accounts'):
@@ -159,3 +174,4 @@ def sync(client, config, state, catalog):
                     endpoint_config['params']['start_date'] = date_batch['start_date'].date()
                     endpoint_config['params']['end_date'] = date_batch['end_date'].date()
                     sync_with_endpoint(client, config, state, stream, endpoint_config)
+        update_currently_syncing(state, stream.tap_stream_id)
