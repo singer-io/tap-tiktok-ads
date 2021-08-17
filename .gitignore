@@ -95,6 +95,7 @@ ENV/
 # Custom stuff
 env.sh
 config.json
+state.json
 .autoenv.zsh
 *.csv
 
