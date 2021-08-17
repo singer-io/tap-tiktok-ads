@@ -36,7 +36,7 @@ class SyncContext:
             del self.__state['currently_syncing']
         else:
             self.__state = singer.set_currently_syncing(self.__state, stream_name)
-            self.__write_state()
+        self.__write_state()
 
     def __write_bookmark(self, stream, value):
         if 'bookmarks' not in self.__state:
@@ -77,7 +77,7 @@ class SyncContext:
         return data
 
     def __pre_transform(self, stream_name, data):
-        if stream_name == 'auction_ad_reports':
+        if stream_name == 'ad_insights':
             return self.__transform_ad_reports(data)
 
     def __process_batch(self, stream, records):
@@ -128,7 +128,7 @@ class SyncContext:
         date_batches = self.__get_date_batches()
 
         endpoints = {
-            "auction_ad_reports": {
+            "ad_insights": {
                 "path": "reports/integrated/get/",
                 "req_advertiser_id": True,
                 "params": {

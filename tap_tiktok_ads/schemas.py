@@ -6,7 +6,7 @@ from singer import metadata
 #   https://github.com/singer-io/getting-started/blob/master/docs/DISCOVERY_MODE.md#Metadata
 
 STREAMS = {
-    'auction_ad_reports': {
+    'ad_insights': {
         'table_key_properties': ['ad_id', 'adgroup_id', 'campaign_id', 'updated_at'],
         'valid_replication_keys': ['updated_at']
     }
