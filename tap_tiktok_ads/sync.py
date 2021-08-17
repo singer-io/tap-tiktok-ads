@@ -87,7 +87,7 @@ class SyncContext:
         for record in sorted_records:
             with Transformer(integer_datetime_fmt=UNIX_MILLISECONDS_INTEGER_DATETIME_PARSING) as transformer:
                 usable_data = record['metrics'] | record['dimensions']
-                usable_data['updated_at'] = usable_data.pop('stat_time_day')
+                usable_data[bookmark_column] = usable_data.pop('stat_time_day')
 
                 usable_data = self.__pre_transform(stream.tap_stream_id, usable_data)
 
@@ -189,7 +189,7 @@ class SyncContext:
                     "page_size": 50,
                     "lifetime": "false"
                 },
-                "id-fields": ["ad_id", "adgroup_id", "campaign_id", "updated_at"]
+                "id-fields": ["ad_id", "adgroup_id", "campaign_id", "extraction_date"]
             }
         }
 

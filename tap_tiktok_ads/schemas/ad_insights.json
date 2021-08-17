@@ -17,7 +17,7 @@
         "string"
       ]
     },
-    "updated_at": {
+    "extraction_date": {
       "type": [
         "null",
         "string"
