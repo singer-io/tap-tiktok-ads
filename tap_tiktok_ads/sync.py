@@ -9,6 +9,82 @@ from tap_tiktok_ads import TikTokClient
 
 LOGGER = singer.get_logger()
 
+AUCTION_FIELDS = """[
+    "ad_name",
+    "ad_text",
+    "adgroup_id",
+    "adgroup_name",
+    "campaign_id",
+    "campaign_name",
+    "placement",
+    "spend",
+    "cpc",
+    "cpm",
+    "impressions",
+    "clicks",
+    "ctr",
+    "reach",
+    "cost_per_1000_reached",
+    "conversion",
+    "cost_per_conversion",
+    "conversion_rate",
+    "real_time_conversion",
+    "real_time_cost_per_conversion",
+    "real_time_conversion_rate",
+    "result",
+    "cost_per_result",
+    "result_rate",
+    "real_time_result",
+    "real_time_cost_per_result",
+    "real_time_result_rate",
+    "secondary_goal_result",
+    "cost_per_secondary_goal_result",
+    "secondary_goal_result_rate",
+    "frequency",
+    "video_play_actions",
+    "video_watched_2s",
+    "video_watched_6s",
+    "average_video_play",
+    "average_video_play_per_user",
+    "video_views_p25",
+    "video_views_p50",
+    "video_views_p75",
+    "video_views_p100",
+    "profile_visits",
+    "profile_visits_rate",
+    "likes",
+    "comments",
+    "shares",
+    "follows",
+    "clicks_on_music_disc"
+]"""
+
+AUDIENCE_FIELDS = """[
+    "ad_name",
+    "ad_text",
+    "adgroup_id",
+    "adgroup_name",
+    "campaign_id",
+    "campaign_name",
+    "spend",
+    "cpc",
+    "cpm",
+    "impressions",
+    "clicks",
+    "ctr",
+    "conversion",
+    "cost_per_conversion",
+    "conversion_rate",
+    "real_time_conversion",
+    "real_time_cost_per_conversion",
+    "real_time_conversion_rate",
+    "result",
+    "cost_per_result",
+    "result_rate",
+    "real_time_result",
+    "real_time_cost_per_result",
+    "real_time_result_rate"
+]"""
 
 class SyncContext:
     def __init__(self,
@@ -87,6 +163,7 @@ class SyncContext:
     def __pre_transform(self, stream_name, data):
         if stream_name == 'ad_insights':
             return self.__transform_ad_reports(data)
+        return data
 
     def __process_batch(self, stream, records):
         bookmark_column = stream.replication_key[0]
@@ -138,60 +215,32 @@ class SyncContext:
                     "report_type": "BASIC",
                     "data_level": "AUCTION_AD",
                     "dimensions": """[
-                            "ad_id",
-                            "stat_time_day"
-                        ]""",
-                    "metrics": """[
-                            "ad_name",
-                            "adgroup_id",
-                            "adgroup_name",
-                            "campaign_id",
-                            "campaign_name",
-                            "spend",
-                            "cpc",
-                            "cpm",
-                            "impressions",
-                            "clicks",
-                            "ctr",
-                            "reach",
-                            "cost_per_1000_reached",
-                            "conversion",
-                            "cost_per_conversion",
-                            "conversion_rate",
-                            "real_time_conversion",
-                            "real_time_cost_per_conversion",
-                            "real_time_conversion_rate",
-                            "result",
-                            "cost_per_result",
-                            "result_rate",
-                            "real_time_result",
-                            "real_time_cost_per_result",
-                            "real_time_result_rate",
-                            "secondary_goal_result",
-                            "cost_per_secondary_goal_result",
-                            "secondary_goal_result_rate",
-                            "frequency",
-                            "video_play_actions",
-                            "video_watched_2s",
-                            "video_watched_6s",
-                            "average_video_play",
-                            "average_video_play_per_user",
-                            "video_views_p25",
-                            "video_views_p50",
-                            "video_views_p75",
-                            "video_views_p100",
-                            "profile_visits",
-                            "profile_visits_rate",
-                            "likes",
-                            "comments",
-                            "shares",
-                            "follows",
-                            "clicks_on_music_disc"
-                        ]""",
+                        "ad_id",
+                        "stat_time_day"
+                    ]""",
+                    "metrics": AUCTION_FIELDS,
                     "page_size": 50,
                     "lifetime": "false"
                 },
                 "id-fields": ["ad_id", "adgroup_id", "campaign_id", "stat_time_day"]
+            },
+            "ad_insights_by_age_and_gender": {
+                "path": "reports/integrated/get/",
+                "req_advertiser_id": True,
+                "params": {
+                    "service_type": "AUCTION",
+                    "report_type": "AUDIENCE",
+                    "data_level": "AUCTION_AD",
+                    "dimensions": """[
+                        "ad_id",
+                        "age",
+                        "gender",
+                        "stat_time_day"
+                    ]""",
+                    "metrics": AUDIENCE_FIELDS,
+                    "page_size": 200,
+                    "lifetime": "false"
+                }
             }
         }
 
@@ -216,4 +265,4 @@ class SyncContext:
                 endpoint_config['params']['start_date'] = date_batch['start_date'].date().isoformat()
                 endpoint_config['params']['end_date'] = date_batch['end_date'].date().isoformat()
                 self.__sync_with_endpoint(stream, endpoint_config)
-            self.__update_currently_syncing(None)
+        self.__update_currently_syncing(None)

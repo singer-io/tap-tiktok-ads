@@ -9,6 +9,10 @@ STREAMS = {
     'ad_insights': {
         'table_key_properties': ['ad_id', 'adgroup_id', 'campaign_id', 'stat_time_day'],
         'valid_replication_keys': ['stat_time_day']
+    },
+    'ad_insights_by_age_and_gender': {
+        'table_key_properties': ['ad_id', 'adgroup_id', 'campaign_id', 'stat_time_day', 'age', 'gender'],
+        'valid_replication_keys': ['stat_time_day']
     }
 }
 

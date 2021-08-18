@@ -54,7 +54,19 @@
         "string"
       ]
     },
-    "placement": {
+    "age": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "gender": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "user_action": {
       "type": [
         "null",
         "string"
@@ -91,18 +103,6 @@
       ]
     },
     "ctr": {
-      "type": [
-        "null",
-        "number"
-      ]
-    },
-    "reach": {
-      "type": [
-        "null",
-        "integer"
-      ]
-    },
-    "cost_per_100_reached": {
       "type": [
         "null",
         "number"
@@ -178,126 +178,6 @@
       "type": [
         "null",
         "number"
-      ]
-    },
-    "secondary_goal_result": {
-      "type": [
-        "null",
-        "integer"
-      ]
-    },
-    "cost_per_secondary_goal_result": {
-      "type": [
-        "null",
-        "number"
-      ]
-    },
-    "secondary_goal_result_rate": {
-      "type": [
-        "null",
-        "number"
-      ]
-    },
-    "frequency": {
-      "type": [
-        "null",
-        "number"
-      ]
-    },
-    "video_play_actions": {
-      "type": [
-        "null",
-        "integer"
-      ]
-    },
-    "video_watched_2s": {
-      "type": [
-        "null",
-        "integer"
-      ]
-    },
-    "video_watched_6s": {
-      "type": [
-        "null",
-        "integer"
-      ]
-    },
-    "average_video_play": {
-      "type": [
-        "null",
-        "number"
-      ]
-    },
-    "average_video_play_per_user": {
-      "type": [
-        "null",
-        "number"
-      ]
-    },
-    "video_views_p25": {
-      "type": [
-        "null",
-        "integer"
-      ]
-    },
-    "video_views_p50": {
-      "type": [
-        "null",
-        "integer"
-      ]
-    },
-    "video_views_p75": {
-      "type": [
-        "null",
-        "integer"
-      ]
-    },
-    "video_views_p100": {
-      "type": [
-        "null",
-        "integer"
-      ]
-    },
-    "profile_visits": {
-      "type": [
-        "null",
-        "integer"
-      ]
-    },
-    "profile_visits_rate": {
-      "type": [
-        "null",
-        "number"
-      ]
-    },
-    "likes": {
-      "type": [
-        "null",
-        "integer"
-      ]
-    },
-    "comments": {
-      "type": [
-        "null",
-        "integer"
-      ]
-    },
-    "shares": {
-      "type": [
-        "null",
-        "integer"
-      ]
-    },
-    "follows": {
-      "type": [
-        "null",
-        "integer"
-      ]
-    },
-    "clicks_on_music_disc": {
-      "type": [
-        "null",
-        "integer"
       ]
     }
   }
