@@ -1,0 +1,178 @@
+{
+  "type": [
+    "null",
+    "object"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "ad_id": {
+      "type": [
+        "null",
+        "integer"
+      ]
+    },
+    "ad_name": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "ad_text": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "stat_time_day": {
+      "type": [
+        "null",
+        "string"
+      ],
+      "format": "date-time"
+    },
+    "adgroup_id": {
+      "type": [
+        "null",
+        "integer"
+      ]
+    },
+    "adgroup_name": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "campaign_id": {
+      "type": [
+        "null",
+        "integer"
+      ]
+    },
+    "campaign_name": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "country_code": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "user_action": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "spend": {
+      "type": [
+        "null",
+        "number"
+      ]
+    },
+    "cpc": {
+      "type": [
+        "null",
+        "number"
+      ]
+    },
+    "cpm": {
+      "type": [
+        "null",
+        "number"
+      ]
+    },
+    "impressions": {
+      "type": [
+        "null",
+        "integer"
+      ]
+    },
+    "clicks": {
+      "type": [
+        "null",
+        "integer"
+      ]
+    },
+    "ctr": {
+      "type": [
+        "null",
+        "number"
+      ]
+    },
+    "conversion": {
+      "type": [
+        "null",
+        "integer"
+      ]
+    },
+    "cost_per_conversion": {
+      "type": [
+        "null",
+        "number"
+      ]
+    },
+    "conversion_rate": {
+      "type": [
+        "null",
+        "number"
+      ]
+    },
+    "real_time_conversion": {
+      "type": [
+        "null",
+        "integer"
+      ]
+    },
+    "real_time_cost_per_conversion": {
+      "type": [
+        "null",
+        "number"
+      ]
+    },
+    "real_time_conversion_rate": {
+      "type": [
+        "null",
+        "number"
+      ]
+    },
+    "result": {
+      "type": [
+        "null",
+        "integer"
+      ]
+    },
+    "cost_per_result": {
+      "type": [
+        "null",
+        "number"
+      ]
+    },
+    "result_rate": {
+      "type": [
+        "null",
+        "number"
+      ]
+    },
+    "real_time_result": {
+      "type": [
+        "null",
+        "integer"
+      ]
+    },
+    "real_time_cost_per_result": {
+      "type": [
+        "null",
+        "number"
+      ]
+    },
+    "real_time_result_rate": {
+      "type": [
+        "null",
+        "number"
+      ]
+    }
+  }
+}

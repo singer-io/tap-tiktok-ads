@@ -241,6 +241,23 @@ class SyncContext:
                     "page_size": 200,
                     "lifetime": "false"
                 }
+            },
+            "ad_insights_by_country": {
+                "path": "reports/integrated/get/",
+                "req_advertiser_id": True,
+                "params": {
+                    "service_type": "AUCTION",
+                    "report_type": "AUDIENCE",
+                    "data_level": "AUCTION_AD",
+                    "dimensions": """[
+                                "ad_id",
+                                "country_code",
+                                "stat_time_day"
+                            ]""",
+                    "metrics": AUDIENCE_FIELDS,
+                    "page_size": 200,
+                    "lifetime": "false"
+                }
             }
         }
 
