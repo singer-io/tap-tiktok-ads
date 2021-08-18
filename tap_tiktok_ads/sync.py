@@ -191,7 +191,7 @@ class SyncContext:
                     "page_size": 50,
                     "lifetime": "false"
                 },
-                "id-fields": ["ad_id", "adgroup_id", "campaign_id", "extraction_date"]
+                "id-fields": ["ad_id", "adgroup_id", "campaign_id", "stat_time_day"]
             }
         }
 

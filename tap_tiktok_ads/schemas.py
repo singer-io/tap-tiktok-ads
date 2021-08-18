@@ -7,8 +7,8 @@ from singer import metadata
 
 STREAMS = {
     'ad_insights': {
-        'table_key_properties': ['ad_id', 'adgroup_id', 'campaign_id', 'extraction_date'],
-        'valid_replication_keys': ['extraction_date']
+        'table_key_properties': ['ad_id', 'adgroup_id', 'campaign_id', 'stat_time_day'],
+        'valid_replication_keys': ['stat_time_day']
     }
 }
 

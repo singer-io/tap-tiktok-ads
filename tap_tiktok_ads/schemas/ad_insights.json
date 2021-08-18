@@ -17,7 +17,7 @@
         "string"
       ]
     },
-    "extraction_date": {
+    "stat_time_day": {
       "type": [
         "null",
         "string"
