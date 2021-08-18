@@ -22,7 +22,8 @@ class SyncContext:
         self.__catalog = catalog
 
     def __enter__(self):
-        self.__state = {}
+        if self.__state is None:
+            self.__state = {}
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
@@ -47,8 +48,15 @@ class SyncContext:
             LOGGER.info(f'Write state for stream: {stream}, value: {value}')
             self.__write_state()
 
-    def __get_date_batches(self):
-        start_date = parse(self.__config['start_date'])
+    # Each API call to TikTok with a stat_time_day dimension only support a range
+    # of 30 days. Because of this we need to separate the interval between start_date
+    # and end_date into batches of 30 days max.
+    def __get_date_batches(self, stream_id):
+        if ('bookmarks' in self.__state) and (stream_id in self.__state['bookmarks']):
+            start_date = parse(self.__state['bookmarks'][stream_id])
+        else:
+            start_date = parse(self.__config['start_date'])
+
         if 'end_date' in self.__config:
             end_date = parse(self.__config['end_date'])
         else:
@@ -121,12 +129,6 @@ class SyncContext:
 
     def do_sync(self):
         """ Sync data from tap source """
-
-        # Each API call to TikTok with a stat_time_day dimension only support a range
-        # of 30 days. Because of this we need to separate the interval between start_date
-        # and end_date into batches of 30 days max.
-        date_batches = self.__get_date_batches()
-
         endpoints = {
             "ad_insights": {
                 "path": "reports/integrated/get/",
@@ -207,6 +209,8 @@ class SyncContext:
 
             if 'account' in self.__config and endpoint_config['req_advertiser_id']:
                 endpoint_config['params']['advertiser_id'] = self.__config['account']
+
+            date_batches = self.__get_date_batches(stream.tap_stream_id)
 
             for date_batch in date_batches:
                 endpoint_config['params']['start_date'] = date_batch['start_date'].date().isoformat()
