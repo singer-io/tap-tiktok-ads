@@ -17,6 +17,10 @@ STREAMS = {
     'ad_insights_by_country': {
         'table_key_properties': ['ad_id', 'adgroup_id', 'campaign_id', 'stat_time_day', 'country_code'],
         'valid_replication_keys': ['stat_time_day']
+    },
+    'ad_insights_by_platform': {
+        'table_key_properties': ['ad_id', 'adgroup_id', 'campaign_id', 'stat_time_day', 'platform'],
+        'valid_replication_keys': ['stat_time_day']
     }
 }
 

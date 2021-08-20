@@ -105,15 +105,12 @@ class SyncContext:
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.__state = {}
 
-    def __write_state(self):
-        singer.write_state(self.__state)
-
     def __update_currently_syncing(self, stream_name):
         if (stream_name is None) and ('currently_syncing' in self.__state):
             del self.__state['currently_syncing']
         else:
             self.__state = singer.set_currently_syncing(self.__state, stream_name)
-        self.__write_state()
+        singer.write_state(self.__state)
 
     def __write_bookmark(self, stream, value):
         if 'bookmarks' not in self.__state:
@@ -122,7 +119,7 @@ class SyncContext:
         if (stream not in self.__state['bookmarks']) or (self.__state['bookmarks'][stream] != value):
             self.__state['bookmarks'][stream] = value
             LOGGER.info(f'Write state for stream: {stream}, value: {value}')
-            self.__write_state()
+            singer.write_state(self.__state)
 
     # Each API call to TikTok with a stat_time_day dimension only support a range
     # of 30 days. Because of this we need to separate the interval between start_date
@@ -250,10 +247,27 @@ class SyncContext:
                     "report_type": "AUDIENCE",
                     "data_level": "AUCTION_AD",
                     "dimensions": """[
-                                "ad_id",
-                                "country_code",
-                                "stat_time_day"
-                            ]""",
+                        "ad_id",
+                        "country_code",
+                        "stat_time_day"
+                    ]""",
+                    "metrics": AUDIENCE_FIELDS,
+                    "page_size": 200,
+                    "lifetime": "false"
+                }
+            },
+            "ad_insights_by_platform": {
+                "path": "reports/integrated/get/",
+                "req_advertiser_id": True,
+                "params": {
+                    "service_type": "AUCTION",
+                    "report_type": "AUDIENCE",
+                    "data_level": "AUCTION_AD",
+                    "dimensions": """[
+                        "ad_id",
+                        "platform",
+                        "stat_time_day"
+                    ]""",
                     "metrics": AUDIENCE_FIELDS,
                     "page_size": 200,
                     "lifetime": "false"
