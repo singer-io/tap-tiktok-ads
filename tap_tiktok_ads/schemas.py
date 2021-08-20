@@ -11,7 +11,11 @@ STREAMS = {
         'valid_replication_keys': ['modify_time']
     },
     'adgroups': {
-        'table_key_properties': ['campaign_id', 'modify_time'],
+        'table_key_properties': ['campaign_id', 'adgroup_id', 'modify_time'],
+        'valid_replication_keys': ['modify_time']
+    },
+    'ads': {
+        'table_key_properties': ['campaign_id', 'adgroup_id', 'ad_id', 'modify_time'],
         'valid_replication_keys': ['modify_time']
     },
     'ad_insights': {

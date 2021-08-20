@@ -84,6 +84,11 @@ AUDIENCE_FIELDS = """[
     "real_time_cost_per_result",
     "real_time_result_rate"
 ]"""
+ENDPOINT_AD_MANAGEMENT = [
+    'campaigns',
+    'adgroups',
+    'ads'
+]
 ENDPOINT_INSIGHTS = [
     'ad_insights',
     'ad_insights_by_age_and_gender',
@@ -108,10 +113,8 @@ def get_date_batches(start_date, end_date):
 def pre_transform(stream_name, records, bookmark_value):
     if stream_name in ENDPOINT_INSIGHTS:
         return transform_ad_insights_records(records)
-    elif stream_name == 'campaigns':
-        return transform_campaign_records(records, bookmark_value)
-    elif stream_name == 'adgroups':
-        return transform_adgroups_records(records, bookmark_value)
+    elif stream_name in ENDPOINT_AD_MANAGEMENT:
+        return transform_ad_management_records(records, bookmark_value)
     else:
         return records
 
@@ -129,20 +132,12 @@ def transform_ad_insights_records(records):
         transformed_records.append(transformed_record)
     return transformed_records
 
-def transform_campaign_records(records, bookmark_value):
+def transform_ad_management_records(records, bookmark_value):
     transformed_records = []
     for record in records:
         if 'modify_time' not in record:
             record['modify_time'] = record['create_time']
-        if bookmark_value == None or record['modify_time'] > bookmark_value:
-            transformed_records.append(record)
-    return transformed_records
-
-def transform_adgroups_records(records, bookmark_value):
-    transformed_records = []
-    for record in records:
-        if 'modify_time' not in record:
-            record['modify_time'] = record['create_time']
+        # In case of an adgroup request, transform 'is_comment_disabled' type from integer to boolean
         if 'is_comment_disable' in record:
             record['is_comment_disable'] = True if record['is_comment_disable'] == 0 else False
         if bookmark_value == None or record['modify_time'] > bookmark_value:
@@ -248,6 +243,13 @@ class SyncContext:
             },
             "adgroups": {
                 "path": "adgroup/get/",
+                "req_advertiser_id": True,
+                "params": {
+                    "page_size": 1000
+                }
+            },
+            "ads": {
+                "path": "ad/get/",
                 "req_advertiser_id": True,
                 "params": {
                     "page_size": 1000
