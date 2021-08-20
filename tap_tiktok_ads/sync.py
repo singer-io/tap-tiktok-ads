@@ -214,13 +214,23 @@ class SyncContext:
                     # update bookmark to latest value
                     self.__write_bookmark(stream.tap_stream_id, transformed_record[bookmark_column])
 
-    def __sync_with_endpoint(self, stream, endpoint_config):
-        records = []
-        total_records = 0
-        page = 1
+    def __sync_advertisers(self, stream, endpoint_config):
         headers = {
             "Access-Token": self.__config['access_token']
         }
+        response = self.__client.get(path=endpoint_config['path'], headers=headers,
+                                     params=endpoint_config.get('params'))
+        if response['message'] == 'OK':
+            records = response['data']
+            self.__process_batch(stream, records)
+
+    def __sync_pages(self, stream, endpoint_config):
+        headers = {
+            "Access-Token": self.__config['access_token']
+        }
+        records = []
+        total_records = 0
+        page = 1
         while (len(records) < total_records) or (page == 1):
             endpoint_config['params']['page'] = page
             response = self.__client.get(path=endpoint_config['path'], headers=headers,
@@ -231,9 +241,20 @@ class SyncContext:
             page = page + 1
         self.__process_batch(stream, records)
 
+    def __sync_with_endpoint(self, stream, endpoint_config):
+        if stream.tap_stream_id == 'advertisers':
+            self.__sync_advertisers(stream, endpoint_config)
+        else:
+            self.__sync_pages(stream, endpoint_config)
+
     def do_sync(self):
         """ Sync data from tap source """
         endpoints = {
+            "advertisers": {
+                "path": "advertiser/info/",
+                "req_advertiser_id": True,
+                "params": {}
+            },
             "campaigns": {
                 "path": "campaign/get/",
                 "req_advertiser_id": True,
@@ -337,8 +358,12 @@ class SyncContext:
                 key_properties=stream.key_properties,
             )
 
-            if 'account' in self.__config and endpoint_config['req_advertiser_id']:
-                endpoint_config['params']['advertiser_id'] = self.__config['account']
+            #TODO: Loop through an array of advertiser IDs and bookmark them with the other bookmarks
+            if 'accounts' in self.__config and endpoint_config['req_advertiser_id']:
+                if stream.tap_stream_id == 'advertisers':
+                    endpoint_config['params']['advertiser_ids'] = self.__config['accounts']
+                else:
+                    endpoint_config['params']['advertiser_id'] = self.__config['accounts'][0]
 
             if stream.tap_stream_id in ENDPOINT_INSIGHTS:
                 date_batches = self.__get_date_batches(stream.tap_stream_id)

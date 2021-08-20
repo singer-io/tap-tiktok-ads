@@ -6,7 +6,7 @@ from tap_tiktok_ads.client import TikTokClient
 from tap_tiktok_ads.discover import discover
 from tap_tiktok_ads.sync import SyncContext
 
-REQUIRED_CONFIG_KEYS = ['start_date', 'user_agent', 'access_token', 'account']
+REQUIRED_CONFIG_KEYS = ['start_date', 'user_agent', 'access_token', 'accounts']
 LOGGER = singer.get_logger()
 
 
