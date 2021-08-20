@@ -1,0 +1,660 @@
+{
+  "type": [
+    "null",
+    "object"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "advertiser_id": {
+      "type": [
+        "null",
+        "integer"
+      ]
+    },
+    "adgroup_id": {
+      "type": [
+        "null",
+        "integer"
+      ]
+    },
+    "campaign_id": {
+      "type": [
+        "null",
+        "integer"
+      ]
+    },
+    "adgroup_name": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "placement_type": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "placement": {
+      "type": [
+        "null",
+        "array"
+      ],
+      "items": {
+        "type": [
+          "null",
+          "string"
+        ]
+      }
+    },
+    "enable_inventory_filter": {
+      "type": [
+        "null",
+        "boolean"
+      ]
+    },
+    "is_comment_disable": {
+      "type": [
+        "null",
+        "boolean"
+      ]
+    },
+    "app_id": {
+      "type": [
+        "null",
+        "integer"
+      ]
+    },
+    "external_type": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "app_download_url": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "package": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "pixel_id": {
+      "type": [
+        "null",
+        "integer"
+      ]
+    },
+    "external_action": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "deep_external_action": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "creative_material_mode": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "audience": {
+      "type": [
+        "null",
+        "array"
+      ],
+      "items": {
+        "type": [
+          "null",
+          "integer"
+        ]
+      }
+    },
+    "excluded_audience": {
+      "type": [
+        "null",
+        "array"
+      ],
+      "items": {
+        "type": [
+          "null",
+          "integer"
+        ]
+      }
+    },
+    "audience_type": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "location": {
+      "type": [
+        "null",
+        "array"
+      ],
+      "items": {
+        "type": [
+          "null",
+          "integer"
+        ]
+      }
+    },
+    "is_hfss": {
+      "type": [
+        "null",
+        "boolean"
+      ]
+    },
+    "interest_category_v2": {
+      "type": [
+        "null",
+        "array"
+      ],
+      "items": {
+        "type": [
+          "null",
+          "integer"
+        ]
+      }
+    },
+    "interest_keywords": {
+      "type": [
+        "null",
+        "array"
+      ],
+      "items": {
+        "type": [
+          "null",
+          "integer"
+        ]
+      }
+    },
+    "age": {
+      "type": [
+        "null",
+        "array"
+      ],
+      "items": {
+        "type": [
+          "null",
+          "string"
+        ]
+      }
+    },
+    "gender": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "languages": {
+      "type": [
+        "null",
+        "array"
+      ],
+      "items": {
+        "type": [
+          "null",
+          "string"
+        ]
+      }
+    },
+    "operation_system": {
+      "type": [
+        "null",
+        "array"
+      ],
+      "items": {
+        "type": [
+          "null",
+          "string"
+        ]
+      }
+    },
+    "connection_type": {
+      "type": [
+        "null",
+        "array"
+      ],
+      "items": {
+        "type": [
+          "null",
+          "string"
+        ]
+      }
+    },
+    "device_price": {
+      "type": [
+        "null",
+        "array"
+      ],
+      "items": {
+        "type": [
+          "null",
+          "integer"
+        ]
+      }
+    },
+    "android_osv": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "ios_target_device": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "device_models": {
+      "type": [
+        "null",
+        "array"
+      ],
+      "items": {
+        "type": [
+          "null",
+          "integer"
+        ]
+      }
+    },
+    "ios_osv": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "budget_mode": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "budget": {
+      "type": [
+        "null",
+        "number"
+      ]
+    },
+    "schedule_type": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "schedule_start_time": {
+      "type": [
+        "null",
+        "string"
+      ],
+      "format": "date-time"
+    },
+    "schedule_end_time": {
+      "type": [
+        "null",
+        "string"
+      ],
+      "format": "date-time"
+    },
+    "dayparting": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "optimize_goal": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "cpv_video_duration": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "conversion_window": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "pacing": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "billing_event": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "skip_learning_phase": {
+      "type": [
+        "null",
+        "integer"
+      ]
+    },
+    "bid_type": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "bid": {
+      "type": [
+        "null",
+        "number"
+      ]
+    },
+    "conversion_bid": {
+      "type": [
+        "null",
+        "number"
+      ]
+    },
+    "deep_bid_type": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "deep_cpabid": {
+      "type": [
+        "null",
+        "number"
+      ]
+    },
+    "status": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "opt_status": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "frequency": {
+      "type": [
+        "null",
+        "integer"
+      ]
+    },
+    "frequency_schedule": {
+      "type": [
+        "null",
+        "integer"
+      ]
+    },
+    "statistic_type": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "carriers_v2": {
+      "type": [
+        "null",
+        "array"
+      ],
+      "items": {
+        "type": [
+          "null",
+          "integer"
+        ]
+      }
+    },
+    "video_download": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "pangle_block_app_list_id": {
+      "type": [
+        "null",
+        "array"
+      ],
+      "items": {
+        "type": [
+          "null",
+          "integer"
+        ]
+      }
+    },
+    "action_v2": {
+      "type": [
+        "null",
+        "array"
+      ],
+      "items": {
+        "type": [
+          "null",
+          "object"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "action_categories": {
+            "type": [
+              "null",
+              "array"
+            ],
+            "items": {
+              "type": [
+                "null",
+                "integer"
+              ]
+            }
+          },
+          "action_period": {
+            "type": [
+              "null",
+              "integer"
+            ]
+          },
+          "action_scene": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "user_actions": {
+            "type": [
+              "null",
+              "array"
+            ],
+            "items": {
+              "type": [
+                "null",
+                "string"
+              ]
+            }
+          }
+        }
+      }
+    },
+    "rf_buy_type": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "buy_impression": {
+      "type": [
+        "null",
+        "integer"
+      ]
+    },
+    "buy_reach": {
+      "type": [
+        "null",
+        "integer"
+      ]
+    },
+    "rf_predict_cpr": {
+      "type": [
+        "null",
+        "integer"
+      ]
+    },
+    "rf_predict_frequency": {
+      "type": [
+        "null",
+        "integer"
+      ]
+    },
+    "pangle_audience_package_include": {
+      "type": [
+        "null",
+        "array"
+      ],
+      "items": {
+        "type": [
+          "null",
+          "integer"
+        ]
+      }
+    },
+    "pangle_audience_package_exclude": {
+      "type": [
+        "null",
+        "array"
+      ],
+      "items": {
+        "type": [
+          "null",
+          "integer"
+        ]
+      }
+    },
+    "is_new_structure": {
+      "type": [
+        "null",
+        "boolean"
+      ]
+    },
+    "catalog_id": {
+      "type": [
+        "null",
+        "integer"
+      ]
+    },
+    "product_set_id": {
+      "type": [
+        "null",
+        "integer"
+      ]
+    },
+    "catalog_authorized_bc": {
+      "type": [
+        "null",
+        "integer"
+      ]
+    },
+    "dpa_retargeting_type": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "split_test_adgroup_ids": {
+      "type": [
+        "null",
+        "array"
+      ],
+      "items": {
+        "type": [
+          "null",
+          "integer"
+        ]
+      }
+    },
+    "brand_safety": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "brand_safety_partner": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "promotion_website_type": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "ios_quota_type": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "roas_bid": {
+      "type": [
+        "null",
+        "number"
+      ]
+    },
+    "targeting_expansion": {
+      "type": [
+        "null",
+        "object"
+      ],
+      "properties": {
+        "expansion_types": {
+          "type": [
+            "null",
+            "array"
+          ],
+          "items": {
+            "type": [
+              "null",
+              "string"
+            ]
+          }
+        },
+        "enable_expansion": {
+          "type": [
+            "null",
+            "boolean"
+          ]
+        }
+      }
+    },
+    "create_time": {
+      "type": [
+        "null",
+        "string"
+      ],
+      "format": "date-time"
+    },
+    "modify_time": {
+      "type": [
+        "null",
+        "string"
+      ],
+      "format": "date-time"
+    }
+  }
+}

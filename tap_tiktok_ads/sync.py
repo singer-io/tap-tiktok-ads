@@ -110,6 +110,8 @@ def pre_transform(stream_name, records, bookmark_value):
         return transform_ad_insights_records(records)
     elif stream_name == 'campaigns':
         return transform_campaign_records(records, bookmark_value)
+    elif stream_name == 'adgroups':
+        return transform_adgroups_records(records, bookmark_value)
     else:
         return records
 
@@ -132,6 +134,17 @@ def transform_campaign_records(records, bookmark_value):
     for record in records:
         if 'modify_time' not in record:
             record['modify_time'] = record['create_time']
+        if bookmark_value == None or record['modify_time'] > bookmark_value:
+            transformed_records.append(record)
+    return transformed_records
+
+def transform_adgroups_records(records, bookmark_value):
+    transformed_records = []
+    for record in records:
+        if 'modify_time' not in record:
+            record['modify_time'] = record['create_time']
+        if 'is_comment_disable' in record:
+            record['is_comment_disable'] = True if record['is_comment_disable'] == 0 else False
         if bookmark_value == None or record['modify_time'] > bookmark_value:
             transformed_records.append(record)
     return transformed_records
@@ -228,6 +241,13 @@ class SyncContext:
         endpoints = {
             "campaigns": {
                 "path": "campaign/get/",
+                "req_advertiser_id": True,
+                "params": {
+                    "page_size": 1000
+                }
+            },
+            "adgroups": {
+                "path": "adgroup/get/",
                 "req_advertiser_id": True,
                 "params": {
                     "page_size": 1000
