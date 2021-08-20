@@ -171,8 +171,10 @@ class SyncContext:
             LOGGER.info(f'Write state for stream: {stream}, value: {value}')
             singer.write_state(self.__state)
 
-    def __has_bookmark(self, stream_name):
-        return 'bookmarks' in self.__state and stream_name in self.__state['bookmarks']
+    def __get_bookmark(self, stream_name):
+        if 'bookmarks' in self.__state and stream_name in self.__state['bookmarks']:
+            return self.__state['bookmarks'][stream_name]
+        return None
 
     # Each API call to TikTok with a stat_time_day dimension only support a range
     # of 30 days. Because of this we need to separate the interval between start_date
@@ -191,10 +193,7 @@ class SyncContext:
 
     def __process_batch(self, stream, records):
         bookmark_column = stream.replication_key[0]
-        if self.__has_bookmark(stream.tap_stream_id):
-            bookmark_value = self.__state['bookmarks'][stream.tap_stream_id]
-        else:
-            bookmark_value = None
+        bookmark_value = self.__get_bookmark(stream.tap_stream_id)
         transformed_records = pre_transform(stream.tap_stream_id, records, bookmark_value)
         sorted_records = sorted(transformed_records, key=lambda x: x[bookmark_column])
         for record in sorted_records:
