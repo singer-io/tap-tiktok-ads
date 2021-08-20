@@ -58,7 +58,6 @@ AUCTION_FIELDS = """[
     "follows",
     "clicks_on_music_disc"
 ]"""
-
 AUDIENCE_FIELDS = """[
     "ad_name",
     "ad_text",
@@ -85,6 +84,57 @@ AUDIENCE_FIELDS = """[
     "real_time_cost_per_result",
     "real_time_result_rate"
 ]"""
+ENDPOINT_INSIGHTS = [
+    'ad_insights',
+    'ad_insights_by_age_and_gender',
+    'ad_insights_by_country',
+    'ad_insights_by_platform'
+]
+
+def get_date_batches(start_date, end_date):
+    date_batches = []
+    if end_date.date() >= start_date.date():
+        while start_date < end_date:
+            next_batch = start_date + timedelta(days=29)
+            date_batch = {
+                'start_date': start_date,
+                'end_date': end_date if next_batch > end_date else next_batch
+            }
+            date_batches.append(date_batch)
+            start_date = next_batch + timedelta(days=1)
+        return date_batches
+    raise ValueError('end_date must not be greater than start_date')
+
+def pre_transform(stream_name, records, bookmark_value):
+    if stream_name in ENDPOINT_INSIGHTS:
+        return transform_ad_insights_records(records)
+    elif stream_name == 'campaigns':
+        return transform_campaign_records(records, bookmark_value)
+    else:
+        return records
+
+def transform_ad_insights_records(records):
+    transformed_records = []
+    for record in records:
+        transformed_record = record['metrics'] | record['dimensions']
+        if 'secondary_goal_result' in transformed_record and transformed_record['secondary_goal_result'] == '-':
+            transformed_record['secondary_goal_result'] = None
+        if 'secondary_goal_result' in transformed_record and transformed_record[
+            'cost_per_secondary_goal_result'] == '-':
+            transformed_record['cost_per_secondary_goal_result'] = None
+        if 'secondary_goal_result' in transformed_record and transformed_record['secondary_goal_result_rate'] == '-':
+            transformed_record['secondary_goal_result_rate'] = None
+        transformed_records.append(transformed_record)
+    return transformed_records
+
+def transform_campaign_records(records, bookmark_value):
+    transformed_records = []
+    for record in records:
+        if 'modify_time' not in record:
+            record['modify_time'] = record['create_time']
+        if bookmark_value == None or record['modify_time'] > bookmark_value:
+            transformed_records.append(record)
+    return transformed_records
 
 class SyncContext:
     def __init__(self,
@@ -121,6 +171,9 @@ class SyncContext:
             LOGGER.info(f'Write state for stream: {stream}, value: {value}')
             singer.write_state(self.__state)
 
+    def __has_bookmark(self, stream_name):
+        return 'bookmarks' in self.__state and stream_name in self.__state['bookmarks']
+
     # Each API call to TikTok with a stat_time_day dimension only support a range
     # of 30 days. Because of this we need to separate the interval between start_date
     # and end_date into batches of 30 days max.
@@ -134,46 +187,19 @@ class SyncContext:
             end_date = parse(self.__config['end_date'])
         else:
             end_date = now()
-
-        date_batches = []
-        if end_date.date() >= start_date.date():
-            while start_date < end_date:
-                next_batch = start_date + timedelta(days=29)
-                date_batch = {
-                    'start_date': start_date,
-                    'end_date': end_date if next_batch > end_date else next_batch
-                }
-                date_batches.append(date_batch)
-                start_date = next_batch + timedelta(days=1)
-            return date_batches
-        raise ValueError('end_date must not be greater than start_date')
-
-    def __transform_ad_reports(self, data):
-        if data['secondary_goal_result'] == '-':
-            data['secondary_goal_result'] = None
-        if data['cost_per_secondary_goal_result'] == '-':
-            data['cost_per_secondary_goal_result'] = None
-        if data['secondary_goal_result_rate'] == '-':
-            data['secondary_goal_result_rate'] = None
-        return data
-
-    def __pre_transform(self, stream_name, data):
-        if stream_name == 'ad_insights':
-            return self.__transform_ad_reports(data)
-        return data
+        return get_date_batches(start_date, end_date)
 
     def __process_batch(self, stream, records):
         bookmark_column = stream.replication_key[0]
-        sorted_records = sorted(records, key=lambda x: x['dimensions']['stat_time_day'])
-
+        if self.__has_bookmark(stream.tap_stream_id):
+            bookmark_value = self.__state['bookmarks'][stream.tap_stream_id]
+        else:
+            bookmark_value = None
+        transformed_records = pre_transform(stream.tap_stream_id, records, bookmark_value)
+        sorted_records = sorted(transformed_records, key=lambda x: x[bookmark_column])
         for record in sorted_records:
             with Transformer(integer_datetime_fmt=UNIX_MILLISECONDS_INTEGER_DATETIME_PARSING) as transformer:
-                usable_data = record['metrics'] | record['dimensions']
-                usable_data[bookmark_column] = usable_data.pop('stat_time_day')
-
-                usable_data = self.__pre_transform(stream.tap_stream_id, usable_data)
-
-                transformed_record = transformer.transform(usable_data, stream.schema.to_dict(),
+                transformed_record = transformer.transform(record, stream.schema.to_dict(),
                                                            metadata.to_map(stream.metadata))
                 # write one or more rows to the stream:
                 singer.write_record(stream.tap_stream_id, transformed_record)
@@ -185,11 +211,9 @@ class SyncContext:
         records = []
         total_records = 0
         page = 1
-
         headers = {
             "Access-Token": self.__config['access_token']
         }
-
         while (len(records) < total_records) or (page == 1):
             endpoint_config['params']['page'] = page
             response = self.__client.get(path=endpoint_config['path'], headers=headers,
@@ -198,12 +222,18 @@ class SyncContext:
                 total_records = response['data']['page_info']['total_number']
                 records = records + response['data']['list']
             page = page + 1
-
         self.__process_batch(stream, records)
 
     def do_sync(self):
         """ Sync data from tap source """
         endpoints = {
+            "campaigns": {
+                "path": "campaign/get/",
+                "req_advertiser_id": True,
+                "params": {
+                    "page_size": 1000
+                }
+            },
             "ad_insights": {
                 "path": "reports/integrated/get/",
                 "req_advertiser_id": True,
@@ -216,10 +246,9 @@ class SyncContext:
                         "stat_time_day"
                     ]""",
                     "metrics": AUCTION_FIELDS,
-                    "page_size": 50,
+                    "page_size": 1000,
                     "lifetime": "false"
                 },
-                "id-fields": ["ad_id", "adgroup_id", "campaign_id", "stat_time_day"]
             },
             "ad_insights_by_age_and_gender": {
                 "path": "reports/integrated/get/",
@@ -235,7 +264,7 @@ class SyncContext:
                         "stat_time_day"
                     ]""",
                     "metrics": AUDIENCE_FIELDS,
-                    "page_size": 200,
+                    "page_size": 1000,
                     "lifetime": "false"
                 }
             },
@@ -252,7 +281,7 @@ class SyncContext:
                         "stat_time_day"
                     ]""",
                     "metrics": AUDIENCE_FIELDS,
-                    "page_size": 200,
+                    "page_size": 1000,
                     "lifetime": "false"
                 }
             },
@@ -269,7 +298,7 @@ class SyncContext:
                         "stat_time_day"
                     ]""",
                     "metrics": AUDIENCE_FIELDS,
-                    "page_size": 200,
+                    "page_size": 1000,
                     "lifetime": "false"
                 }
             }
@@ -290,10 +319,12 @@ class SyncContext:
             if 'account' in self.__config and endpoint_config['req_advertiser_id']:
                 endpoint_config['params']['advertiser_id'] = self.__config['account']
 
-            date_batches = self.__get_date_batches(stream.tap_stream_id)
-
-            for date_batch in date_batches:
-                endpoint_config['params']['start_date'] = date_batch['start_date'].date().isoformat()
-                endpoint_config['params']['end_date'] = date_batch['end_date'].date().isoformat()
+            if stream.tap_stream_id in ENDPOINT_INSIGHTS:
+                date_batches = self.__get_date_batches(stream.tap_stream_id)
+                for date_batch in date_batches:
+                    endpoint_config['params']['start_date'] = date_batch['start_date'].date().isoformat()
+                    endpoint_config['params']['end_date'] = date_batch['end_date'].date().isoformat()
+                    self.__sync_with_endpoint(stream, endpoint_config)
+            else:
                 self.__sync_with_endpoint(stream, endpoint_config)
         self.__update_currently_syncing(None)
