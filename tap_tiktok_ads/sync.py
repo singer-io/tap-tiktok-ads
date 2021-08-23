@@ -98,7 +98,7 @@ ENDPOINT_INSIGHTS = [
 
 def get_date_batches(start_date, end_date):
     date_batches = []
-    if end_date.date() >= start_date.date():
+    if end_date.date() > start_date.date():
         while start_date < end_date:
             next_batch = start_date + timedelta(days=29)
             date_batch = {
@@ -121,15 +121,16 @@ def pre_transform(stream_name, records, bookmark_value):
 def transform_ad_insights_records(records):
     transformed_records = []
     for record in records:
-        transformed_record = record['metrics'] | record['dimensions']
-        if 'secondary_goal_result' in transformed_record and transformed_record['secondary_goal_result'] == '-':
-            transformed_record['secondary_goal_result'] = None
-        if 'secondary_goal_result' in transformed_record and transformed_record[
-            'cost_per_secondary_goal_result'] == '-':
-            transformed_record['cost_per_secondary_goal_result'] = None
-        if 'secondary_goal_result' in transformed_record and transformed_record['secondary_goal_result_rate'] == '-':
-            transformed_record['secondary_goal_result_rate'] = None
-        transformed_records.append(transformed_record)
+        if 'metrics' in record and 'dimensions' in record:
+            transformed_record = record['metrics'] | record['dimensions']
+            if 'secondary_goal_result' in transformed_record and transformed_record['secondary_goal_result'] == '-':
+                transformed_record['secondary_goal_result'] = None
+            if 'cost_per_secondary_goal_result' in transformed_record and transformed_record[
+                'cost_per_secondary_goal_result'] == '-':
+                transformed_record['cost_per_secondary_goal_result'] = None
+            if 'secondary_goal_result_rate' in transformed_record and transformed_record['secondary_goal_result_rate'] == '-':
+                transformed_record['secondary_goal_result_rate'] = None
+            transformed_records.append(transformed_record)
     return transformed_records
 
 def transform_ad_management_records(records, bookmark_value):
