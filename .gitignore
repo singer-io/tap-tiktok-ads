@@ -106,3 +106,4 @@ catalog.json
 rsa-key
 tags
 singer-check-tap-data
+/stitch_state.json
