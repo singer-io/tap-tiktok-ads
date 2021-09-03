@@ -36,13 +36,11 @@ class TikTokClient:
             url='https://ads.tiktok.com/open_api/v1.2/user/info',
             headers=headers)
         if response.status_code != 200:
-            LOGGER.error(f'Error status_code = {response.status_code}')
+            LOGGER.error('Error status_code = %s', response.status_code)
+            return False
         else:
             resp = response.json()
-            if resp['message'] == 'OK':
-                return True
-            else:
-                return False
+            return bool(resp['message'] == 'OK')
 
     def request(self, method, url=None, path=None, **kwargs):
         if not self.__verified:

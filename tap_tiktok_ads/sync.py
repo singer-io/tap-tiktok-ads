@@ -5,7 +5,7 @@ from dateutil.parser import parse
 from singer.utils import now
 from singer import Transformer, UNIX_MILLISECONDS_INTEGER_DATETIME_PARSING, metadata
 
-from tap_tiktok_ads import TikTokClient
+from tap_tiktok_ads.client import TikTokClient
 
 LOGGER = singer.get_logger()
 
@@ -144,8 +144,8 @@ def transform_ad_management_records(records, bookmark_value):
             record['modify_time'] = record['create_time']
         # In case of an adgroup request, transform 'is_comment_disabled' type from integer to boolean
         if 'is_comment_disable' in record:
-            record['is_comment_disable'] = True if record['is_comment_disable'] == 0 else False
-        if bookmark_value == None or record['modify_time'] > bookmark_value:
+            record['is_comment_disable'] = bool(record['is_comment_disable'] == 0)
+        if bookmark_value is None or record['modify_time'] > bookmark_value:
             transformed_records.append(record)
     return transformed_records
 
@@ -153,10 +153,10 @@ def transform_advertisers_records(records, bookmark_value):
     transformed_records = []
     for record in records:
         record['create_time'] = datetime.fromtimestamp(record['create_time'], tz=timezone.utc)
-        if bookmark_value == None:
+        if bookmark_value is None:
             transformed_records.append(record)
         else:
-            if bookmark_value != None and record['create_time'] > parse(bookmark_value):
+            if bookmark_value is not None and record['create_time'] > parse(bookmark_value):
                 transformed_records.append(record)
     return transformed_records
 
@@ -192,7 +192,7 @@ class SyncContext:
 
         if (stream not in self.__state['bookmarks']) or (self.__state['bookmarks'][stream] != value):
             self.__state['bookmarks'][stream] = value
-            LOGGER.info(f'Write state for stream: {stream}, value: {value}')
+            LOGGER.info('Write state for stream: %s, value: %s', stream, value)
             singer.write_state(self.__state)
 
     def __get_bookmark(self, stream_name):
@@ -364,7 +364,7 @@ class SyncContext:
 
         # Loop over selected streams in catalog
         for stream in self.__catalog.get_selected_streams(self.__state):
-            LOGGER.info("Syncing stream:" + stream.tap_stream_id)
+            LOGGER.info("Syncing stream: %s", stream.tap_stream_id)
             self.__update_currently_syncing(stream.tap_stream_id)
             endpoint_config = endpoints[stream.tap_stream_id]
 
