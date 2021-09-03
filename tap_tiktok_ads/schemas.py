@@ -49,7 +49,7 @@ def get_schemas():
     field_metadata = {}
     for stream_name, stream_metadata in STREAMS.items():
         path = get_abs_path(f'schemas/{stream_name}.json')
-        with open(path, encoding='locale') as file:
+        with open(path, encoding='utf-8') as file:
             schema = json.load(file)
         schemas[stream_name] = schema
 
