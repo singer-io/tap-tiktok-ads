@@ -59,7 +59,6 @@ def get_schemas():
             replication_method=stream_metadata.get('replication_method', None),
             valid_replication_keys=stream_metadata.get('valid_replication_keys', None,)
         )
-        mdata[0]['metadata']['selected'] = "true"
         field_metadata[stream_name] = mdata
 
     return schemas, field_metadata
