@@ -33,7 +33,7 @@ class TikTokClient:
         headers['Access-Token'] = self.__access_token
         headers['Accept'] = 'application/json'
         response = self.__session.get(
-            url='https://ads.tiktok.com/open_api/v1.2/user/info',
+            url='https://business-api.tiktok.com/open_api/v1.2/user/info',
             headers=headers)
         if response.status_code != 200:
             LOGGER.error('Error status_code = %s', response.status_code)
@@ -47,7 +47,7 @@ class TikTokClient:
             self.__verified = self.check_access_token()
 
         if not url and self.__base_url is None:
-            self.__base_url = 'https://ads.tiktok.com/open_api/v1.2'
+            self.__base_url = 'https://business-api.tiktok.com/open_api/v1.2'
 
         if not url and path:
             url = f'{self.__base_url}/{path}'
