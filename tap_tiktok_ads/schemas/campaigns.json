@@ -5,6 +5,12 @@
   ],
   "additionalProperties": false,
   "properties": {
+    "advertiser_id": {
+      "type": [
+        "null",
+        "integer"
+      ]
+    },
     "campaign_id": {
       "type": [
         "null",
@@ -21,12 +27,6 @@
       "type": [
         "null",
         "string"
-      ]
-    },
-    "advertiser_id": {
-      "type": [
-        "null",
-        "integer"
       ]
     },
     "budget": {

@@ -160,6 +160,16 @@ def transform_advertisers_records(records, bookmark_value):
                 transformed_records.append(record)
     return transformed_records
 
+
+def get_bookmark_value(stream_name, bookmark_data, advertiser_id):
+    if stream_name in ENDPOINT_ADVERTISERS:
+        return bookmark_data
+    elif (stream_name in ENDPOINT_INSIGHTS or stream_name in ENDPOINT_AD_MANAGEMENT) and advertiser_id in bookmark_data:
+        return bookmark_data[advertiser_id]
+    else:
+        return None
+
+
 class SyncContext:
     def __init__(self,
                  state,
@@ -203,9 +213,9 @@ class SyncContext:
     # Each API call to TikTok with a stat_time_day dimension only support a range
     # of 30 days. Because of this we need to separate the interval between start_date
     # and end_date into batches of 30 days max.
-    def __get_date_batches(self, stream_id):
-        if ('bookmarks' in self.__state) and (stream_id in self.__state['bookmarks']):
-            start_date = parse(self.__state['bookmarks'][stream_id]) + timedelta(days=1)
+    def __get_date_batches(self, stream_id, advertiser_id):
+        if ('bookmarks' in self.__state) and (stream_id in self.__state['bookmarks'] and (str(advertiser_id) in self.__state['bookmarks'][stream_id])):
+            start_date = parse(self.__state['bookmarks'][stream_id][str(advertiser_id)]) + timedelta(days=1)
         else:
             start_date = parse(self.__config['start_date'])
 
@@ -215,9 +225,10 @@ class SyncContext:
             end_date = now()
         return get_date_batches(start_date, end_date)
 
-    def __process_batch(self, stream, records):
+    def __process_batch(self, stream, records, advertiser_id):
         bookmark_column = stream.replication_key[0]
-        bookmark_value = self.__get_bookmark(stream.tap_stream_id)
+        bookmark_data = self.__get_bookmark(stream.tap_stream_id)
+        bookmark_value = get_bookmark_value(stream.tap_stream_id, bookmark_data, advertiser_id)
         transformed_records = pre_transform(stream.tap_stream_id, records, bookmark_value)
         sorted_records = sorted(transformed_records, key=lambda x: x[bookmark_column])
         for record in sorted_records:
@@ -228,7 +239,13 @@ class SyncContext:
                 singer.write_record(stream.tap_stream_id, transformed_record)
                 if bookmark_column:
                     # update bookmark to latest value
-                    self.__write_bookmark(stream.tap_stream_id, transformed_record[bookmark_column])
+                    if stream.tap_stream_id in ENDPOINT_ADVERTISERS:
+                        self.__write_bookmark(stream.tap_stream_id, transformed_record[bookmark_column])
+                    else:
+                        if bookmark_data is None:
+                            bookmark_data = {}
+                        bookmark_data[advertiser_id] = transformed_record[bookmark_column]
+                        self.__write_bookmark(stream.tap_stream_id, bookmark_data)
 
     def __sync_advertisers(self, stream, endpoint_config):
         headers = {
@@ -238,12 +255,13 @@ class SyncContext:
                                      params=endpoint_config.get('params'))
         if response['message'] == 'OK':
             records = response['data']
-            self.__process_batch(stream, records)
+            self.__process_batch(stream, records, None)
 
     def __sync_pages(self, stream, endpoint_config):
         headers = {
             "Access-Token": self.__config['access_token']
         }
+        advertiser_id = str(endpoint_config['params']['advertiser_id'])
         records = []
         total_records = 0
         page = 1
@@ -255,7 +273,7 @@ class SyncContext:
                 total_records = response['data']['page_info']['total_number']
                 records = records + response['data']['list']
             page = page + 1
-        self.__process_batch(stream, records)
+        self.__process_batch(stream, records, advertiser_id)
 
     def __sync_with_endpoint(self, stream, endpoint_config):
         if stream.tap_stream_id == 'advertisers':
@@ -269,7 +287,7 @@ class SyncContext:
             "advertisers": {
                 "path": "advertiser/info/",
                 "req_advertiser_id": True,
-                "params": {}
+                "params": {},
             },
             "campaigns": {
                 "path": "campaign/get/",
@@ -363,7 +381,8 @@ class SyncContext:
         }
 
         # Loop over selected streams in catalog
-        for stream in self.__catalog.get_selected_streams(self.__state):
+        selected_streams = self.__catalog.get_selected_streams(self.__state)
+        for stream in selected_streams:
             LOGGER.info("Syncing stream: %s", stream.tap_stream_id)
             self.__update_currently_syncing(stream.tap_stream_id)
             endpoint_config = endpoints[stream.tap_stream_id]
@@ -374,19 +393,21 @@ class SyncContext:
                 key_properties=stream.key_properties,
             )
 
-            #TODO: Loop through an array of advertiser IDs and bookmark them with the other bookmarks
             if 'accounts' in self.__config and endpoint_config['req_advertiser_id']:
                 if stream.tap_stream_id == 'advertisers':
                     endpoint_config['params']['advertiser_ids'] = self.__config['accounts']
+                    self.__sync_advertisers(stream, endpoint_config)
                 else:
-                    endpoint_config['params']['advertiser_id'] = self.__config['accounts'][0]
+                    advertiser_ids = self.__config['accounts']
+                    for advertiser_id in advertiser_ids:
+                        endpoint_config['params']['advertiser_id'] = advertiser_id
+                        if stream.tap_stream_id in ENDPOINT_INSIGHTS:
+                            date_batches = self.__get_date_batches(stream.tap_stream_id, advertiser_id)
+                            for date_batch in date_batches:
+                                endpoint_config['params']['start_date'] = date_batch['start_date'].date().isoformat()
+                                endpoint_config['params']['end_date'] = date_batch['end_date'].date().isoformat()
+                                self.__sync_pages(stream, endpoint_config)
+                        else:
+                            self.__sync_pages(stream, endpoint_config)
 
-            if stream.tap_stream_id in ENDPOINT_INSIGHTS:
-                date_batches = self.__get_date_batches(stream.tap_stream_id)
-                for date_batch in date_batches:
-                    endpoint_config['params']['start_date'] = date_batch['start_date'].date().isoformat()
-                    endpoint_config['params']['end_date'] = date_batch['end_date'].date().isoformat()
-                    self.__sync_with_endpoint(stream, endpoint_config)
-            else:
-                self.__sync_with_endpoint(stream, endpoint_config)
         self.__update_currently_syncing(None)

@@ -11,31 +11,31 @@ STREAMS = {
         'valid_replication_keys': ['create_time']
     },
     'campaigns': {
-        'table_key_properties': ['campaign_id', 'modify_time'],
+        'table_key_properties': ['advertiser_id', 'campaign_id', 'modify_time'],
         'valid_replication_keys': ['modify_time']
     },
     'adgroups': {
-        'table_key_properties': ['campaign_id', 'adgroup_id', 'modify_time'],
+        'table_key_properties': ['advertiser_id', 'campaign_id', 'adgroup_id', 'modify_time'],
         'valid_replication_keys': ['modify_time']
     },
     'ads': {
-        'table_key_properties': ['campaign_id', 'adgroup_id', 'ad_id', 'modify_time'],
+        'table_key_properties': ['advertiser_id', 'campaign_id', 'adgroup_id', 'ad_id', 'modify_time'],
         'valid_replication_keys': ['modify_time']
     },
     'ad_insights': {
-        'table_key_properties': ['ad_id', 'adgroup_id', 'campaign_id', 'stat_time_day'],
+        'table_key_properties': ['advertiser_id', 'ad_id', 'adgroup_id', 'campaign_id', 'stat_time_day'],
         'valid_replication_keys': ['stat_time_day']
     },
     'ad_insights_by_age_and_gender': {
-        'table_key_properties': ['ad_id', 'adgroup_id', 'campaign_id', 'stat_time_day', 'age', 'gender'],
+        'table_key_properties': ['advertiser_id', 'ad_id', 'adgroup_id', 'campaign_id', 'stat_time_day', 'age', 'gender'],
         'valid_replication_keys': ['stat_time_day']
     },
     'ad_insights_by_country': {
-        'table_key_properties': ['ad_id', 'adgroup_id', 'campaign_id', 'stat_time_day', 'country_code'],
+        'table_key_properties': ['advertiser_id', 'ad_id', 'adgroup_id', 'campaign_id', 'stat_time_day', 'country_code'],
         'valid_replication_keys': ['stat_time_day']
     },
     'ad_insights_by_platform': {
-        'table_key_properties': ['ad_id', 'adgroup_id', 'campaign_id', 'stat_time_day', 'platform'],
+        'table_key_properties': ['advertiser_id', 'ad_id', 'adgroup_id', 'campaign_id', 'stat_time_day', 'platform'],
         'valid_replication_keys': ['stat_time_day']
     }
 }
