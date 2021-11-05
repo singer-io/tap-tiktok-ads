@@ -166,3 +166,6 @@ Details by stream:
 | ad_insights_by_platform       | 2195    | 1       |
 +-------------------------------+---------+---------+
 ```
+---
+
+Copyright &copy; 2021 Stitch
