@@ -4,15 +4,10 @@ from singer import utils
 
 from tap_tiktok_ads.client import TikTokClient
 from tap_tiktok_ads.discover import discover
-from tap_tiktok_ads.sync import SyncContext
+from tap_tiktok_ads.sync import sync
 
 REQUIRED_CONFIG_KEYS = ['start_date', 'user_agent', 'access_token', 'accounts']
 LOGGER = singer.get_logger()
-
-
-def sync(tik_tok_client, config, state, catalog):
-    with SyncContext(state, config, tik_tok_client, catalog) as ctx:
-        ctx.do_sync()
 
 
 @utils.handle_top_exception(LOGGER)
