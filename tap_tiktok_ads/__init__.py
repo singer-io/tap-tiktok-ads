@@ -21,7 +21,8 @@ def main():
     args = utils.parse_args(REQUIRED_CONFIG_KEYS)
 
     with TikTokClient(access_token=args.config['access_token'],
-                      user_agent=args.config['user_agent']) as tik_tok_client:
+                      user_agent=args.config['user_agent'],
+                      request_timeout=args.config.get('request_timeout')) as tik_tok_client:
 
         # If discover flag was passed, run discovery mode and dump output to stdout
         if args.discover:
