@@ -3,7 +3,7 @@ from datetime import timedelta, datetime, timezone
 import singer
 from dateutil.parser import parse
 from singer.utils import now
-from singer import Transformer, UNIX_MILLISECONDS_INTEGER_DATETIME_PARSING, metadata
+from singer import utils, Transformer, UNIX_MILLISECONDS_INTEGER_DATETIME_PARSING, metadata
 
 from tap_tiktok_ads.client import TikTokClient
 
@@ -145,7 +145,7 @@ def transform_ad_management_records(records, bookmark_value):
         # In case of an adgroup request, transform 'is_comment_disabled' type from integer to boolean
         if 'is_comment_disable' in record:
             record['is_comment_disable'] = bool(record['is_comment_disable'] == 0)
-        if bookmark_value is None or record['modify_time'] > bookmark_value:
+        if bookmark_value is None or utils.strptime_to_utc(record['modify_time']) > utils.strptime_to_utc(bookmark_value):
             transformed_records.append(record)
     return transformed_records
 
@@ -163,7 +163,10 @@ def transform_advertisers_records(records, bookmark_value):
 
 def get_bookmark_value(stream_name, bookmark_data, advertiser_id):
     if stream_name in ENDPOINT_ADVERTISERS:
-        return bookmark_data
+        if bookmark_data:
+            return bookmark_data
+        else:
+            return None
     elif (stream_name in ENDPOINT_INSIGHTS or stream_name in ENDPOINT_AD_MANAGEMENT) and advertiser_id in bookmark_data:
         return bookmark_data[advertiser_id]
     else:
@@ -200,7 +203,7 @@ class Stream():
     def get_bookmark(self, stream_name):
         if 'bookmarks' in self.state and stream_name in self.state['bookmarks']:
             return self.state['bookmarks'][stream_name]
-        return None
+        return {}
 
     # Each API call to TikTok with a stat_time_day dimension only support a range
     # of 30 days. Because of this we need to separate the interval between start_date
