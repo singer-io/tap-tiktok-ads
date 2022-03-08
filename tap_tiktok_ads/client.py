@@ -32,6 +32,7 @@ class TikTokClient:
         self.__base_url = None
         self.__verified = False
 
+    # Backoff the request after 5 minutes in case of 50000 error code
     @backoff.on_exception(backoff.constant,
                           (TikTokAdsClientError),
                           max_time=600, # 10 minutes
@@ -63,10 +64,11 @@ class TikTokClient:
         error_code = resp.get('code')
         message = resp.get('message', 'Unknown Error occurred.')
 
-        if error_code != 0:
-            raise TikTokAdsClientError(message, response)
+        if error_code != 0: # `0` error code indicates successful request
+            raise TikTokAdsClientError(message, response) # raise the exception with the message retrieved
         return bool(resp.get('message') == 'OK')
 
+    # Backoff the request after 5 minutes in case of 50000 error code
     @backoff.on_exception(backoff.constant,
                           (TikTokAdsClientError),
                           max_time=600, # 10 minutes
@@ -120,8 +122,8 @@ class TikTokClient:
             json_response = {}
         error_code = json_response.get("code")
         message = json_response.get('message', 'Unknown Error occurred.')
-        if error_code != 0:
-            raise TikTokAdsClientError(message, response)
+        if error_code != 0: # `0` error code indicates successful request
+            raise TikTokAdsClientError(message, response) # raise the exception with the message retrieved
         return json_response
 
     def get(self, url=None, path=None, **kwargs):
