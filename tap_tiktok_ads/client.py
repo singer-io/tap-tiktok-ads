@@ -7,15 +7,24 @@ from singer import metrics
 
 LOGGER = singer.get_logger()
 
+PROD_ENDPOINT_BASE = "https://business-api.tiktok.com/open_api/v1.2"
+SANDBOX_ENDPOINT_BASE = "https://sandbox-ads.tiktok.com/open_api/v1.2"
+PROD_TOKEN_URL = 'https://business-api.tiktok.com/open_api/v1.2/user/info'
+SANDBOX_TOKEN_URL = 'https://sandbox-ads.tiktok.com/open_api/v1.2/user/info'
+
 class TikTokClient:
     def __init__(self,
                  access_token,
+                 sandbox=False,
                  user_agent=None):
         self.__access_token = access_token
         self.__user_agent = user_agent
         self.__session = requests.Session()
         self.__base_url = None
         self.__verified = False
+        self.sandbox = False
+        if sandbox in ['true', 'True', True]:
+            self.sandbox = True
 
     def __enter__(self):
         self.__verified = self.check_access_token()
@@ -32,8 +41,12 @@ class TikTokClient:
             headers['User-Agent'] = self.__user_agent
         headers['Access-Token'] = self.__access_token
         headers['Accept'] = 'application/json'
+        if self.sandbox:
+            url = SANDBOX_TOKEN_URL
+        else:
+            url = PROD_TOKEN_URL
         response = self.__session.get(
-            url='https://business-api.tiktok.com/open_api/v1.2/user/info',
+            url=url,
             headers=headers)
         if response.status_code != 200:
             LOGGER.error('Error status_code = %s', response.status_code)
@@ -47,7 +60,10 @@ class TikTokClient:
             self.__verified = self.check_access_token()
 
         if not url and self.__base_url is None:
-            self.__base_url = 'https://business-api.tiktok.com/open_api/v1.2'
+            if self.sandbox:
+                self.__base_url = SANDBOX_ENDPOINT_BASE
+            else:
+                self.__base_url = PROD_ENDPOINT_BASE
 
         if not url and path:
             url = f'{self.__base_url}/{path}'
