@@ -56,7 +56,12 @@ AUCTION_FIELDS = """[
     "comments",
     "shares",
     "follows",
-    "clicks_on_music_disc"
+    "clicks_on_music_disc",
+    "tt_app_id",
+    "tt_app_name",
+    "mobile_app_id",
+    "promotion_type",
+    "dpa_target_audience_type"
 ]"""
 AUDIENCE_FIELDS = """[
     "ad_name",
@@ -82,7 +87,12 @@ AUDIENCE_FIELDS = """[
     "result_rate",
     "real_time_result",
     "real_time_cost_per_result",
-    "real_time_result_rate"
+    "real_time_result_rate",
+    "tt_app_id",
+    "tt_app_name",
+    "mobile_app_id",
+    "promotion_type",
+    "dpa_target_audience_type"
 ]"""
 ENDPOINT_ADVERTISERS = [
     'advertisers'
