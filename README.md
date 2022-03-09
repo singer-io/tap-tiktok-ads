@@ -32,6 +32,7 @@ The tap requires some fields to be completed in a config file in order to work. 
 	- user_agent: User agent that makes the API call.
 	- access_token: Access token for the TikTok Marketing API
 	- accounts: A list of account ids.
+    - sandbox (string, optional): Whether to communication with tiktok-ads's sandbox or business account for this application. If you're not sure leave out. Defaults to false.
 
 ```json
 {
@@ -39,7 +40,8 @@ The tap requires some fields to be completed in a config file in order to work. 
   "end_date": "2020-01-01T00:00:00Z",
   "user_agent": "tap-tiktok-ads <api_user_email@your_company.com>",
   "access_token": "YOUR_ACCESS_TOKEN",
-  "accounts": []
+  "accounts": [],
+  "sandbox": "<true|false>"
 }
 ```
 
