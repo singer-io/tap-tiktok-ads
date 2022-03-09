@@ -1,5 +1,4 @@
 import unittest
-import requests
 from tap_tiktok_ads.client import TikTokAdsClientError, TikTokClient
 from unittest import mock
 
@@ -17,9 +16,8 @@ class Mockresponse:
 def get_response(status_code, json={}, headers=None):
     return Mockresponse(status_code, json, headers)
 
-# @mock.patch("time.sleep")
 @mock.patch("requests.Session.request")
-class TestInternalErrorBackoff(unittest.TestCase):
+class TestErrorHandling(unittest.TestCase):
     """
         Test cases to verify that proper error message is thrown in case of error.
     """
@@ -40,8 +38,8 @@ class TestInternalErrorBackoff(unittest.TestCase):
         # verify that we raise Timeout error when using "with" statement
         with self.assertRaises(TikTokAdsClientError) as e:
             # create client and call function
-            client = TikTokClient(config.get("access_token"), config.get("user_agent"))
-            client.__enter__()
+            with TikTokClient(config.get("access_token"), config.get("user_agent")) as client:
+                client.__enter__()
         # verify the error is raised as expected with message
         self.assertEqual(str(e.exception), "Requests made too frequently")
 
@@ -62,8 +60,8 @@ class TestInternalErrorBackoff(unittest.TestCase):
         # verify that we raise Timeout error when using "with" statement
         with self.assertRaises(TikTokAdsClientError) as e:
             # create client and call function
-            client = TikTokClient(config.get("access_token"), config.get("user_agent"))
-            client.request("GET", "https://www.test.com")
+            with TikTokClient(config.get("access_token"), config.get("user_agent")) as client:
+                client.request("GET", "https://www.test.com")
         # verify the error is raised as expected with message
         self.assertEqual(str(e.exception), "Requests made too frequently")
 
