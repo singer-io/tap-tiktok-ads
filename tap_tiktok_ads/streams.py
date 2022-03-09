@@ -145,6 +145,8 @@ def transform_ad_management_records(records, bookmark_value):
         # In case of an adgroup request, transform 'is_comment_disabled' type from integer to boolean
         if 'is_comment_disable' in record:
             record['is_comment_disable'] = bool(record['is_comment_disable'] == 0)
+        # The `modify_time` format is different that the bookmark_value format(which is currently in TZ format),
+        # hence resulted into falsy comparision. Thus, converted both to same formats.
         if bookmark_value is None or utils.strptime_to_utc(record['modify_time']) > utils.strptime_to_utc(bookmark_value):
             transformed_records.append(record)
     return transformed_records

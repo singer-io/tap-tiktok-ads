@@ -27,6 +27,8 @@ class TestBookmarks(unittest.TestCase):
         records = [{'modify_time': '2022-02-10 12:15:34'}, {'modify_time': '2022-02-10 12:12:40'}]
         bookmark_value = '2022-02-10T12:12:52.000000Z'
         transformed_records = transform_ad_management_records(records, bookmark_value)
+        # Verify that the transformed records contains only the records with modify_time greater than the
+        # bookmark, thus verifying correct comparision.
         self.assertEqual(transformed_records, [{'modify_time': '2022-02-10 12:15:34'}])
 
     @mock.patch('tap_tiktok_ads.streams.get_bookmark_value')
@@ -40,6 +42,7 @@ class TestBookmarks(unittest.TestCase):
         advertisers = Advertisers(MockClient(), config, state)
         stream =  MockCatalog('advertisers', 'advertisers', ['create_time'])
         advertisers.process_batch(stream, [{'create_time': 1642114853}], 'test_acc_id')
+        # Verify that the get_bookmark_value() is called with {} indicating empty state which is returned from the get_bookmark() function.
         test_get_bk_value.assert_called_with('advertisers', {}, 'test_acc_id')
 
     @mock.patch('tap_tiktok_ads.streams.pre_transform')
@@ -53,4 +56,5 @@ class TestBookmarks(unittest.TestCase):
         advertisers = Advertisers(MockClient(), config, state)
         stream =  MockCatalog('advertisers', 'advertisers', ['create_time'])
         advertisers.process_batch(stream, [{'create_time': 1642114853}], 'test_acc_id')
+        # Verify that the pre_transform() is called with None thus verifying that the get_bookmark_value() returned None.
         test_pre_transform.assert_called_with('advertisers', [{'create_time': 1642114853}], None)
