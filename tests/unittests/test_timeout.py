@@ -234,10 +234,11 @@ class TestTimeoutBackoff(unittest.TestCase):
             "user_agent": "test_user_agent"
         }
 
+        # create client
+        client = TikTokClient(config.get("access_token"), config.get("user_agent"), config.get("request_timeout"))
         # verify that we raise Timeout error when using "with" statement
         with self.assertRaises(requests.Timeout):
-            # create client and call function
-            client = TikTokClient(config.get("access_token"), config.get("user_agent"), config.get("request_timeout"))
+            # function call
             client.__enter__()
 
         # verify that we backoff for 5 times
@@ -256,10 +257,11 @@ class TestTimeoutBackoff(unittest.TestCase):
             "user_agent": "test_user_agent"
         }
 
+        #  create client
+        client = TikTokClient(config.get("access_token"), config.get("user_agent"), config.get("request_timeout"))
         # verify that we raise Timeout error when using "with" statement
         with self.assertRaises(requests.Timeout):
-            # create client and call function
-            client = TikTokClient(config.get("access_token"), config.get("user_agent"), config.get("request_timeout"))
+            # function call
             client.request("GET")
 
         # get arguments passed during calling "requests.Session.request"
@@ -284,10 +286,11 @@ class TestTimeoutBackoff(unittest.TestCase):
             "user_agent": "test_user_agent"
         }
 
+        # create client
+        client = TikTokClient(config.get("access_token"), config.get("user_agent"), config.get("request_timeout"))
         # verify that we raise Timeout error when using "with" statement
         with self.assertRaises(requests.Timeout):
-            # create client and call function
-            client = TikTokClient(config.get("access_token"), config.get("user_agent"), config.get("request_timeout"))
+            # function call
             client.request("GET", "https://www.test.com")
 
         # verify that we backoff for 5 times
