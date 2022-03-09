@@ -27,12 +27,12 @@ The tap uses an access token provided by the TikTok Marketing API to make the ca
 ## Config File
 
 The tap requires some fields to be completed in a config file in order to work. Currently the tap supports the fields:
-	- start_date: Date from which the tap starts extracting data. RFC3339 format.
-	- end_date: Date from which the tap ends extracting data. RFC3339 format. (Optional)
-	- user_agent: User agent that makes the API call.
-	- access_token: Access token for the TikTok Marketing API
-	- accounts: A list of account ids.
-    - request_timeout: Timeout for requests. Default: 300 seconds.
+- start_date: Date from which the tap starts extracting data. RFC3339 format.
+- end_date: Date from which the tap ends extracting data. RFC3339 format. (Optional)
+- user_agent: User agent that makes the API call.
+- access_token: Access token for the TikTok Marketing API
+- accounts: A list of account ids.
+- request_timeout: The time for which request should wait to get response. It is an optional parameter and default value as 300 seconds.
 
 ```json
 {
