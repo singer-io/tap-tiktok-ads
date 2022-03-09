@@ -167,8 +167,7 @@ def get_bookmark_value(stream_name, bookmark_data, advertiser_id):
     if stream_name in ENDPOINT_ADVERTISERS:
         if bookmark_data:
             return bookmark_data
-        else:
-            return None
+        return None
     elif (stream_name in ENDPOINT_INSIGHTS or stream_name in ENDPOINT_AD_MANAGEMENT) and advertiser_id in bookmark_data:
         return bookmark_data[advertiser_id]
     else:
