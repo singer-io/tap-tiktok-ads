@@ -35,11 +35,11 @@ class TestErrorHandling(unittest.TestCase):
             "user_agent": "test_user_agent"
         }
 
+        # create client and call function
+        client = TikTokClient(config.get("access_token"), config.get("user_agent"))
         # verify that we raise Timeout error when using "with" statement
         with self.assertRaises(TikTokAdsClientError) as e:
-            # create client and call function
-            with TikTokClient(config.get("access_token"), config.get("user_agent")) as client:
-                client.__enter__()
+            client.__enter__()
         # verify the error is raised as expected with message
         self.assertEqual(str(e.exception), "Requests made too frequently")
 
@@ -57,11 +57,11 @@ class TestErrorHandling(unittest.TestCase):
             "user_agent": "test_user_agent"
         }
 
+        # create client and call function
+        client = TikTokClient(config.get("access_token"), config.get("user_agent"))
         # verify that we raise Timeout error when using "with" statement
         with self.assertRaises(TikTokAdsClientError) as e:
-            # create client and call function
-            with TikTokClient(config.get("access_token"), config.get("user_agent")) as client:
-                client.request("GET", "https://www.test.com")
+            client.request("GET", "https://www.test.com")
         # verify the error is raised as expected with message
         self.assertEqual(str(e.exception), "Requests made too frequently")
 
