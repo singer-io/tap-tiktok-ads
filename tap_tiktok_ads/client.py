@@ -25,12 +25,14 @@ def should_retry(e):
 class TikTokClient:
     def __init__(self,
                  access_token,
+                 advertiser_id,
                  user_agent=None):
         self.__access_token = access_token
         self.__user_agent = user_agent
         self.__session = requests.Session()
         self.__base_url = None
         self.__verified = False
+        self.__advertiser_id = advertiser_id
 
     # Backoff the request after 5 minutes in case of 50000 error code
     @backoff.on_exception(backoff.constant,
@@ -58,15 +60,24 @@ class TikTokClient:
             url='https://business-api.tiktok.com/open_api/v1.2/user/info',
             headers=headers)
         if response.status_code != 200:
-            LOGGER.error('Error status_code = %s', response.status_code)
-            return False
+            raise Exception('Error status_code = %s', response.status_code)
         resp = response.json()
         error_code = resp.get('code')
         message = resp.get('message', 'Unknown Error occurred.')
 
         if error_code != 0: # `0` error code indicates successful request
             raise TikTokAdsClientError(message, response) # raise the exception with the message retrieved
-        return bool(resp.get('message') == 'OK')
+        if resp['message'] == 'OK':
+            self.__verified = True
+            headers = {
+                "Access-Token": self.__access_token
+            }
+            params = {
+                "advertiser_ids": self.__advertiser_id
+            }
+            adv_response = self.get(path='advertiser/info/', headers=headers,
+                                        params=params)
+            return bool(adv_response.get('message') == 'OK')
 
     # Backoff the request after 5 minutes in case of 50000 error code
     @backoff.on_exception(backoff.constant,
