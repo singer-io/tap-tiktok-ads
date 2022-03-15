@@ -164,6 +164,10 @@ def transform_advertisers_records(records, bookmark_value):
 
 
 def get_bookmark_value(stream_name, bookmark_data, advertiser_id):
+    '''
+    Return the bookmark value. Return None in case of `advertisers` stream if bookmark is not present.
+    For other streams return bookmark for each advertiser_id
+    '''
     if stream_name in ENDPOINT_ADVERTISERS:
         if bookmark_data:
             return bookmark_data
