@@ -7,10 +7,10 @@ from singer import metrics
 
 LOGGER = singer.get_logger()
 
-PROD_ENDPOINT_BASE = "https://business-api.tiktok.com/open_api/v1.2"
-SANDBOX_ENDPOINT_BASE = "https://sandbox-ads.tiktok.com/open_api/v1.2"
-PROD_TOKEN_URL = 'https://business-api.tiktok.com/open_api/v1.2/user/info'
-SANDBOX_TOKEN_URL = 'https://sandbox-ads.tiktok.com/open_api/v1.2/user/info'
+ENDPOINT_BASE = "https://{api}.tiktok.com/open_api/v1.2"
+# SANDBOX_ENDPOINT_BASE = "https://sandbox-ads.tiktok.com/open_api/v1.2"
+TOKEN_URL = 'https://{api}.tiktok.com/open_api/v1.2/user/info'
+# SANDBOX_TOKEN_URL = 'https://sandbox-ads.tiktok.com/open_api/v1.2/user/info'
 
 class TikTokClient:
     def __init__(self,
@@ -42,9 +42,9 @@ class TikTokClient:
         headers['Access-Token'] = self.__access_token
         headers['Accept'] = 'application/json'
         if self.sandbox:
-            url = SANDBOX_TOKEN_URL
+            url = TOKEN_URL.format(api='sandbox-ads')
         else:
-            url = PROD_TOKEN_URL
+            url = TOKEN_URL.format(api='business-api')
         response = self.__session.get(
             url=url,
             headers=headers)
@@ -61,9 +61,9 @@ class TikTokClient:
 
         if not url and self.__base_url is None:
             if self.sandbox:
-                self.__base_url = SANDBOX_ENDPOINT_BASE
+                self.__base_url = ENDPOINT_BASE.format(api='sandbox-ads')
             else:
-                self.__base_url = PROD_ENDPOINT_BASE
+                self.__base_url = ENDPOINT_BASE.format(api='business-api')
 
         if not url and path:
             url = f'{self.__base_url}/{path}'
