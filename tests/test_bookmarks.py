@@ -5,6 +5,9 @@ from base import TiktokBase
 from tap_tester import runner, connections, menagerie
 
 def get_second_start_date(stream):
+    """
+        Return the new date for stream to run sync mode 2nd time
+    """
     if "insights" in stream:
         return "2020-12-20T00:00:00Z"
     elif stream == "advertisers":
