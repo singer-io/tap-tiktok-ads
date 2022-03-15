@@ -34,12 +34,14 @@ class TiktokBase(unittest.TestCase):
         return "platform.tiktok"
 
     def get_credentials(self):
+        """Return creds from env variables"""
         return {
             "access_token": os.getenv("TAP_TIKTOK_ADS_ACCESS_TOKEN"),
             "accounts": eval(os.getenv("TAP_TIKTOK_ADS_ACCOUNTS"))
         }
 
     def get_properties(self, original: bool = True):
+        """Return config"""
         return_value = {
             "start_date": "2020-12-01T00:00:00Z",
             "sandbox": True,
@@ -52,6 +54,7 @@ class TiktokBase(unittest.TestCase):
         return return_value
 
     def expected_metadata(self):
+        """Return all the data about all the streams"""
         return {
             "advertisers": {
                 self.PRIMARY_KEYS: {"id", "create_time"},
@@ -104,17 +107,21 @@ class TiktokBase(unittest.TestCase):
         }
 
     def expected_streams(self):
+        """Return the streams"""
         return set(self.expected_metadata().keys())
 
     def expected_replication_keys(self):
+        """Return replication keys for the streams"""
         return {table: properties.get(self.REPLICATION_KEYS, set()) for table, properties
                 in self.expected_metadata().items()}
 
     def expected_primary_keys(self):
+        """Return primary keys for the streams"""
         return {table: properties.get(self.PRIMARY_KEYS, set()) for table, properties
                 in self.expected_metadata().items()}
 
     def expected_replication_method(self):
+        """Return replication method for the streams"""
         return {table: properties.get(self.REPLICATION_METHOD, set()) for table, properties
                 in self.expected_metadata().items()}
 
@@ -162,6 +169,7 @@ class TiktokBase(unittest.TestCase):
         return found_catalogs
 
     def run_and_verify_sync(self, conn_id, streams=None):
+        """Run sync, verify we replicated some records and return record count by streams"""
         sync_job_name = runner.run_sync_mode(self, conn_id)
 
         # verify tap and target exit codes
@@ -182,6 +190,7 @@ class TiktokBase(unittest.TestCase):
         return sync_record_count
 
     def dt_to_ts(self, dtime):
+        """Convert date to epoch time"""
         for date_format in self.DATETIME_FMT:
             try:
                 date_stripped = int(time.mktime(dt.strptime(dtime, date_format).timetuple()))
@@ -190,4 +199,5 @@ class TiktokBase(unittest.TestCase):
                 continue
 
     def is_incremental(self, stream):
+        """Boolean function to check is the stream is INCREMENTAL of not"""
         return self.expected_metadata()[stream][self.REPLICATION_METHOD] == self.INCREMENTAL
