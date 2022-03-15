@@ -12,12 +12,18 @@ class Mockresponse:
         self.headers = headers
 
     def raise_for_status(self):
+        """
+            Raise error if 'raise_error' is True
+        """
         if not self.raise_error:
             return self.status_code
 
         raise requests.HTTPError("Sample message")
 
     def json(self):
+        """
+            Return mocked response
+        """
         return self.text
 
 # function to get mocked response
