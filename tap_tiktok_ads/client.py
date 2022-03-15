@@ -19,6 +19,8 @@ def should_retry(e):
     """ Return true if exception is required to retry otherwise return false """
     response = e.response
     error_code = response.json().get("code")
+    # Backoff in case of 50000 error code. Refer doc: https://ads.tiktok.com/marketing_api/docs?id=1714940022762498 
+    # for more information.
     if error_code == 50000:
         return True
 
@@ -58,8 +60,7 @@ class TikTokClient:
             url='https://business-api.tiktok.com/open_api/v1.2/user/info',
             headers=headers)
         if response.status_code != 200:
-            LOGGER.error('Error status_code = %s', response.status_code)
-            return False
+            raise Exception('Error status_code = %s', response.status_code)
         resp = response.json()
         error_code = resp.get('code')
         message = resp.get('message', 'Unknown Error occurred.')
