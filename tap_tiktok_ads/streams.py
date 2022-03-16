@@ -100,6 +100,9 @@ ENDPOINT_INSIGHTS = [
 ]
 
 def get_date_batches(start_date, end_date):
+    """
+        Returns batches with start_date and end_date for the date_windowing from the provided start_date and end_date
+    """
     date_batches = []
     if end_date.date() > start_date.date():
         while start_date < end_date:
@@ -113,6 +116,9 @@ def get_date_batches(start_date, end_date):
     return date_batches
 
 def pre_transform(stream_name, records, bookmark_value):
+    """
+        Transforms records for every stream before writing to output as per stream category
+    """
     if stream_name in ENDPOINT_INSIGHTS:
         return transform_ad_insights_records(records)
     elif stream_name in ENDPOINT_AD_MANAGEMENT:
@@ -123,6 +129,9 @@ def pre_transform(stream_name, records, bookmark_value):
         return records
 
 def transform_ad_insights_records(records):
+    """
+        Transforms records for ad_insights streams before writing to output
+    """
     transformed_records = []
     for record in records:
         if 'metrics' in record and 'dimensions' in record:
@@ -138,6 +147,9 @@ def transform_ad_insights_records(records):
     return transformed_records
 
 def transform_ad_management_records(records, bookmark_value):
+    """
+        Transforms records for ad_management streams before writing to output
+    """
     transformed_records = []
     for record in records:
         if 'modify_time' not in record:
@@ -152,6 +164,9 @@ def transform_ad_management_records(records, bookmark_value):
     return transformed_records
 
 def transform_advertisers_records(records, bookmark_value):
+    """
+        Transforms records for advertisers stream before writing to output
+    """
     transformed_records = []
     for record in records:
         record['create_time'] = datetime.fromtimestamp(record['create_time'], tz=timezone.utc)
@@ -165,8 +180,8 @@ def transform_advertisers_records(records, bookmark_value):
 
 def get_bookmark_value(stream_name, bookmark_data, advertiser_id):
     '''
-    Return the bookmark value. Return None in case of `advertisers` stream if bookmark is not present.
-    For other streams return bookmark for each advertiser_id
+    Returns bookmark value for any stream based on stream category(normal or stream with advertiser_id). Return None in 
+    case of `advertisers` stream if bookmark is not present. For other streams return bookmark for each advertiser_id
     '''
     if stream_name in ENDPOINT_ADVERTISERS:
         if bookmark_data:
@@ -197,6 +212,9 @@ class Stream():
         self.client = client
 
     def write_bookmark(self, stream, value):
+        """
+            Write bookmark in state for given stream with provided bookmark value.
+        """
         if 'bookmarks' not in self.state:
             self.state['bookmarks'] = {}
 
@@ -206,6 +224,10 @@ class Stream():
             singer.write_state(self.state)
 
     def get_bookmark(self, stream_name):
+        """
+            Return bookmark value present in state or return a default value if no bookmark
+            present in the state for provided stream
+        """
         if 'bookmarks' in self.state and stream_name in self.state['bookmarks']:
             return self.state['bookmarks'][stream_name]
         return {}
@@ -214,6 +236,9 @@ class Stream():
     # of 30 days. Because of this we need to separate the interval between start_date
     # and end_date into batches of 30 days max.
     def get_date_batches(self, stream_id, advertiser_id):
+        """
+            Returns batches with start_date and end_date for the date_windowing using bookmark/start_date
+        """
         if ('bookmarks' in self.state) and (stream_id in self.state['bookmarks'] and (str(advertiser_id) in self.state['bookmarks'][stream_id])):
             start_date = parse(self.state['bookmarks'][stream_id][str(advertiser_id)]) + timedelta(days=1)
         else:
@@ -226,6 +251,9 @@ class Stream():
         return get_date_batches(start_date, end_date)
 
     def process_batch(self, stream, records, advertiser_id):
+        """
+            Process records for the stream by transforming it to the desired format, writing it to output, and bookmark writing
+        """
         bookmark_column = stream.replication_key[0]
         bookmark_data = self.get_bookmark(stream.tap_stream_id)
         bookmark_value = get_bookmark_value(stream.tap_stream_id, bookmark_data, advertiser_id)
@@ -248,6 +276,9 @@ class Stream():
                         self.write_bookmark(stream.tap_stream_id, bookmark_data)
 
     def sync_pages(self, stream):
+        """
+            Returns page with records for processing for provided stream
+        """
         headers = {
             "Access-Token": self.config['access_token']
         }
@@ -282,6 +313,7 @@ class Advertisers(Stream):
     path = "advertiser/info/"
 
     def sync_advertisers(self, stream):
+        """Returns records of advertisers for the processing"""
         headers = {
             "Access-Token": self.config['access_token']
         }
