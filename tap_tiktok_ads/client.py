@@ -69,6 +69,7 @@ class TikTokClient:
 
         if error_code != 0: # `0` error code indicates successful request
             raise TikTokAdsClientError(message, response) # raise the exception with the message retrieved
+        # if the check_access_token() succeeds, then check the account access with the account ids provided in config.
         if resp['message'] == 'OK':
             self.__verified = True
             headers = {
@@ -77,6 +78,7 @@ class TikTokClient:
             params = {
                 "advertiser_ids": self.__advertiser_id
             }
+            # Call the advertisers API with the account ids to check whether the accounts ar valid or not.
             adv_response = self.get(path='advertiser/info/', headers=headers,
                                         params=params)
             return bool(adv_response.get('message') == 'OK')

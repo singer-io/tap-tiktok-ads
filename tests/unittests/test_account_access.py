@@ -17,7 +17,6 @@ def get_response(status_code, json={}, headers=None):
     return Mockresponse(status_code, json, headers)
 
 @mock.patch("requests.Session.request")
-# @mock.patch("tap_tiktok_ads.client.TikTokClient.get")
 class TestErrorHandling(unittest.TestCase):
     """
         Test cases to verify that proper error message is thrown in case of error.
