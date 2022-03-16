@@ -8,9 +8,7 @@ from singer import metrics
 LOGGER = singer.get_logger()
 
 ENDPOINT_BASE = "https://{api}.tiktok.com/open_api/v1.2"
-# SANDBOX_ENDPOINT_BASE = "https://sandbox-ads.tiktok.com/open_api/v1.2"
 TOKEN_URL = 'https://{api}.tiktok.com/open_api/v1.2/user/info'
-# SANDBOX_TOKEN_URL = 'https://sandbox-ads.tiktok.com/open_api/v1.2/user/info'
 
 class TikTokClient:
     def __init__(self,
