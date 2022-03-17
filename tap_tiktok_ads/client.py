@@ -137,6 +137,9 @@ class TikTokClient:
             json_response = {}
         error_code = json_response.get("code")
         message = json_response.get('message', 'Unknown Error occurred.')
+        if "Service error:" in message:
+            message = "Error encountered accessing the accounts with the given account ids. Kindly check your account ids."
+
         if error_code != 0: # `0` error code indicates successful request
             raise TikTokAdsClientError(message, response) # raise the exception with the message retrieved
         return json_response
