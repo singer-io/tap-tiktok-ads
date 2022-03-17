@@ -78,7 +78,7 @@ class TikTokClient:
             params = {
                 "advertiser_ids": self.__advertiser_id
             }
-            # Call the advertisers API with the account ids to check whether the accounts ar valid or not.
+            # Call the advertisers API with the account ids to check whether the accounts are valid or not.
             adv_response = self.get(path='advertiser/info/', headers=headers,
                                         params=params)
             return bool(adv_response.get('message') == 'OK')
