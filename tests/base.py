@@ -31,7 +31,7 @@ class TiktokBase(unittest.TestCase):
             raise Exception("set " + ", ".join(missing_envs))
 
     def get_type(self):
-        return "platform.tiktok"
+        return "platform.tiktok-ads"
 
     def get_credentials(self):
         """Return creds from env variables"""
