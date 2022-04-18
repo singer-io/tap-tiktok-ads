@@ -140,7 +140,7 @@
     "balance": {
       "type": [
         "null",
-        "string"
+        "number"
       ]
     },
     "create_time": {
