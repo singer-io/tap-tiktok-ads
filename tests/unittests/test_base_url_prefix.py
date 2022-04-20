@@ -25,7 +25,7 @@ class Mockresponse:
 def get_response(status_code, json={}, raise_error=False, headers=None):
     return Mockresponse(status_code, json, raise_error, headers)
 
-@mock.patch("requests.Session.get")
+@mock.patch("requests.Session.request")
 class TestBaseURLPrefix(unittest.TestCase):
     """
         Test cases to verify the URL prefix is set correctly for sandbox and non-sandbox accounts
@@ -36,7 +36,7 @@ class TestBaseURLPrefix(unittest.TestCase):
             Test case to verify the business URL is used when sandbox is set to string false
         """
         # mock response
-        mocked_get.return_value = get_response(200)
+        mocked_get.return_value = get_response(200, {'code': 0, "message": "True"})
         # create config
         config = {
             "access_token": "test_access_token",
@@ -44,21 +44,21 @@ class TestBaseURLPrefix(unittest.TestCase):
         }
 
         # create client
-        client = TikTokClient(config.get("access_token"), sandbox=config.get("sandbox"))
+        client = TikTokClient(config.get("access_token"), [], sandbox=config.get("sandbox"))
         # function call
         client.check_access_token()
 
         # get args with which request was called
         args, kwargs = mocked_get.call_args
         # verify the base URL
-        self.assertRegex(kwargs.get("url"), r'business-api.tiktok.com')
+        self.assertRegex(args[1], r'business-api.tiktok.com')
 
     def test_no_sandbox_account_boolean(self, mocked_get):
         """
             Test case to verify the business URL is used when sandbox is set to boolean false
         """
         # mock response
-        mocked_get.return_value = get_response(200)
+        mocked_get.return_value = get_response(200, {'code': 0, "message": "True"})
         # create config
         config = {
             "access_token": "test_access_token",
@@ -66,42 +66,42 @@ class TestBaseURLPrefix(unittest.TestCase):
         }
 
         # create client
-        client = TikTokClient(config.get("access_token"), sandbox=config.get("sandbox"))
+        client = TikTokClient(config.get("access_token"), [], sandbox=config.get("sandbox"))
         # function call
         client.check_access_token()
 
         # get args with which request was called
         args, kwargs = mocked_get.call_args
         # verify the base URL
-        self.assertRegex(kwargs.get("url"), r'business-api.tiktok.com')
+        self.assertRegex(args[1], r'business-api.tiktok.com')
 
     def test_no_sandbox_account_param_passed(self, mocked_get):
         """
             Test case to verify the business URL is used when sandbox is not passed in config
         """
         # mock response
-        mocked_get.return_value = get_response(200)
+        mocked_get.return_value = get_response(200, {'code': 0, "message": "True"})
         # create config
         config = {
             "access_token": "test_access_token"
         }
 
         # create client
-        client = TikTokClient(config.get("access_token"), sandbox=config.get("sandbox"))
+        client = TikTokClient(config.get("access_token"), [], sandbox=config.get("sandbox"))
         # function call
         client.check_access_token()
 
         # get args with which request was called
         args, kwargs = mocked_get.call_args
         # verify the base URL
-        self.assertRegex(kwargs.get("url"), r'business-api.tiktok.com')
+        self.assertRegex(args[1], r'business-api.tiktok.com')
 
     def test_sandbox_account_string(self, mocked_get):
         """
             Test case to verify the sandbox URL is used when sandbox is set to string true
         """
         # mock response
-        mocked_get.return_value = get_response(200)
+        mocked_get.return_value = get_response(200, {'code': 0, "message": "True"})
         # create config
         config = {
             "access_token": "test_access_token",
@@ -109,21 +109,21 @@ class TestBaseURLPrefix(unittest.TestCase):
         }
 
         # create client
-        client = TikTokClient(config.get("access_token"), sandbox=config.get("sandbox"))
+        client = TikTokClient(config.get("access_token"), [], sandbox=config.get("sandbox"))
         # function call
         client.check_access_token()
 
         # get args with which request was called
         args, kwargs = mocked_get.call_args
         # verify the base URL
-        self.assertRegex(kwargs.get("url"), r'sandbox-ads.tiktok.com')
+        self.assertRegex(args[1], r'sandbox-ads.tiktok.com')
 
     def test_sandbox_account_boolean(self, mocked_get):
         """
             Test case to verify the sandbox URL is used when sandbox is set to boolean true
         """
         # mock response
-        mocked_get.return_value = get_response(200)
+        mocked_get.return_value = get_response(200, {'code': 0, "message": "True"})
         # create config
         config = {
             "access_token": "test_access_token",
@@ -131,11 +131,11 @@ class TestBaseURLPrefix(unittest.TestCase):
         }
 
         # create client
-        client = TikTokClient(config.get("access_token"), sandbox=config.get("sandbox"))
+        client = TikTokClient(config.get("access_token"), [], sandbox=config.get("sandbox"))
         # function call
         client.check_access_token()
 
         # get args with which request was called
         args, kwargs = mocked_get.call_args
         # verify the base URL
-        self.assertRegex(kwargs.get("url"), r'sandbox-ads.tiktok.com')
+        self.assertRegex(args[1], r'sandbox-ads.tiktok.com')
