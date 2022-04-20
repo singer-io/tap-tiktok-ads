@@ -179,6 +179,36 @@
         "null",
         "number"
       ]
+    },
+    "tt_app_id": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "tt_app_name": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "mobile_app_id": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "promotion_type": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "dpa_target_audience_type": {
+      "type": [
+        "null",
+        "string"
+      ]
     }
   }
 }
