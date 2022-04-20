@@ -42,7 +42,7 @@ class TestRequestTimeoutValue(unittest.TestCase):
             Verify that default timeout is used when timeout is not passed in config
         """
         # mock response
-        mocked_request.return_value = get_response(200)
+        mocked_request.return_value = get_response(200, {'code': 0})
 
         # set config
         config = {
@@ -64,7 +64,7 @@ class TestRequestTimeoutValue(unittest.TestCase):
             Verify that desired timeout is used when integer timeout is passed in config
         """
         # mock response
-        mocked_request.return_value = get_response(200)
+        mocked_request.return_value = get_response(200, {'code': 0})
 
         # set config
         config = {
@@ -87,7 +87,7 @@ class TestRequestTimeoutValue(unittest.TestCase):
             Verify that desired timeout is used when stringified integer timeout is passed in config
         """
         # mock response
-        mocked_request.return_value = get_response(200)
+        mocked_request.return_value = get_response(200, {'code': 0})
 
         # set config
         config = {
@@ -110,7 +110,7 @@ class TestRequestTimeoutValue(unittest.TestCase):
             Verify that desired timeout is used when float timeout is passed in config
         """
         # mock response
-        mocked_request.return_value = get_response(200)
+        mocked_request.return_value = get_response(200, {'code': 0})
 
         # set config
         config = {
@@ -133,7 +133,7 @@ class TestRequestTimeoutValue(unittest.TestCase):
             Verify that desired timeout is used when stringified float timeout is passed in config
         """
         # mock response
-        mocked_request.return_value = get_response(200)
+        mocked_request.return_value = get_response(200, {'code': 0})
 
         # set config
         config = {
@@ -156,7 +156,7 @@ class TestRequestTimeoutValue(unittest.TestCase):
             Verify that default timeout is used when empty timeout is passed in config
         """
         # mock response
-        mocked_request.return_value = get_response(200)
+        mocked_request.return_value = get_response(200, {'code': 0})
 
         # set config
         config = {
@@ -179,7 +179,7 @@ class TestRequestTimeoutValue(unittest.TestCase):
             Verify that default timeout is used when zero 0 timeout is passed in config
         """
         # mock response
-        mocked_request.return_value = get_response(200)
+        mocked_request.return_value = get_response(200, {'code': 0})
 
         # set config
         config = {
@@ -202,7 +202,7 @@ class TestRequestTimeoutValue(unittest.TestCase):
             Verify that default timeout is used when stringified zero '0' timeout is passed in config
         """
         # mock response
-        mocked_request.return_value = get_response(200)
+        mocked_request.return_value = get_response(200, {'code': 0})
 
         # set config
         config = {
