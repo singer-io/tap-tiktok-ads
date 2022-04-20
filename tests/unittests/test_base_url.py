@@ -30,7 +30,7 @@ class TestSandboxUrl(unittest.TestCase):
             "sandbox": True
         }
         mock_request.return_value = get_response(200, {"code": 0, "message": "OK"})
-        client = TikTokClient(config.get("access_token"),config.get('sandbox'), config.get("user_agent"))
+        client = TikTokClient(config.get("access_token"), [], config.get('sandbox'), config.get("user_agent"))
         client.request("GET", path = 'test')
         mock_request.assert_called_with('GET', 'https://sandbox-ads.tiktok.com/open_api/v1.2/test', headers={'Access-Token': 'test_access_token', 'Accept': 'application/json', 'User-Agent': 'test_user_agent'})
 
@@ -45,7 +45,7 @@ class TestSandboxUrl(unittest.TestCase):
             "sandbox": False
         }
         mock_request.return_value = get_response(200, {"code": 0, "message": "OK"})
-        client = TikTokClient(config.get("access_token"),config.get('sandbox'), config.get("user_agent"))
+        client = TikTokClient(config.get("access_token"), [], config.get('sandbox'), config.get("user_agent"))
         client.request("GET", path = 'test')
         mock_request.assert_called_with('GET', 'https://business-api.tiktok.com/open_api/v1.2/test', headers={'Access-Token': 'test_access_token', 'Accept': 'application/json', 'User-Agent': 'test_user_agent'})
 
@@ -59,7 +59,7 @@ class TestSandboxUrl(unittest.TestCase):
             "user_agent": "test_user_agent"
         }
         mock_request.return_value = get_response(200, {"code": 0, "message": "OK"})
-        client = TikTokClient(config.get("access_token"), user_agent= config.get("user_agent"))
+        client = TikTokClient(config.get("access_token"), [],  user_agent= config.get("user_agent"))
         client.request("GET", path = 'test')
         mock_request.assert_called_with('GET', 'https://business-api.tiktok.com/open_api/v1.2/test', headers={'Access-Token': 'test_access_token', 'Accept': 'application/json', 'User-Agent': 'test_user_agent'})
 
@@ -74,7 +74,7 @@ class TestSandboxUrl(unittest.TestCase):
             "sandbox": "False"
         }
         mock_request.return_value = get_response(200, {"code": 0, "message": "OK"})
-        client = TikTokClient(config.get("access_token"),user_agent= config.get("user_agent"))
+        client = TikTokClient(config.get("access_token"), [], user_agent= config.get("user_agent"))
         client.request("GET", path = 'test')
         mock_request.assert_called_with('GET', 'https://business-api.tiktok.com/open_api/v1.2/test', headers={'Access-Token': 'test_access_token', 'Accept': 'application/json', 'User-Agent': 'test_user_agent'})
 
@@ -88,7 +88,7 @@ class TestSandboxUrl(unittest.TestCase):
             "sandbox": True
         }
         mock_get.return_value = get_response(200, {"code": 0, "message": "OK"})
-        client = TikTokClient(config.get("access_token"),config.get('sandbox'), config.get("user_agent"))
+        client = TikTokClient(config.get("access_token"), [], config.get('sandbox'), config.get("user_agent"))
         client.check_access_token()
         mock_get.assert_called_with(url='https://sandbox-ads.tiktok.com/open_api/v1.2/user/info', headers={'User-Agent': 'test_user_agent', 'Access-Token': 'test_access_token', 'Accept': 'application/json'})
 
@@ -102,7 +102,7 @@ class TestSandboxUrl(unittest.TestCase):
             "sandbox": False
         }
         mock_get.return_value = get_response(200, {"code": 0, "message": "OK"})
-        client = TikTokClient(config.get("access_token"), config.get('sandbox'), config.get("user_agent"))
+        client = TikTokClient(config.get("access_token"), [],  config.get('sandbox'), config.get("user_agent"))
         client.check_access_token()
         mock_get.assert_called_with(url='https://business-api.tiktok.com/open_api/v1.2/user/info', headers={'User-Agent': 'test_user_agent', 'Access-Token': 'test_access_token', 'Accept': 'application/json'})
 
@@ -115,7 +115,7 @@ class TestSandboxUrl(unittest.TestCase):
             "user_agent": "test_user_agent"
         }
         mock_get.return_value = get_response(200, {"code": 0, "message": "OK"})
-        client = TikTokClient(config.get("access_token"), user_agent=config.get("user_agent"))
+        client = TikTokClient(config.get("access_token"), [],  user_agent=config.get("user_agent"))
         client.check_access_token()
         mock_get.assert_called_with(url='https://business-api.tiktok.com/open_api/v1.2/user/info', headers={'User-Agent': 'test_user_agent', 'Access-Token': 'test_access_token', 'Accept': 'application/json'})
 
@@ -129,6 +129,6 @@ class TestSandboxUrl(unittest.TestCase):
             "sandbox": "False"
         }
         mock_get.return_value = get_response(200, {"code": 0, "message": "OK"})
-        client = TikTokClient(config.get("access_token"), config.get('sandbox'), config.get("user_agent"))
+        client = TikTokClient(config.get("access_token"), [],  config.get('sandbox'), config.get("user_agent"))
         client.check_access_token()
         mock_get.assert_called_with(url='https://business-api.tiktok.com/open_api/v1.2/user/info', headers={'User-Agent': 'test_user_agent', 'Access-Token': 'test_access_token', 'Accept': 'application/json'})
