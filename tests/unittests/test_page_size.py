@@ -17,7 +17,7 @@ class TestPageSize(unittest.TestCase):
         }
 
         # create client
-        client = TikTokClient(config.get("access_token"))
+        client = TikTokClient(config.get("access_token"), [], False)
         # create stream with config
         stream = Stream(client, config)
 
@@ -35,7 +35,7 @@ class TestPageSize(unittest.TestCase):
         }
 
         # create client
-        client = TikTokClient(config.get("access_token"))
+        client = TikTokClient(config.get("access_token"), [], False)
         # create stream with config
         stream = Stream(client, config)
 
@@ -53,7 +53,7 @@ class TestPageSize(unittest.TestCase):
         }
 
         # create client
-        client = TikTokClient(config.get("access_token"))
+        client = TikTokClient(config.get("access_token"), [], False)
         # create stream
         stream = Stream(client, config)
 
