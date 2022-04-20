@@ -37,7 +37,7 @@ class TestErrorHandling(unittest.TestCase):
         mocked_request.side_effect = [get_response(200, {"code": 0, "message": "OK"}), get_response(200, {"code": 40001, "message": "advertiser account_id1 doesn't exist or has been deleted."})]
         
         # create client and call function
-        client = TikTokClient(config.get("access_token"), config.get('accounts'), config.get("user_agent"))
+        client = TikTokClient(config.get("access_token"), config.get('accounts'), False, config.get("user_agent"))
         # verify that we raise TikTokAdsClientError error when using "with" statement
         with self.assertRaises(TikTokAdsClientError) as e:
             client.__enter__()
@@ -59,7 +59,7 @@ class TestErrorHandling(unittest.TestCase):
         mocked_request.return_value = get_response(200, {"code": 0, "message": "OK"})
 
         # create client and call function
-        client = TikTokClient(config.get("access_token"), config.get('accounts'), config.get("user_agent"))
+        client = TikTokClient(config.get("access_token"), config.get('accounts'), False, config.get("user_agent"))
         verified = client.check_access_token()
         # Verify the check_access_token() returns true
         self.assertEqual(verified, True)
@@ -79,7 +79,7 @@ class TestErrorHandling(unittest.TestCase):
         mocked_request.side_effect = [get_response(200, {"code": 0, "message": "OK"}), get_response(200, {"code": 51008, "message": "Service error:"})]
         
         # create client and call function
-        client = TikTokClient(config.get("access_token"), config.get('accounts'), config.get("user_agent"))
+        client = TikTokClient(config.get("access_token"), config.get('accounts'), False, config.get("user_agent"))
         # verify that we raise TikTokAdsClientError error when using "with" statement
         with self.assertRaises(TikTokAdsClientError) as e:
             client.__enter__()
