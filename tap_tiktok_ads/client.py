@@ -36,6 +36,7 @@ def should_retry(e):
 class TikTokClient:
     def __init__(self,
                  access_token,
+                 advertiser_id,
                  sandbox=False,
                  user_agent=None,
                  request_timeout=REQUEST_TIMEOUT):
@@ -44,6 +45,8 @@ class TikTokClient:
         self.__session = requests.Session()
         self.__base_url = None
         self.__verified = False
+        self.__advertiser_id = advertiser_id
+
         self.sandbox = False
         if sandbox in ['true', 'True', True]:
             self.sandbox = True
@@ -97,7 +100,19 @@ class TikTokClient:
 
         if error_code != 0: # `0` error code indicates successful request
             raise TikTokAdsClientError(message, response) # raise the exception with the message retrieved
-        return bool(resp.get('message') == 'OK')
+        # if the check_access_token() succeeds, then check the account access with the account ids provided in config.
+        if resp['message'] == 'OK':
+            self.__verified = True
+            headers = {
+                "Access-Token": self.__access_token
+            }
+            params = {
+                "advertiser_ids": self.__advertiser_id
+            }
+            # Call the advertisers API with the account ids to check whether the accounts are valid or not.
+            adv_response = self.get(path='advertiser/info/', headers=headers,
+                                        params=params)
+            return bool(adv_response.get('message') == 'OK')
 
     # Backoff the request after 5 minutes in case of 50000 error code
     @backoff.on_exception(backoff.constant,
@@ -160,6 +175,9 @@ class TikTokClient:
             json_response = {}
         error_code = json_response.get("code")
         message = json_response.get('message', 'Unknown Error occurred.')
+        if "Service error:" in message:
+            message = "Error encountered accessing the accounts with the given account ids. Kindly check your account ids."
+
         if error_code != 0: # `0` error code indicates successful request
             raise TikTokAdsClientError(message, response) # raise the exception with the message retrieved
         return json_response
