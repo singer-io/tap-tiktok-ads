@@ -13,9 +13,13 @@ REQUEST_TIMEOUT = 300
 
 LOGGER = singer.get_logger()
 
+ENDPOINT_BASE = "https://{api}.tiktok.com/open_api/v1.2"
+TOKEN_URL = 'https://{api}.tiktok.com/open_api/v1.2/user/info'
+
 class TikTokClient:
     def __init__(self,
                  access_token,
+                 sandbox=False,
                  user_agent=None,
                  request_timeout=REQUEST_TIMEOUT):
         self.__access_token = access_token
@@ -23,6 +27,9 @@ class TikTokClient:
         self.__session = requests.Session()
         self.__base_url = None
         self.__verified = False
+        self.sandbox = False
+        if sandbox in ['true', 'True', True]:
+            self.sandbox = True
 
         # set request timeout from config param "request_timeout" value
         # If value is 0,"0","" or not passed then it set default to 300 seconds.
@@ -50,8 +57,12 @@ class TikTokClient:
             headers['User-Agent'] = self.__user_agent
         headers['Access-Token'] = self.__access_token
         headers['Accept'] = 'application/json'
+        if self.sandbox:
+            url = TOKEN_URL.format(api='sandbox-ads')
+        else:
+            url = TOKEN_URL.format(api='business-api')
         response = self.__session.get(
-            url='https://business-api.tiktok.com/open_api/v1.2/user/info',
+            url=url,
             headers=headers,
             timeout=self.__request_timeout)
         if response.status_code != 200:
@@ -70,7 +81,10 @@ class TikTokClient:
             self.__verified = self.check_access_token()
 
         if not url and self.__base_url is None:
-            self.__base_url = 'https://business-api.tiktok.com/open_api/v1.2'
+            if self.sandbox:
+                self.__base_url = ENDPOINT_BASE.format(api='sandbox-ads')
+            else:
+                self.__base_url = ENDPOINT_BASE.format(api='business-api')
 
         if not url and path:
             url = f'{self.__base_url}/{path}'

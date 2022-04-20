@@ -51,7 +51,7 @@ class TestRequestTimeoutValue(unittest.TestCase):
         }
 
         # create client and call request
-        client = TikTokClient(config.get("access_token"), config.get("user_agent"), config.get("request_timeout"))
+        client = TikTokClient(config.get("access_token"), False, config.get("user_agent"), config.get("request_timeout"))
         client.request("GET")
 
         # get arguments passed during calling "requests.Session.request"
@@ -74,7 +74,7 @@ class TestRequestTimeoutValue(unittest.TestCase):
         }
 
         # create client and call request
-        client = TikTokClient(config.get("access_token"), config.get("user_agent"), config.get("request_timeout"))
+        client = TikTokClient(config.get("access_token"), False, config.get("user_agent"), config.get("request_timeout"))
         client.request("GET")
 
         # get arguments passed during calling "requests.Session.request"
@@ -97,7 +97,7 @@ class TestRequestTimeoutValue(unittest.TestCase):
         }
 
         # create client and call request
-        client = TikTokClient(config.get("access_token"), config.get("user_agent"), config.get("request_timeout"))
+        client = TikTokClient(config.get("access_token"), False, config.get("user_agent"), config.get("request_timeout"))
         client.request("GET")
 
         # get arguments passed during calling "requests.Session.request"
@@ -120,7 +120,7 @@ class TestRequestTimeoutValue(unittest.TestCase):
         }
 
         # create client and call request
-        client = TikTokClient(config.get("access_token"), config.get("user_agent"), config.get("request_timeout"))
+        client = TikTokClient(config.get("access_token"), False, config.get("user_agent"), config.get("request_timeout"))
         client.request("GET")
 
         # get arguments passed during calling "requests.Session.request"
@@ -143,7 +143,7 @@ class TestRequestTimeoutValue(unittest.TestCase):
         }
 
         # create client and call request
-        client = TikTokClient(config.get("access_token"), config.get("user_agent"), config.get("request_timeout"))
+        client = TikTokClient(config.get("access_token"), False, config.get("user_agent"), config.get("request_timeout"))
         client.request("GET")
 
         # get arguments passed during calling "requests.Session.request"
@@ -166,7 +166,7 @@ class TestRequestTimeoutValue(unittest.TestCase):
         }
 
         # create client and call request
-        client = TikTokClient(config.get("access_token"), config.get("user_agent"), config.get("request_timeout"))
+        client = TikTokClient(config.get("access_token"), False, config.get("user_agent"), config.get("request_timeout"))
         client.request("GET")
 
         # get arguments passed during calling "requests.Session.request"
@@ -189,7 +189,7 @@ class TestRequestTimeoutValue(unittest.TestCase):
         }
 
         # create client and call request
-        client = TikTokClient(config.get("access_token"), config.get("user_agent"), config.get("request_timeout"))
+        client = TikTokClient(config.get("access_token"), False, config.get("user_agent"), config.get("request_timeout"))
         client.request("GET")
 
         # get arguments passed during calling "requests.Session.request"
@@ -212,7 +212,7 @@ class TestRequestTimeoutValue(unittest.TestCase):
         }
 
         # create client and call request
-        client = TikTokClient(config.get("access_token"), config.get("user_agent"), config.get("request_timeout"))
+        client = TikTokClient(config.get("access_token"), False, config.get("user_agent"), config.get("request_timeout"))
         client.request("GET")
 
         # get arguments passed during calling "requests.Session.request"
@@ -241,7 +241,7 @@ class TestTimeoutBackoff(unittest.TestCase):
         }
 
         # create client
-        client = TikTokClient(config.get("access_token"), config.get("user_agent"), config.get("request_timeout"))
+        client = TikTokClient(config.get("access_token"), False, config.get("user_agent"), config.get("request_timeout"))
         # verify that we raise Timeout error when using "with" statement
         with self.assertRaises(requests.Timeout):
             # function call
@@ -264,7 +264,7 @@ class TestTimeoutBackoff(unittest.TestCase):
         }
 
         #  create client
-        client = TikTokClient(config.get("access_token"), config.get("user_agent"), config.get("request_timeout"))
+        client = TikTokClient(config.get("access_token"), False, config.get("user_agent"), config.get("request_timeout"))
         # verify that we raise Timeout error when using "with" statement
         with self.assertRaises(requests.Timeout):
             # function call
@@ -293,7 +293,7 @@ class TestTimeoutBackoff(unittest.TestCase):
         }
 
         # create client
-        client = TikTokClient(config.get("access_token"), config.get("user_agent"), config.get("request_timeout"))
+        client = TikTokClient(config.get("access_token"), False, config.get("user_agent"), config.get("request_timeout"))
         # verify that we raise Timeout error when using "with" statement
         with self.assertRaises(requests.Timeout):
             # function call
