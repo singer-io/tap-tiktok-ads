@@ -5,11 +5,7 @@ class TiktokAllFieldsTest(TiktokBase):
 
     # fields which are deprecated or data is not generated
     fields_to_remove = {
-        'campaigns': [
-            'bid_type',
-            'budget_optimize_switch',
-            'status',
-            'optimize_goal'],
+        'campaigns': ['status'],
         'ads': [
             'dpa_fallback_type',
             'image_mode',
@@ -38,6 +34,7 @@ class TiktokAllFieldsTest(TiktokBase):
             'promotion_website_type',
             'ios_quota_type',
             'android_osv',
+            'roas_bid',
             'device_models',
             'carriers_v2'],
         'ad_insights_by_age_and_gender': ['user_action'],
