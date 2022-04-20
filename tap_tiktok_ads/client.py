@@ -1,4 +1,5 @@
 from urllib.parse import urlencode
+import backoff
 
 import requests
 import backoff
@@ -6,7 +7,15 @@ import singer
 
 from singer import metrics
 
+# max tries for backoff
+MAX_TRIES = 5
+# default timeout for requests
+REQUEST_TIMEOUT = 300
+
 LOGGER = singer.get_logger()
+
+ENDPOINT_BASE = "https://{api}.tiktok.com/open_api/v1.2"
+TOKEN_URL = 'https://{api}.tiktok.com/open_api/v1.2/user/info'
 
 # pylint: disable=missing-class-docstring
 class TikTokAdsClientError(Exception):
@@ -27,12 +36,24 @@ def should_retry(e):
 class TikTokClient:
     def __init__(self,
                  access_token,
-                 user_agent=None):
+                 sandbox=False,
+                 user_agent=None,
+                 request_timeout=REQUEST_TIMEOUT):
         self.__access_token = access_token
         self.__user_agent = user_agent
         self.__session = requests.Session()
         self.__base_url = None
         self.__verified = False
+        self.sandbox = False
+        if sandbox in ['true', 'True', True]:
+            self.sandbox = True
+
+        # set request timeout from config param "request_timeout" value
+        # If value is 0,"0","" or not passed then it set default to 300 seconds.
+        if request_timeout and float(request_timeout):
+            self.__request_timeout = float(request_timeout)
+        else:
+            self.__request_timeout = REQUEST_TIMEOUT
 
     # Backoff the request after 5 minutes in case of 50000 error code
     @backoff.on_exception(backoff.constant,
@@ -41,6 +62,10 @@ class TikTokClient:
                           interval=300, # 5 minutes
                           giveup=lambda e: not should_retry(e),
                           jitter=None)
+    @backoff.on_exception(backoff.expo,
+                          requests.Timeout, # backoff for "Timeout" error
+                          max_tries=MAX_TRIES,
+                          factor=2)
     def __enter__(self):
         self.__verified = self.check_access_token()
         return self
@@ -56,9 +81,14 @@ class TikTokClient:
             headers['User-Agent'] = self.__user_agent
         headers['Access-Token'] = self.__access_token
         headers['Accept'] = 'application/json'
+        if self.sandbox:
+            url = TOKEN_URL.format(api='sandbox-ads')
+        else:
+            url = TOKEN_URL.format(api='business-api')
         response = self.__session.get(
-            url='https://business-api.tiktok.com/open_api/v1.2/user/info',
-            headers=headers)
+            url=url,
+            headers=headers,
+            timeout=self.__request_timeout)
         if response.status_code != 200:
             raise Exception('Error status_code = %s', response.status_code)
         resp = response.json()
@@ -76,12 +106,19 @@ class TikTokClient:
                           interval=300, # 5 minutes
                           giveup=lambda e: not should_retry(e),
                           jitter=None)
+    @backoff.on_exception(backoff.expo,
+                          requests.Timeout, # backoff for "Timeout" error
+                          max_tries=MAX_TRIES,
+                          factor=2)
     def request(self, method, url=None, path=None, **kwargs):
         if not self.__verified:
             self.__verified = self.check_access_token()
 
         if not url and self.__base_url is None:
-            self.__base_url = 'https://business-api.tiktok.com/open_api/v1.2'
+            if self.sandbox:
+                self.__base_url = ENDPOINT_BASE.format(api='sandbox-ads')
+            else:
+                self.__base_url = ENDPOINT_BASE.format(api='business-api')
 
         if not url and path:
             url = f'{self.__base_url}/{path}'
@@ -111,7 +148,7 @@ class TikTokClient:
             kwargs['headers']['Content-Type'] = 'application/json'
 
         with metrics.http_request_timer(endpoint) as timer:
-            response = self.__session.request(method, url + query, **kwargs)
+            response = self.__session.request(method, url + query, timeout=self.__request_timeout, **kwargs)
             timer.tags[metrics.Tag.http_status_code] = response.status_code
 
         if response.status_code != 200:
