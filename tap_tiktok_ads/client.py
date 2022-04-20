@@ -45,11 +45,12 @@ class TikTokClient:
         self.__session = requests.Session()
         self.__base_url = None
         self.__verified = False
+        # base URL prefix
+        self.__base_url_prefix = 'business-api'
+        # if the account is sandbox, change the URL prefix
+        if str(sandbox).lower() == 'true':
+            self.__base_url_prefix = 'sandbox-ads'
         self.__advertiser_id = advertiser_id
-
-        self.sandbox = False
-        if sandbox in ['true', 'True', True]:
-            self.sandbox = True
 
         # set request timeout from config param "request_timeout" value
         # If value is 0,"0","" or not passed then it set default to 300 seconds.
@@ -84,14 +85,11 @@ class TikTokClient:
             headers['User-Agent'] = self.__user_agent
         headers['Access-Token'] = self.__access_token
         headers['Accept'] = 'application/json'
-        if self.sandbox:
-            url = TOKEN_URL.format(api='sandbox-ads')
-        else:
-            url = TOKEN_URL.format(api='business-api')
         response = self.__session.get(
-            url=url,
+            url='https://{}.tiktok.com/open_api/v1.2/user/info'.format(self.__base_url_prefix),
             headers=headers,
             timeout=self.__request_timeout)
+
         if response.status_code != 200:
             raise Exception('Error status_code = %s', response.status_code)
         resp = response.json()
@@ -130,10 +128,7 @@ class TikTokClient:
             self.__verified = self.check_access_token()
 
         if not url and self.__base_url is None:
-            if self.sandbox:
-                self.__base_url = ENDPOINT_BASE.format(api='sandbox-ads')
-            else:
-                self.__base_url = ENDPOINT_BASE.format(api='business-api')
+            self.__base_url = 'https://{}.tiktok.com/open_api/v1.2'.format(self.__base_url_prefix)
 
         if not url and path:
             url = f'{self.__base_url}/{path}'

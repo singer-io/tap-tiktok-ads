@@ -14,6 +14,15 @@ setup(
         "singer-python",
         "requests",
     ],
+    extras_require={
+        "test": [
+            "pylint==2.13.4",
+            "nose"
+        ],
+        "dev": [
+            "ipdb==0.11"
+        ]
+    },
     entry_points="""
     [console_scripts]
     tap-tiktok-ads=tap_tiktok_ads:main

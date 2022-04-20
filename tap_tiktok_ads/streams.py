@@ -220,6 +220,7 @@ class Stream():
         self.state = state
         self.config = config
         self.client = client
+        self.page_size = int(config.get('page_size', 1000))
 
     def write_bookmark(self, stream, value):
         """
@@ -271,6 +272,8 @@ class Stream():
         sorted_records = sorted(transformed_records, key=lambda x: x[bookmark_column])
         for record in sorted_records:
             with Transformer(integer_datetime_fmt=UNIX_MILLISECONDS_INTEGER_DATETIME_PARSING) as transformer:
+                # for 'insights' stream, 'advertiser_id' is not getting populated and it is one for the Primary Keys
+                record['advertiser_id'] = advertiser_id
                 transformed_record = transformer.transform(record, stream.schema.to_dict(),
                                                            metadata.to_map(stream.metadata))
                 # write one or more rows to the stream:
@@ -293,6 +296,8 @@ class Stream():
             "Access-Token": self.config['access_token']
         }
         advertiser_id = str(self.params['advertiser_id'])
+        # add page size param
+        self.params['page_size'] = self.page_size
         records = []
         total_records = 0
         page = 1
@@ -344,27 +349,21 @@ class Campaigns(Stream):
     key_properties = ['advertiser_id', 'campaign_id', 'modify_time']
     replication_keys  = ['modify_time']
     path = "campaign/get/"
-    params = {
-        "page_size": 1000
-    }
+    params = {}
 
 class AdGroups(Stream):
     tap_stream_id = "adgroups"
     key_properties = ['advertiser_id', 'campaign_id', 'adgroup_id', 'modify_time']
     replication_keys  = ['modify_time']
     path = "adgroup/get/"
-    params = {
-        "page_size": 1000
-    }
+    params = {}
 
 class Ads(Stream):
     tap_stream_id = "ads"
     key_properties = ['advertiser_id', 'campaign_id', 'adgroup_id', 'ad_id', 'modify_time']
     replication_keys  = ['modify_time']
     path = "ad/get/"
-    params = {
-        "page_size": 1000
-    }
+    params = {}
 
 class Insights(Stream):
 
@@ -395,7 +394,6 @@ class AdInsights(Insights):
             "stat_time_day"
         ]""",
         "metrics": AUCTION_FIELDS,
-        "page_size": 1000,
         "lifetime": "false"
     }
 
@@ -415,7 +413,6 @@ class AdInsightsByAgeAndGender(Insights):
             "stat_time_day"
         ]""",
         "metrics": AUDIENCE_FIELDS,
-        "page_size": 1000,
         "lifetime": "false"
     }
 
@@ -434,7 +431,6 @@ class AdInsightsByCountry(Insights):
             "stat_time_day"
         ]""",
         "metrics": AUDIENCE_FIELDS,
-        "page_size": 1000,
         "lifetime": "false"
     }
 
@@ -453,7 +449,6 @@ class AdInsightsByPlatform(Insights):
             "stat_time_day"
         ]""",
         "metrics": AUDIENCE_FIELDS,
-        "page_size": 1000,
         "lifetime": "false"
     }
 
