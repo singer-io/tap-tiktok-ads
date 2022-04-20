@@ -3,7 +3,7 @@ from datetime import timedelta, datetime, timezone
 import singer
 from dateutil.parser import parse
 from singer.utils import now
-from singer import Transformer, UNIX_MILLISECONDS_INTEGER_DATETIME_PARSING, metadata
+from singer import utils, Transformer, UNIX_MILLISECONDS_INTEGER_DATETIME_PARSING, metadata
 
 from tap_tiktok_ads.client import TikTokClient
 
@@ -157,7 +157,9 @@ def transform_ad_management_records(records, bookmark_value):
         # In case of an adgroup request, transform 'is_comment_disabled' type from integer to boolean
         if 'is_comment_disable' in record:
             record['is_comment_disable'] = bool(record['is_comment_disable'] == 0)
-        if bookmark_value is None or record['modify_time'] > bookmark_value:
+        # The `modify_time` format is different that the bookmark_value format(which is currently in TZ format),
+        # hence resulted into falsy comparision. Thus, converted both to same formats.
+        if bookmark_value is None or utils.strptime_to_utc(record['modify_time']) > utils.strptime_to_utc(bookmark_value):
             transformed_records.append(record)
     return transformed_records
 
@@ -177,11 +179,14 @@ def transform_advertisers_records(records, bookmark_value):
 
 
 def get_bookmark_value(stream_name, bookmark_data, advertiser_id):
-    """
-        Returns bookmark value for any stream based on stream category(normal or stream with advertiser_id)
-    """
+    '''
+    Returns bookmark value for any stream based on stream category(normal or stream with advertiser_id). Return None in 
+    case of `advertisers` stream if bookmark is not present. For other streams return bookmark for each advertiser_id
+    '''
     if stream_name in ENDPOINT_ADVERTISERS:
-        return bookmark_data
+        if bookmark_data:
+            return bookmark_data
+        return None
     elif (stream_name in ENDPOINT_INSIGHTS or stream_name in ENDPOINT_AD_MANAGEMENT) and advertiser_id in bookmark_data:
         return bookmark_data[advertiser_id]
     else:
@@ -225,7 +230,7 @@ class Stream():
         """
         if 'bookmarks' in self.state and stream_name in self.state['bookmarks']:
             return self.state['bookmarks'][stream_name]
-        return None
+        return {}
 
     # Each API call to TikTok with a stat_time_day dimension only support a range
     # of 30 days. Because of this we need to separate the interval between start_date
