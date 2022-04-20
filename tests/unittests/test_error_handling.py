@@ -36,7 +36,7 @@ class TestErrorHandling(unittest.TestCase):
         }
 
         # create client and call function
-        client = TikTokClient(config.get("access_token"), config.get("user_agent"))
+        client = TikTokClient(config.get("access_token"), [], False, config.get("user_agent"))
         # verify that we raise Timeout error when using "with" statement
         with self.assertRaises(TikTokAdsClientError) as e:
             client.__enter__()
@@ -58,7 +58,7 @@ class TestErrorHandling(unittest.TestCase):
         }
 
         # create client and call function
-        client = TikTokClient(config.get("access_token"), config.get("user_agent"))
+        client = TikTokClient(config.get("access_token"), [], False, config.get("user_agent"))
         # verify that we raise Timeout error when using "with" statement
         with self.assertRaises(TikTokAdsClientError) as e:
             client.request("GET", "https://www.test.com")
