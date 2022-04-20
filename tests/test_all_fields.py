@@ -3,7 +3,7 @@ from base import TiktokBase
 
 class TiktokAllFieldsTest(TiktokBase):
 
-    # fields which are deprecated or data is not generated
+    # fields which is data is not generated
     fields_to_remove = {
         'campaigns': ['status'],
         'ads': [
