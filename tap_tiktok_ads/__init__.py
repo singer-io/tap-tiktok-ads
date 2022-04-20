@@ -16,6 +16,7 @@ def main():
     args = utils.parse_args(REQUIRED_CONFIG_KEYS)
 
     with TikTokClient(access_token=args.config['access_token'],
+                      sandbox=args.config.get('sandbox', False),
                       user_agent=args.config['user_agent'],
                       request_timeout=args.config.get('request_timeout')) as tik_tok_client:
 

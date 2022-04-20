@@ -33,6 +33,7 @@ The tap requires some fields to be completed in a config file in order to work. 
 - access_token: Access token for the TikTok Marketing API
 - accounts: A list of account ids.
 - request_timeout: The time for which request should wait to get response. It is an optional parameter and default value as 300 seconds.
+- sandbox (string, optional): Whether to communication with tiktok-ads's sandbox or business account for this application. If you're not sure leave out. Defaults to false.
 
 ```json
 {
@@ -41,6 +42,7 @@ The tap requires some fields to be completed in a config file in order to work. 
   "user_agent": "tap-tiktok-ads <api_user_email@your_company.com>",
   "access_token": "YOUR_ACCESS_TOKEN",
   "accounts": [],
+  "sandbox": "<true|false>",
   "request_timeout": 300
 }
 ```
