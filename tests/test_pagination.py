@@ -8,8 +8,8 @@ class TiktokPaginationTest(TiktokBase):
 
     def get_properties(self, *args, **kwargs):
         props = super().get_properties(*args, **kwargs)
-        # add page size of 50
-        props['page_size'] = 50
+        # add page size of 25
+        props['page_size'] = 25
         return props
 
     def test_run(self):
@@ -37,7 +37,7 @@ class TiktokPaginationTest(TiktokBase):
             with self.subTest(stream=stream):
 
                 # verify that we can paginate with all fields selected
-                minimum_record_count = 50
+                minimum_record_count = 25
 
                 self.assertGreater(record_count_by_stream.get(stream, -1), minimum_record_count,
                     msg="The number of records is not over the stream max limit")
