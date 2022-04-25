@@ -85,9 +85,35 @@ class TestAccountsList(unittest.TestCase):
         mocked_parse_args.return_value = get_args(config)
 
         # verify we raise error when empty "accounts" is passed
-        with self.assertRaises(ValueError) as e:
+        with self.assertRaises(Exception) as e:
             # function call
             main()
 
         # verify the error message
-        self.assertTrue("Please provide atleast 1 Account ID" in str(e.exception))
+        self.assertTrue(str(e.exception), "Please provide atleast 1 Account ID.")
+
+    @mock.patch("singer.utils.parse_args")
+    @mock.patch("tap_tiktok_ads.sync")
+    @mock.patch("tap_tiktok_ads.TikTokClient")
+    def test_invlaid_accounts_list(self, mocked_TikTokClient, mocked_sync, mocked_parse_args):
+
+        # create config file
+        config = {
+            "start_date": "2022-01-01T00:00:00Z",
+            "user_agent": "tap-tiktok-ads <api_user_email@your_company.com>",
+            "access_token": "test_access_token",
+            "accounts": "1a"
+        }
+
+        # mock TikTokClient
+        mocked_TikTokClient.side_effect = MockTikTokClient
+        # mock singer.parse_args
+        mocked_parse_args.return_value = get_args(config)
+
+        # verify we raise error when invlaid "accounts" is passed
+        with self.assertRaises(Exception) as e:
+            # function call
+            main()
+
+        # verify the error message
+        self.assertEqual(str(e.exception), "Provided list of account IDs contains invalid IDs. Kindly check your Account IDs.")
