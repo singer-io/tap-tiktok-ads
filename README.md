@@ -31,7 +31,7 @@ The tap requires some fields to be completed in a config file in order to work. 
 - end_date: Date from which the tap ends extracting data. RFC3339 format. (Optional)
 - user_agent: User agent that makes the API call.
 - access_token: Access token for the TikTok Marketing API
-- accounts: A list of account ids.
+- accounts: A string containing comma-separated values of account ids.
 - request_timeout: The time for which request should wait to get response. It is an optional parameter and default value as 300 seconds.
 - sandbox (string, optional): Whether to communication with tiktok-ads's sandbox or business account for this application. If you're not sure leave out. Defaults to false.
 
@@ -41,7 +41,7 @@ The tap requires some fields to be completed in a config file in order to work. 
   "end_date": "2020-01-01T00:00:00Z",
   "user_agent": "tap-tiktok-ads <api_user_email@your_company.com>",
   "access_token": "YOUR_ACCESS_TOKEN",
-  "accounts": [],
+  "accounts": "id1, id2, id3",
   "sandbox": "<true|false>",
   "request_timeout": 300
 }
@@ -79,7 +79,7 @@ Create your tap's `config.json` file which should look like the following:
         "start_date": "2019-01-01T00:00:00Z",
         "user_agent": "tap-tiktok-ads <api_user_email@your_company.com>",
         "access_token": "YOUR_ACCESS_TOKEN",
-        "accounts": [id1, id2, id3],
+        "accounts": "id1, id2, id3",
         "request_timeout": 300
     }
     ```
