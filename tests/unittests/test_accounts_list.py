@@ -65,3 +65,29 @@ class TestAccountsList(unittest.TestCase):
 
         # verify the comma-separated string of accounts is converted to list of accounts
         self.assertEqual(actual_config, expected_config)
+
+    @mock.patch("singer.utils.parse_args")
+    @mock.patch("tap_tiktok_ads.sync")
+    @mock.patch("tap_tiktok_ads.TikTokClient")
+    def test_empty_accounts_list(self, mocked_TikTokClient, mocked_sync, mocked_parse_args):
+
+        # create config file
+        config = {
+            "start_date": "2022-01-01T00:00:00Z",
+            "user_agent": "tap-tiktok-ads <api_user_email@your_company.com>",
+            "access_token": "test_access_token",
+            "accounts": ""
+        }
+
+        # mock TikTokClient
+        mocked_TikTokClient.side_effect = MockTikTokClient
+        # mock singer.parse_args
+        mocked_parse_args.return_value = get_args(config)
+
+        # verify we raise error when empty "accounts" is passed
+        with self.assertRaises(ValueError) as e:
+            # function call
+            main()
+
+        # verify the error message
+        self.assertTrue("Please provide atleast 1 Account ID" in str(e.exception))
