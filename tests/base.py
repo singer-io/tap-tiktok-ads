@@ -37,7 +37,7 @@ class TiktokBase(unittest.TestCase):
         """Return creds from env variables"""
         return {
             "access_token": os.getenv("TAP_TIKTOK_ADS_ACCESS_TOKEN"),
-            "accounts": eval(os.getenv("TAP_TIKTOK_ADS_ACCOUNTS"))
+            "accounts": os.getenv("TAP_TIKTOK_ADS_ACCOUNTS")
         }
 
     def get_properties(self, original: bool = True):

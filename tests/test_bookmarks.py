@@ -31,7 +31,7 @@ class TiktokBookmarksTest(TiktokBase):
         - The number of records in the 2nd sync is less then the first
         """
         # get account id for collecting bookmark
-        account_id = eval(os.getenv("TAP_TIKTOK_ADS_ACCOUNTS"))[0]
+        account_id = os.getenv("TAP_TIKTOK_ADS_ACCOUNTS")
 
         conn_id = connections.ensure_connection(self)
         runner.run_check_mode(self, conn_id)
