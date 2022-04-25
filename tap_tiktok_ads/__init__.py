@@ -17,11 +17,14 @@ def main():
 
     # get comma-separated string of accounts
     accounts = args.config['accounts'].replace(" ", "")
+    # raise error if no accounts is passed
+    if not accounts:
+        raise Exception("Please provide atleast 1 Account ID.")
     try:
         # create list of accounts
         accounts_list = [int(i) for i in accounts.split(",")]
-    except ValueError as e:
-        raise ValueError(str(e) + ". Please provide atleast 1 Account ID") from None
+    except ValueError:
+        raise Exception("Provided list of account IDs contains invalid IDs. Kindly check your Account IDs.") from None
     # update string to list in the config
     args.config['accounts'] = accounts_list
 
