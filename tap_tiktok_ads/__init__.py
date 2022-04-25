@@ -15,6 +15,13 @@ def main():
     # Parse command line arguments
     args = utils.parse_args(REQUIRED_CONFIG_KEYS)
 
+    # get comma-separated string of accounts
+    accounts = args.config['accounts'].replace(" ", "")
+    # create list of accounts
+    accounts_list = [int(i) for i in accounts.split(",")]
+    # update string to list in the config
+    args.config['accounts'] = accounts_list
+
     with TikTokClient(access_token=args.config['access_token'],
                       advertiser_id=args.config['accounts'],
                       sandbox=args.config.get('sandbox', False),
