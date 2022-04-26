@@ -44,7 +44,7 @@ class TiktokBase(unittest.TestCase):
         """Return config"""
         return_value = {
             "start_date": "2020-12-01T00:00:00Z",
-            "sandbox": True,
+            "sandbox": "true",
         }
         if original:
             return return_value
