@@ -265,7 +265,7 @@ class Stream():
         """
             Process records for the stream by transforming it to the desired format, writing it to output, and bookmark writing
         """
-        bookmark_column = self.replication_keys[0]
+        bookmark_column = self.replication_keys[0] # pylint: disable=unsubscriptable-object
         bookmark_data = self.get_bookmark(stream.tap_stream_id)
         bookmark_value = get_bookmark_value(stream.tap_stream_id, bookmark_data, advertiser_id)
         transformed_records = pre_transform(stream.tap_stream_id, records, bookmark_value)
