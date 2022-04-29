@@ -145,7 +145,8 @@ def transform_ad_insights_records(records):
     transformed_records = []
     for record in records:
         if 'metrics' in record and 'dimensions' in record:
-            transformed_record = record['metrics'] | record['dimensions']
+            # merging of 2 dicts by not using '|' for older python version compatibility
+            transformed_record = {**record['metrics'], **record['dimensions']}
             if 'secondary_goal_result' in transformed_record and transformed_record['secondary_goal_result'] == '-':
                 transformed_record['secondary_goal_result'] = None
             if 'cost_per_secondary_goal_result' in transformed_record and transformed_record[
@@ -265,7 +266,7 @@ class Stream():
         """
             Process records for the stream by transforming it to the desired format, writing it to output, and bookmark writing
         """
-        bookmark_column = stream.replication_key[0]
+        bookmark_column = self.replication_keys[0] # pylint: disable=unsubscriptable-object
         bookmark_data = self.get_bookmark(stream.tap_stream_id)
         bookmark_value = get_bookmark_value(stream.tap_stream_id, bookmark_data, advertiser_id)
         transformed_records = pre_transform(stream.tap_stream_id, records, bookmark_value)
