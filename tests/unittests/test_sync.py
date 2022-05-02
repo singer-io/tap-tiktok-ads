@@ -2,7 +2,7 @@ import datetime
 import unittest
 
 from dateutil.parser import parse
-from tap_tiktok_ads.sync import get_date_batches, transform_ad_management_records, transform_ad_insights_records, \
+from tap_tiktok_ads.streams import get_date_batches, transform_ad_management_records, transform_ad_insights_records, \
     pre_transform, transform_advertisers_records
 
 
