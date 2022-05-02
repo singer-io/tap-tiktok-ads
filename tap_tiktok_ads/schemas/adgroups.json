@@ -655,6 +655,18 @@
         "string"
       ],
       "format": "date-time"
+    },
+    "daily_retention_ratio": {
+      "type": [
+        "null",
+        "number"
+      ]
+    },
+    "is_share_disable": {
+      "type": [
+        "null",
+        "boolean"
+      ]
     }
   }
 }
