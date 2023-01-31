@@ -56,6 +56,12 @@ class TiktokBase(unittest.TestCase):
     def expected_metadata(self):
         """Return all the data about all the streams"""
         return {
+            "advertisers": {
+                self.PRIMARY_KEYS: {"id", "create_time"},
+                self.REPLICATION_METHOD: self.INCREMENTAL,
+                self.REPLICATION_KEYS: {"create_time"},
+                self.OBEYS_START_DATE: True
+            },
             "ads": {
                 self.PRIMARY_KEYS: {"advertiser_id", "campaign_id", "adgroup_id", "ad_id", "modify_time"},
                 self.REPLICATION_METHOD: self.INCREMENTAL,

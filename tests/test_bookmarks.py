@@ -36,7 +36,7 @@ class TiktokBookmarksTest(TiktokBase):
         conn_id = connections.ensure_connection(self)
         runner.run_check_mode(self, conn_id)
 
-        expected_streams = self.expected_streams()
+        expected_streams = self.expected_streams()  - {"advertisers"}
 
         found_catalogs = self.run_and_verify_check_mode(conn_id)
         self.select_found_catalogs(conn_id, found_catalogs)
