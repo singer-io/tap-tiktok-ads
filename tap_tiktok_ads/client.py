@@ -107,6 +107,8 @@ class TikTokClient:
             params = {
                 "advertiser_ids": self.__advertiser_id
             }
+            if self.__base_url_prefix == 'sandbox-ads':
+                return True
             # Call the advertisers API with the account ids to check whether the accounts are valid or not.
             adv_response = self.get(path='advertiser/info/', headers=headers,
                                         params=params)
