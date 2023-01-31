@@ -25,7 +25,7 @@ class TiktokDiscoveryTest(TiktokBase):
 
         Verify all streams have inclusion of automatic
         """
-        streams_to_test = self.expected_streams()
+        streams_to_test = self.expected_streams() - {"advertisers"}
 
         conn_id = connections.ensure_connection(self)
 

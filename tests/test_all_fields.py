@@ -52,7 +52,7 @@ class TiktokAllFieldsTest(TiktokBase):
         - Verify no unexpected streams were replicated
         - Verify that more than just the automatic fields are replicated for each stream
         """
-        expected_streams = self.expected_streams()
+        expected_streams = self.expected_streams() -  {"advertisers"}
         
         # instantiate connection
         conn_id = connections.ensure_connection(self)

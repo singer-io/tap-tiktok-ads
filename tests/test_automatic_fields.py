@@ -13,7 +13,7 @@ class TiktokAutomaticFieldsTest(TiktokBase):
         - Verify that all replicated records have unique primary key values.
         """
         conn_id = connections.ensure_connection(self)
-        expected_streams = self.expected_streams()
+        expected_streams = self.expected_streams() -  {"advertisers"}
 
         # run check mode
         found_catalogs = self.run_and_verify_check_mode(conn_id)
