@@ -43,7 +43,11 @@ class TestSync(unittest.TestCase):
         self.assertEqual(get_date_batches(start_date, end_date), expected_result)
 
     def test_transform_ad_management_records(self):
+        import pdb; pdb.set_trace()
         records = [
+            {
+                'create_time': '2021-12-01T01:00:00.000000Z'
+            },
             {
                 'create_time': '2021-01-01T01:00:00.000000Z'
             },
@@ -58,6 +62,9 @@ class TestSync(unittest.TestCase):
         ]
         bookmark_value = '2021-01-01T01:00:00.000000Z'
         expected_result = [
+            {
+                'create_time': '2021-01-01T01:00:00.000000Z'
+            },
             {
                 'create_time': '2021-02-01T01:00:00.000000Z',
                 'modify_time': '2021-02-01T01:00:00.000000Z'
