@@ -5,7 +5,10 @@ class TiktokAllFieldsTest(TiktokBase):
 
     # fields which is data is not generated
     fields_to_remove = {
-        'campaigns': ['status'],
+        'campaigns': [
+            'status',
+            'split_test_variable'    # TDL-21880: missing field from the API response
+            ],
         'ads': [
             'dpa_fallback_type',
             'image_mode',
@@ -36,7 +39,9 @@ class TiktokAllFieldsTest(TiktokBase):
             'android_osv',
             'roas_bid',
             'device_models',
-            'carriers_v2'],
+            'carriers_v2',
+            'split_test_adgroup_ids'    # TDL-21880: missing field from the API response
+            ],
         'ad_insights_by_age_and_gender': ['user_action'],
         'ad_insights_by_platform': ['user_action'],
         'ad_insights_by_country': ['user_action'],
