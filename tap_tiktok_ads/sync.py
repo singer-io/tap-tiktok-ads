@@ -19,10 +19,12 @@ def update_currently_syncing(state, stream_name):
     singer.write_state(state)
 
 def sync(tik_tok_client, config, state, catalog):
+
+    sandbox_mode = False if config.get("sandbox",False) in  ("false","FALSE",False) else True
     # Loop over selected streams in catalog
     selected_streams = catalog.get_selected_streams(state)
     for stream in selected_streams:
-        if config.get("sandbox","false").lower() == "true" and stream.tap_stream_id == "advertisers":
+        if sandbox_mode and stream.tap_stream_id == "advertisers":
             LOGGER.info("Skipping stream: %s for sandbox", stream.tap_stream_id)
             continue
         LOGGER.info("Syncing stream: %s", stream.tap_stream_id)
