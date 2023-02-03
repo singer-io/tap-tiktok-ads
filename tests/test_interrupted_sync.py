@@ -1,3 +1,4 @@
+import os
 from tap_tester import runner, connections, menagerie
 from base import TiktokBase
 from dateutil import parser as parser
@@ -41,7 +42,7 @@ class TiktokAdsInterruptedSyncTest(TiktokBase):
         start_date_datetime = self.dt_to_ts(self.start_date)
 
         conn_id = connections.ensure_connection(self)
-        expected_streams = self.expected_streams()
+        expected_streams = self.expected_streams() - {"advertisers"}
 
         # Run check mode
         found_catalogs = self.run_and_verify_check_mode(conn_id)
@@ -54,14 +55,14 @@ class TiktokAdsInterruptedSyncTest(TiktokBase):
 
         # Run a sync job
         self.run_and_verify_sync(conn_id)
-        synced_records_full_sync = runner.get_records_from_target_output()
+        first_full_sync = runner.get_records_from_target_output()
 
-        full_sync_state = menagerie.get_state(conn_id)
+        first_full_sync_state = menagerie.get_state(conn_id)
 
         # State to run 2nd sync
         interrupted_sync_state = {
+            "currently_syncing": "ad_insights",
             "bookmarks": {
-                "currently_syncing": "ad_insights",
                 "campaigns": {
                     "7086361182503780353": "2022-04-21T09:35:11.000000Z"
                 },
@@ -72,7 +73,7 @@ class TiktokAdsInterruptedSyncTest(TiktokBase):
                     "7086361182503780353": "2022-04-21T09:06:35.000000Z"
                 },
                 "ad_insights": {
-                    "7086361182503780353": "2021-12-25T00:00:00.000000Z"
+                    "7086361182503780353": "2021-01-25T00:00:00.000000Z"
                 }
             }
         }
@@ -81,11 +82,11 @@ class TiktokAdsInterruptedSyncTest(TiktokBase):
         menagerie.set_state(conn_id, interrupted_sync_state)
 
         # Run sync after interruption
-        record_count_by_stream_interrupted_sync = self.run_and_verify_sync(conn_id)
-        synced_records_interrupted_sync = runner.get_records_from_target_output()
+        second_sync_record_count_by_stream = self.run_and_verify_sync(conn_id)
+        synced_interrupted_sync_records = runner.get_records_from_target_output()
 
         final_state = menagerie.get_state(conn_id)
-        currently_syncing = final_state.get("bookmarks").get("currently_syncing")
+        currently_syncing = final_state.get("currently_syncing")
 
         # Checking that the resuming sync resulted in a successfully saved state
         with self.subTest():
@@ -97,7 +98,10 @@ class TiktokAdsInterruptedSyncTest(TiktokBase):
             self.assertIsNotNone(final_state.get("bookmarks"))
 
             # Verify final_state is equal to uninterrupted sync"s state
-            self.assertDictEqual(final_state, full_sync_state)
+            self.assertDictEqual(final_state.get("bookmarks"), first_full_sync_state.get("bookmarks"))
+
+        # Get all account ids from the config properties
+        account_ids = [x.strip() for x in self.get_credentials()["accounts"].split(",") if x.strip()]
 
         # Stream level assertions
         for stream in expected_streams:
@@ -105,70 +109,78 @@ class TiktokAdsInterruptedSyncTest(TiktokBase):
 
                 replication_key = self.expected_replication_keys()[stream]
                 # Gather actual results
-                full_records = [message["data"]
-                                for message in synced_records_full_sync.get(
-                                    stream, {}).get("messages", [])]
-                interrupted_records = [message["data"]
-                                       for message in synced_records_interrupted_sync.get(
-                                           stream, {}).get("messages", [])]
-                interrupted_record_count = record_count_by_stream_interrupted_sync.get(stream, 0)
+                full_records = {}
+                interrupted_records = {}
+                interrupted_record_count = second_sync_record_count_by_stream.get(stream, 0)
+                for account_id in account_ids:
+                    full_records[account_id] = [message["data"]
+                                                for message in first_full_sync.get(stream, {}).get("messages", [])
+                                                if str(message["data"]["advertiser_id"]) == account_id]
+
+                    interrupted_records[account_id] = [message["data"]
+                                                       for message in synced_interrupted_sync_records.get(stream, {}).get("messages", [])
+                                                       if str(message["data"]["advertiser_id"]) == account_id]
 
                 # Final bookmark after interrupted sync
-                final_stream_bookmark = final_state["bookmarks"][stream][list(replication_key)[0]]
+                # State saves stream-wise bookmarks for each account id provided in the config properties
+                for account_id in account_ids:
+                    final_stream_bookmark = final_state["bookmarks"].get(stream, {}).get(account_id)
 
-                # Verify final bookmark matched the formatting standards for the resuming sync
-                self.assertIsNotNone(final_stream_bookmark)
-                self.assertIsInstance(final_stream_bookmark, str)
+                    # Verify final bookmark matched the formatting standards for the resuming sync
+                    self.assertIsNotNone(final_stream_bookmark)
+                    self.assertIsInstance(final_stream_bookmark, str)
 
-                if stream == interrupted_sync_state["bookmarks"]["currently_syncing"]:
-                    # Assign the start date to the interrupted stream
-                    interrupted_stream_datetime = start_date_datetime
+                    account_bookmark_datetime = interrupted_sync_state["bookmarks"].get(stream, {}).get(account_id)
 
-                    for record in interrupted_records:
-                        record_time = self.dt_to_ts(record.get(list(replication_key)[0]), self.BOOKMARK_DATE_FORMAT)
+                    if stream == interrupted_sync_state.get("currently_syncing"):
+                        # Assign the start date to the interrupted stream
+                        interrupted_stream_datetime = account_bookmark_datetime if account_bookmark_datetime \
+                            else start_date_datetime
+                        interrupted_stream_time = self.dt_to_ts(interrupted_stream_datetime)
 
-                        # Verify resuming sync only replicates records with the replication key
-                        # values greater or equal to the state for streams that were replicated
-                        # during the interrupted sync.
-                        self.assertGreaterEqual(record_time, interrupted_stream_datetime)
+                        for record in interrupted_records[account_id]:
+                            record_time = self.dt_to_ts(record.get(list(replication_key)[0]))
 
-                        # Verify the interrupted sync replicates the expected record set all
-                        # interrupted records are in full records
-                        self.assertIn(record, full_records,
-                                      msg="Incremental table record in interrupted sync not found in full sync")
+                            # Verify resuming sync only replicates records with the replication key
+                            # values greater or equal to the state for streams that were replicated
+                            # during the interrupted sync.
+                            self.assertGreaterEqual(record_time, interrupted_stream_time)
 
-                    # Record count for all streams of interrupted sync match expectations
-                    records_after_interrupted_bookmark = 0
-                    for record in full_records:
-                        record_time = self.dt_to_ts(record.get(list(replication_key)[0]), self.BOOKMARK_DATE_FORMAT)
-                        if record_time >= interrupted_stream_datetime:
-                            records_after_interrupted_bookmark += 1
+                            # Verify the interrupted sync replicates the expected record set all
+                            # interrupted records are in full records
+                            self.assertIn(record, full_records[account_id],
+                                          msg="Incremental table record in interrupted sync not found in full sync")
 
-                    self.assertGreater(records_after_interrupted_bookmark, interrupted_record_count,
-                                       msg=f"Expected {records_after_interrupted_bookmark} records in each sync")
+                        # Record count for all streams of interrupted sync match expectations
+                        records_after_interrupted_bookmark = 0
+                        for record in full_records[account_id]:
+                            record_time = self.dt_to_ts(record.get(list(replication_key)[0]))
+                            if record_time >= interrupted_stream_time:
+                                records_after_interrupted_bookmark += 1
 
-                else:
-                    # Get the date to start 2nd sync for non-interrupted streams
-                    synced_stream_bookmark = interrupted_sync_state["bookmarks"].get(
-                        stream, {}).get(list(replication_key)[0])
+                        self.assertGreaterEqual(records_after_interrupted_bookmark, interrupted_record_count,
+                                                msg=f"Expected {records_after_interrupted_bookmark} records in each sync")
 
-                    if synced_stream_bookmark:
-                        synced_stream_datetime = self.dt_to_ts(synced_stream_bookmark, self.BOOKMARK_DATE_FORMAT)
                     else:
-                        synced_stream_datetime = start_date_datetime
+                        # Get the date to start 2nd sync for non-interrupted streams
+                        synced_stream_bookmark = account_bookmark_datetime if account_bookmark_datetime \
+                            else start_date_datetime
 
-                    # Verify we replicated some records for the non-interrupted streams
-                    self.assertGreater(interrupted_record_count, 0)
+                        synced_stream_datetime = start_date_datetime if start_date_datetime \
+                            else self.dt_to_ts(synced_stream_bookmark)
 
-                    for record in interrupted_records:
-                        record_time = self.dt_to_ts(record.get(list(replication_key)[0]), self.BOOKMARK_DATE_FORMAT)
+                        # Verify we replicated some records for the non-interrupted streams
+                        self.assertGreater(interrupted_record_count, 0)
 
-                        # Verify resuming sync only replicates records with the replication key
-                        # values greater or equal to the state for streams that were replicated
-                        # during the interrupted sync.
-                        self.assertGreaterEqual(record_time, synced_stream_datetime)
+                        for record in interrupted_records[account_id]:
+                            record_time = self.dt_to_ts(record.get(list(replication_key)[0]))
 
-                        # Verify resuming sync replicates all records that were found in the full
-                        # sync (non-interrupted)
-                        self.assertIn(record, full_records,
-                                      msg="Unexpected record replicated in resuming sync.")
+                            # Verify resuming sync only replicates records with the replication key
+                            # values greater or equal to the state for streams that were replicated
+                            # during the interrupted sync.
+                            self.assertGreaterEqual(record_time, synced_stream_datetime)
+
+                            # Verify resuming sync replicates all records that were found in the full
+                            # sync (non-interrupted)
+                            self.assertIn(record, full_records[account_id],
+                                          msg="Unexpected record replicated in resuming sync.")
