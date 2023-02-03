@@ -83,12 +83,6 @@
         "string"
       ]
     },
-    "split_test_variable": {
-      "type": [
-        "null",
-        "string"
-      ]
-    },
     "is_new_structure": {
       "type": [
         "null",
