@@ -27,11 +27,10 @@ def main():
         raise Exception("Provided list of account IDs contains invalid IDs. Kindly check your Account IDs.") from None
     # update string to list in the config
     args.config['accounts'] = accounts_list
-    sandbox = True if str(args.config.get('sandbox', "false")).lower() == "true" else False
 
     with TikTokClient(access_token=args.config['access_token'],
                       advertiser_id=args.config['accounts'],
-                      sandbox=sandbox,
+                      sandbox=args.config.get('sandbox', "false"),
                       user_agent=args.config['user_agent'],
                       request_timeout=args.config.get('request_timeout')) as tik_tok_client:
 

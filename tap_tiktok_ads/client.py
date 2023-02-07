@@ -45,7 +45,8 @@ class TikTokClient:
         self.__session = requests.Session()
         self.__base_url = None
         self.__verified = False
-        self.sandbox = sandbox
+        self.sandbox  = True if str(sandbox).lower() == "true" else False
+
         # base URL prefix
         self.__base_url_prefix = 'business-api'
         # if the account is sandbox, change the URL prefix
