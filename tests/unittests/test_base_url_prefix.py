@@ -40,7 +40,7 @@ class TestBaseURLPrefix(unittest.TestCase):
         # create config
         config = {
             "access_token": "test_access_token",
-            "sandbox": False
+            "sandbox": "false"
         }
 
         # create client
