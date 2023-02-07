@@ -20,11 +20,12 @@ def update_currently_syncing(state, stream_name):
 
 def sync(tik_tok_client, config, state, catalog):
 
-    sandbox_mode = False if config.get("sandbox",False) in  ("false","FALSE",False) else True
+    
     # Loop over selected streams in catalog
     selected_streams = catalog.get_selected_streams(state)
     for stream in selected_streams:
-        if sandbox_mode and stream.tap_stream_id == "advertisers":
+        if tik_tok_client.sandbox and stream.tap_stream_id == "advertisers":
+            # api for advertisers does not work with sandbox accout as the advertiserid's are invalid
             LOGGER.info("Skipping stream: %s for sandbox", stream.tap_stream_id)
             continue
         LOGGER.info("Syncing stream: %s", stream.tap_stream_id)
