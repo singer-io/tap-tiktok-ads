@@ -18,6 +18,11 @@ class TiktokBase(unittest.TestCase):
     INCREMENTAL = "INCREMENTAL"
     OBEYS_START_DATE = "obey-start-date"
 
+    unsupported_streams =  {
+            # as we are running tests on sandbox account, the api call fails for the following stream despite using the sandbox url
+            "advertisers"
+        }
+
     def tap_name(self):
         return "tap-tiktok-ads"
 

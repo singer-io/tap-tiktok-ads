@@ -20,7 +20,7 @@ class TiktokPaginationTest(TiktokBase):
         """
 
         # 'advertisers' records depends on the number of accounts passed for syncing
-        expected_streams = self.expected_streams() - {"advertisers"}
+        expected_streams = self.expected_streams() - self.unsupported_streams
         conn_id = connections.ensure_connection(self)
 
         # Select all streams and all fields within streams
