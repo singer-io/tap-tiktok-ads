@@ -19,8 +19,7 @@ def update_currently_syncing(state, stream_name):
     singer.write_state(state)
 
 def sync(tik_tok_client, config, state, catalog):
-
-    
+    """ Sync data from tap source """
     # Loop over selected streams in catalog
     selected_streams = catalog.get_selected_streams(state)
     for stream in selected_streams:
