@@ -39,7 +39,6 @@ class TiktokAdsInterruptedSyncTest(TiktokBase):
         """
 
         self.start_date = self.get_properties()["start_date"]
-        start_date_datetime = self.dt_to_ts(self.start_date)
 
         conn_id = connections.ensure_connection(self)
         expected_streams = self.expected_streams() - {"advertisers"}
@@ -135,8 +134,8 @@ class TiktokAdsInterruptedSyncTest(TiktokBase):
                     if stream == interrupted_sync_state.get("currently_syncing"):
                         # Assign the start date to the interrupted stream
                         interrupted_stream_datetime = account_bookmark_datetime if account_bookmark_datetime \
-                            else start_date_datetime
-                        interrupted_stream_time = self.dt_to_ts(interrupted_stream_datetime)
+                            else self.start_date
+                        interrupted_stream_timestamp = self.dt_to_ts(interrupted_stream_datetime)
 
                         for record in interrupted_records[account_id]:
                             record_time = self.dt_to_ts(record.get(list(replication_key)[0]))
@@ -144,7 +143,7 @@ class TiktokAdsInterruptedSyncTest(TiktokBase):
                             # Verify resuming sync only replicates records with the replication key
                             # values greater or equal to the state for streams that were replicated
                             # during the interrupted sync.
-                            self.assertGreaterEqual(record_time, interrupted_stream_time)
+                            self.assertGreaterEqual(record_time, interrupted_stream_timestamp)
 
                             # Verify the interrupted sync replicates the expected record set all
                             # interrupted records are in full records
@@ -155,7 +154,7 @@ class TiktokAdsInterruptedSyncTest(TiktokBase):
                         records_after_interrupted_bookmark = 0
                         for record in full_records[account_id]:
                             record_time = self.dt_to_ts(record.get(list(replication_key)[0]))
-                            if record_time >= interrupted_stream_time:
+                            if record_time >= interrupted_stream_timestamp:
                                 records_after_interrupted_bookmark += 1
 
                         self.assertGreaterEqual(records_after_interrupted_bookmark, interrupted_record_count,
@@ -163,10 +162,10 @@ class TiktokAdsInterruptedSyncTest(TiktokBase):
 
                     else:
                         # Get the date to start 2nd sync for non-interrupted streams
-                        synced_stream_bookmark = account_bookmark_datetime if account_bookmark_datetime \
-                            else start_date_datetime
+                        synced_stream_bookmark_datetime = account_bookmark_datetime if account_bookmark_datetime \
+                            else self.start_date
 
-                        synced_stream_datetime = self.dt_to_ts(synced_stream_bookmark)
+                        synced_stream_datetime_timestamp = self.dt_to_ts(synced_stream_bookmark_datetime)
 
                         # Verify we replicated some records for the non-interrupted streams
                         self.assertGreater(interrupted_record_count, 0)
@@ -177,7 +176,7 @@ class TiktokAdsInterruptedSyncTest(TiktokBase):
                             # Verify resuming sync only replicates records with the replication key
                             # values greater or equal to the state for streams that were replicated
                             # during the interrupted sync.
-                            self.assertGreaterEqual(record_time, synced_stream_datetime)
+                            self.assertGreaterEqual(record_time, synced_stream_datetime_timestamp)
 
                             # Verify resuming sync replicates all records that were found in the full
                             # sync (non-interrupted)
