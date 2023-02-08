@@ -166,8 +166,7 @@ class TiktokAdsInterruptedSyncTest(TiktokBase):
                         synced_stream_bookmark = account_bookmark_datetime if account_bookmark_datetime \
                             else start_date_datetime
 
-                        synced_stream_datetime = start_date_datetime if start_date_datetime \
-                            else self.dt_to_ts(synced_stream_bookmark)
+                        synced_stream_datetime = self.dt_to_ts(synced_stream_bookmark)
 
                         # Verify we replicated some records for the non-interrupted streams
                         self.assertGreater(interrupted_record_count, 0)
