@@ -574,18 +574,6 @@
         "string"
       ]
     },
-    "split_test_adgroup_ids": {
-      "type": [
-        "null",
-        "array"
-      ],
-      "items": {
-        "type": [
-          "null",
-          "integer"
-        ]
-      }
-    },
     "brand_safety": {
       "type": [
         "null",
