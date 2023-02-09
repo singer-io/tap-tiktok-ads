@@ -37,6 +37,7 @@ class TiktokAdsInterruptedSyncTest(TiktokBase):
         - Verify the yet-to-be-synced streams are replicated following the interrupted stream
             in the resuming sync.
         """
+        # to stress the test
         i = 0
         while i <= 20:
             self.start_date = self.get_properties()["start_date"]
