@@ -30,7 +30,7 @@ def main():
 
     with TikTokClient(access_token=args.config['access_token'],
                       advertiser_id=args.config['accounts'],
-                      sandbox=args.config.get('sandbox', False),
+                      sandbox=args.config.get('sandbox', "false"),
                       user_agent=args.config['user_agent'],
                       request_timeout=args.config.get('request_timeout')) as tik_tok_client:
 
