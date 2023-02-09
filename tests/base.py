@@ -17,6 +17,7 @@ class TiktokBase(unittest.TestCase):
     FULL_TABLE = "FULL_TABLE"
     INCREMENTAL = "INCREMENTAL"
     OBEYS_START_DATE = "obey-start-date"
+    BOOKMARK_DATE_FORMAT = "%Y-%m-%dT00:00:00Z"
 
     def tap_name(self):
         return "tap-tiktok-ads"
