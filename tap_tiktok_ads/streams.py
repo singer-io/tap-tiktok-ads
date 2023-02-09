@@ -277,6 +277,7 @@ class Stream():
                 record['advertiser_id'] = advertiser_id
                 transformed_record = transformer.transform(record, stream.schema.to_dict(),
                                                            metadata.to_map(stream.metadata))
+                transformed_record = dict(sorted(transformed_record.items()))
                 # write one or more rows to the stream:
                 singer.write_record(stream.tap_stream_id, transformed_record)
                 if bookmark_column:
