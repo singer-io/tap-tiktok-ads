@@ -1,4 +1,9 @@
 # Changelog
+## 0.2.1
+ * Removed Missing Schema items from `adgroups` and `campaign` stream [#15] (https://github.com/singer-io/tap-tiktok-ads/pull/15)
+ * Fixed Bookmarking logic
+ * Fixed Compatibility with sandbox accounts
+
 
 ## 0.2.0
   * Implement request timeout [#3](https://github.com/singer-io/tap-tiktok-ads/pull/3)
