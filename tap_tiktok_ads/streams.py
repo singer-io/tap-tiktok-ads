@@ -170,7 +170,7 @@ def transform_ad_management_records(records, bookmark_value):
             record['is_comment_disable'] = bool(record['is_comment_disable'] == 0)
         # The `modify_time` format is different that the bookmark_value format(which is currently in TZ format),
         # hence resulted into falsy comparision. Thus, converted both to same formats.
-        if bookmark_value is None or utils.strptime_to_utc(record['modify_time']) > utils.strptime_to_utc(bookmark_value):
+        if bookmark_value is None or utils.strptime_to_utc(record['modify_time']) >= utils.strptime_to_utc(bookmark_value):
             transformed_records.append(record)
     return transformed_records
 
@@ -252,7 +252,7 @@ class Stream():
             Returns batches with start_date and end_date for the date_windowing using bookmark/start_date
         """
         if ('bookmarks' in self.state) and (stream_id in self.state['bookmarks'] and (str(advertiser_id) in self.state['bookmarks'][stream_id])):
-            start_date = parse(self.state['bookmarks'][stream_id][str(advertiser_id)]) + timedelta(days=1)
+            start_date = parse(self.state['bookmarks'][stream_id][str(advertiser_id)])
         else:
             start_date = parse(self.config['start_date'])
 
