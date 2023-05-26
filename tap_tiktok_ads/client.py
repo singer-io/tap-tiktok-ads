@@ -14,8 +14,8 @@ REQUEST_TIMEOUT = 300
 
 LOGGER = singer.get_logger()
 
-ENDPOINT_BASE = "https://{api}.tiktok.com/open_api/v1.2"
-TOKEN_URL = 'https://{api}.tiktok.com/open_api/v1.2/user/info'
+ENDPOINT_BASE = "https://{api}.tiktok.com/open_api/v1.3"
+TOKEN_URL = 'https://{api}.tiktok.com/open_api/v1.3/user/info'
 
 # pylint: disable=missing-class-docstring
 class TikTokAdsClientError(Exception):
