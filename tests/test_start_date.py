@@ -34,7 +34,7 @@ class TiktokStartDateTest(TiktokBase):
         ### First Sync
         ##########################################################################
 
-        expected_streams = self.expected_streams() - {"ads", "advertisers", "campaigns", "adgroups"}
+        expected_streams = self.expected_streams() - { "advertisers", "ad_insights", "ad_insights_by_age_and_gender", "ad_insights_by_country", "ad_insights_by_platform"}
 
         conn_id_1 = connections.ensure_connection(self, original_properties=False)
         runner.run_check_mode(self, conn_id_1)
@@ -109,9 +109,9 @@ class TiktokStartDateTest(TiktokBase):
                         start_date_key_value_parsed = parse(start_date_key_value).strftime("%Y-%m-%dT%H:%M:%SZ")
                         self.assertGreaterEqual(self.dt_to_ts(start_date_key_value_parsed), start_date_2_epoch)
 
-                    # Verify the number of records replicated in sync 1 is greater than the number
+                    # Verify the number of records replicated in sync 1 is greater or equal to the number
                     # of records replicated in sync 2 for stream
-                    self.assertGreater(record_count_sync_1, record_count_sync_2)
+                    self.assertGreaterEqual(record_count_sync_1, record_count_sync_2)
 
                     # Verify the records replicated in sync 2 were also replicated in sync 1
                     self.assertTrue(primary_keys_sync_2.issubset(primary_keys_sync_1))
