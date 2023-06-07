@@ -1,4 +1,8 @@
 # Changelog
+
+## 0.3.0
+ * Add backoff logic for error codes - 40200, 40201, 40202, 40700, 50002 [#21] (https://github.com/singer-io/tap-tiktok-ads/pull/21)
+
 ## 0.2.1
  * Removed Missing Schema items from `adgroups` and `campaign` stream [#15] (https://github.com/singer-io/tap-tiktok-ads/pull/15)
  * Fixed Bookmarking logic
