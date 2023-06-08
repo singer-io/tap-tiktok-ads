@@ -28,9 +28,12 @@ def should_retry(e):
     """ Return true if exception is required to retry otherwise return false """
     response = e.response
     error_code = response.json().get("code")
-    # Backoff in case of 50000 error code. Refer doc: https://ads.tiktok.com/marketing_api/docs?id=1714940022762498 
+    # Backoff in case of below error codes. Refer doc: https://ads.tiktok.com/marketing_api/docs?rid=xmtaqatxqj8&id=1737172488964097
     # for more information.
-    if error_code == 50000:
+    if error_code in (40200, 40201, 40202, 40700, 50000, 50002):
+        return True
+    if (type(e) == Exception and type(e.args[0][1]) == ConnectionResetError) or type(e) == ConnectionResetError:
+        # Tap raises Exception: ConnectionResetError(104, 'Connection reset by peer').
         return True
 
 class TikTokClient:
@@ -64,7 +67,7 @@ class TikTokClient:
     # Backoff the request after 5 minutes in case of 50000 error code
     @backoff.on_exception(backoff.constant,
                           (TikTokAdsClientError),
-                          max_time=600, # 10 minutes
+                          max_tries=3,
                           interval=300, # 5 minutes
                           giveup=lambda e: not should_retry(e),
                           jitter=None)
@@ -119,7 +122,7 @@ class TikTokClient:
     # Backoff the request after 5 minutes in case of 50000 error code
     @backoff.on_exception(backoff.constant,
                           (TikTokAdsClientError),
-                          max_time=600, # 10 minutes
+                          max_tries=3,
                           interval=300, # 5 minutes
                           giveup=lambda e: not should_retry(e),
                           jitter=None)
