@@ -27,7 +27,7 @@ jobs:
           name: 'Unit Tests'
           command: |
             source /usr/local/share/virtualenvs/tap-tiktok-ads/bin/activate
-            pip install coverage
+            pip install coverage parameterized
             nosetests --with-coverage --cover-erase --cover-package=tap_tiktok_ads --cover-html-dir=htmlcov tests/unittests
             coverage html
       - store_test_results:
