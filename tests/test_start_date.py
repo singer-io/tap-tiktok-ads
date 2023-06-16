@@ -19,8 +19,8 @@ class TiktokStartDateTest(TiktokBase):
             - Verify by primary key values, that the 2nd sync and 1st sync replicated the same records.
         """
 
-        self.first_start_date = "2020-12-01T00:00:00Z"
-        self.second_start_date = "2020-12-20T00:00:00Z"
+        self.first_start_date = "2022-04-18T00:00:00Z"
+        self.second_start_date = "2020-04-21T00:00:00Z"
         start_date_1_epoch = self.dt_to_ts(self.first_start_date)
         start_date_2_epoch = self.dt_to_ts(self.second_start_date)
 
@@ -109,10 +109,9 @@ class TiktokStartDateTest(TiktokBase):
                         start_date_key_value_parsed = parse(start_date_key_value).strftime("%Y-%m-%dT%H:%M:%SZ")
                         self.assertGreaterEqual(self.dt_to_ts(start_date_key_value_parsed), start_date_2_epoch)
 
-                    # ticket - https://jira.talendforge.org/browse/TDL-23225
                     # Verify the number of records replicated in sync 1 is greater than the number
                     # of records replicated in sync 2 for stream
-                    # self.assertGreater(record_count_sync_1, record_count_sync_2)
+                    self.assertGreater(record_count_sync_1, record_count_sync_2)
 
                     # Verify the records replicated in sync 2 were also replicated in sync 1
                     self.assertTrue(primary_keys_sync_2.issubset(primary_keys_sync_1))
