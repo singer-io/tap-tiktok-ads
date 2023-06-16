@@ -1,8 +1,9 @@
 from datetime import timedelta, datetime, timezone
+import json
 
 import singer
 from dateutil.parser import parse
-from singer.utils import now
+from singer.utils import now, strftime
 from singer import utils, Transformer, UNIX_MILLISECONDS_INTEGER_DATETIME_PARSING, metadata
 
 from tap_tiktok_ads.client import TikTokClient
@@ -108,6 +109,7 @@ ENDPOINT_INSIGHTS = [
     'ad_insights_by_country',
     'ad_insights_by_platform'
 ]
+FILTER_DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
 
 def get_date_batches(start_date, end_date):
     """
@@ -319,7 +321,12 @@ class Stream():
             advertiser_ids = self.config['accounts']
             for advertiser_id in advertiser_ids:
                 self.params['advertiser_id'] = advertiser_id
-                self.sync_pages(stream)
+                date_batches = self.get_date_batches(stream.tap_stream_id, advertiser_id)
+                for date_batch in date_batches:
+                    filter = {'create_start_time': strftime(date_batch['start_date'], FILTER_DATE_FORMAT), 
+                              'create_end_time': strftime(date_batch['end_date'], FILTER_DATE_FORMAT)}
+                    self.params['filtering'] = json.dumps(filter)
+                    self.sync_pages(stream)
 
 
 class Advertisers(Stream):
