@@ -20,7 +20,7 @@ class TiktokStartDateTest(TiktokBase):
         """
 
         self.first_start_date = "2022-04-18T00:00:00Z"
-        self.second_start_date = "2020-04-21T00:00:00Z"
+        self.second_start_date = "2022-04-21T00:00:00Z"
         start_date_1_epoch = self.dt_to_ts(self.first_start_date)
         start_date_2_epoch = self.dt_to_ts(self.second_start_date)
 
