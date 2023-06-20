@@ -8,13 +8,13 @@
     "advertiser_id": {
       "type": [
         "null",
-        "integer"
+        "string"
       ]
     },
     "campaign_id": {
       "type": [
         "null",
-        "integer"
+        "string"
       ]
     },
     "campaign_name": {
@@ -41,13 +41,13 @@
         "string"
       ]
     },
-    "status": {
+    "secondary_status": {
       "type": [
         "null",
         "string"
       ]
     },
-    "opt_status": {
+    "operation_status": {
       "type": [
         "null",
         "string"
@@ -65,10 +65,10 @@
         "string"
       ]
     },
-    "budget_optimize_switch": {
+    "budget_optimize_on": {
       "type": [
         "null",
-        "number"
+        "boolean"
       ]
     },
     "bid_type": {
@@ -77,7 +77,7 @@
         "string"
       ]
     },
-    "optimize_goal": {
+    "optimization_goal": {
       "type": [
         "null",
         "string"
@@ -102,6 +102,66 @@
         "string"
       ],
       "format": "date-time"
+    },
+    "campaign_app_profile_page_state": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "special_industries": {
+      "type": [
+        "null",
+        "array"
+      ],
+      "items": {
+        "type": [
+          "null",
+          "string"
+        ]
+      }
+    },
+    "app_id": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "rf_campaign_type": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "campaign_product_source": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "is_smart_performance_campaign": {
+      "type": [
+        "null",
+        "boolean"
+      ]
+    },
+    "app_promotion_type": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "deep_bid_type": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "roas_bid": {
+      "type": [
+        "null",
+        "number"
+      ]
     }
   }
 }
