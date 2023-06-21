@@ -1,5 +1,8 @@
 # Changelog
 
+## 0.4.0
+ * Sync records from the start date specified in the config. [#22] (https://github.com/singer-io/tap-tiktok-ads/pull/22)
+
 ## 0.3.0
  * Add backoff logic for error codes - 40200, 40201, 40202, 40700, 50002 [#21] (https://github.com/singer-io/tap-tiktok-ads/pull/21)
 
