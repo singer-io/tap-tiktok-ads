@@ -1,9 +1,8 @@
 from datetime import timedelta, datetime, timezone
-import json
 
 import singer
 from dateutil.parser import parse
-from singer.utils import now, strftime
+from singer.utils import now
 from singer import utils, Transformer, UNIX_MILLISECONDS_INTEGER_DATETIME_PARSING, metadata
 
 from tap_tiktok_ads.client import TikTokClient
@@ -109,7 +108,6 @@ ENDPOINT_INSIGHTS = [
     'ad_insights_by_country',
     'ad_insights_by_platform'
 ]
-FILTER_DATE_FORMAT = "%Y-%m-%d %H:%M:%S"
 
 def get_date_batches(start_date, end_date):
     """
