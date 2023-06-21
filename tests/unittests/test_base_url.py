@@ -32,7 +32,7 @@ class TestSandboxUrl(unittest.TestCase):
         mock_request.return_value = get_response(200, {"code": 0, "message": "True"})
         client = TikTokClient(config.get("access_token"), [], config.get('sandbox'), config.get("user_agent"))
         client.request("GET", path = 'test')
-        mock_request.assert_called_with('GET', 'https://sandbox-ads.tiktok.com/open_api/v1.2/test', timeout=300.0, headers={'Access-Token': 'test_access_token', 'Accept': 'application/json', 'User-Agent': 'test_user_agent'})
+        mock_request.assert_called_with('GET', 'https://sandbox-ads.tiktok.com/open_api/v1.3/test', timeout=300.0, headers={'Access-Token': 'test_access_token', 'Accept': 'application/json', 'User-Agent': 'test_user_agent'})
 
     @mock.patch("tap_tiktok_ads.client.requests.Session.request")
     @mock.patch("tap_tiktok_ads.client.TikTokClient.check_access_token")
@@ -47,7 +47,7 @@ class TestSandboxUrl(unittest.TestCase):
         mock_request.return_value = get_response(200, {"code": 0, "message": "True"})
         client = TikTokClient(config.get("access_token"), [], config.get('sandbox'), config.get("user_agent"))
         client.request("GET", path = 'test')
-        mock_request.assert_called_with('GET', 'https://business-api.tiktok.com/open_api/v1.2/test', timeout=300.0, headers={'Access-Token': 'test_access_token', 'Accept': 'application/json', 'User-Agent': 'test_user_agent'})
+        mock_request.assert_called_with('GET', 'https://business-api.tiktok.com/open_api/v1.3/test', timeout=300.0, headers={'Access-Token': 'test_access_token', 'Accept': 'application/json', 'User-Agent': 'test_user_agent'})
 
     @mock.patch("tap_tiktok_ads.client.requests.Session.request")
     @mock.patch("tap_tiktok_ads.client.TikTokClient.check_access_token")
@@ -61,7 +61,7 @@ class TestSandboxUrl(unittest.TestCase):
         mock_request.return_value = get_response(200, {"code": 0, "message": "True"})
         client = TikTokClient(config.get("access_token"), [],  user_agent= config.get("user_agent"))
         client.request("GET", path = 'test')
-        mock_request.assert_called_with('GET', 'https://business-api.tiktok.com/open_api/v1.2/test', timeout=300.0, headers={'Access-Token': 'test_access_token', 'Accept': 'application/json', 'User-Agent': 'test_user_agent'})
+        mock_request.assert_called_with('GET', 'https://business-api.tiktok.com/open_api/v1.3/test', timeout=300.0, headers={'Access-Token': 'test_access_token', 'Accept': 'application/json', 'User-Agent': 'test_user_agent'})
 
     @mock.patch("tap_tiktok_ads.client.requests.Session.request")
     @mock.patch("tap_tiktok_ads.client.TikTokClient.check_access_token")
@@ -76,7 +76,7 @@ class TestSandboxUrl(unittest.TestCase):
         mock_request.return_value = get_response(200, {"code": 0, "message": "True"})
         client = TikTokClient(config.get("access_token"), [], user_agent= config.get("user_agent"))
         client.request("GET", path = 'test')
-        mock_request.assert_called_with('GET', 'https://business-api.tiktok.com/open_api/v1.2/test', timeout=300.0, headers={'Access-Token': 'test_access_token', 'Accept': 'application/json', 'User-Agent': 'test_user_agent'})
+        mock_request.assert_called_with('GET', 'https://business-api.tiktok.com/open_api/v1.3/test', timeout=300.0, headers={'Access-Token': 'test_access_token', 'Accept': 'application/json', 'User-Agent': 'test_user_agent'})
 
     @mock.patch("tap_tiktok_ads.client.requests.Session.get")
     def test_sandbox_url_in_check_access_token(self, mock_get):
@@ -90,7 +90,7 @@ class TestSandboxUrl(unittest.TestCase):
         mock_get.return_value = get_response(200, {"code": 0, "message": "True"})
         client = TikTokClient(config.get("access_token"), [], config.get('sandbox'), config.get("user_agent"))
         client.check_access_token()
-        mock_get.assert_called_with(url='https://sandbox-ads.tiktok.com/open_api/v1.2/user/info', timeout=300.0, headers={'User-Agent': 'test_user_agent', 'Access-Token': 'test_access_token', 'Accept': 'application/json'})
+        mock_get.assert_called_with(url='https://sandbox-ads.tiktok.com/open_api/v1.3/user/info', timeout=300.0, headers={'User-Agent': 'test_user_agent', 'Access-Token': 'test_access_token', 'Accept': 'application/json'})
 
     @mock.patch("tap_tiktok_ads.client.requests.Session.get")
     def test_business_url_in_check_access_token(self, mock_get):
@@ -104,7 +104,7 @@ class TestSandboxUrl(unittest.TestCase):
         mock_get.return_value = get_response(200, {"code": 0, "message": "True"})
         client = TikTokClient(config.get("access_token"), [],  config.get('sandbox'), config.get("user_agent"))
         client.check_access_token()
-        mock_get.assert_called_with(url='https://business-api.tiktok.com/open_api/v1.2/user/info', timeout=300.0, headers={'User-Agent': 'test_user_agent', 'Access-Token': 'test_access_token', 'Accept': 'application/json'})
+        mock_get.assert_called_with(url='https://business-api.tiktok.com/open_api/v1.3/user/info', timeout=300.0, headers={'User-Agent': 'test_user_agent', 'Access-Token': 'test_access_token', 'Accept': 'application/json'})
 
     @mock.patch("tap_tiktok_ads.client.requests.Session.get")
     def test_business_url_in_check_access_token_when_not_passed_in_config(self, mock_get):
@@ -117,7 +117,7 @@ class TestSandboxUrl(unittest.TestCase):
         mock_get.return_value = get_response(200, {"code": 0, "message": "True"})
         client = TikTokClient(config.get("access_token"), [],  user_agent=config.get("user_agent"))
         client.check_access_token()
-        mock_get.assert_called_with(url='https://business-api.tiktok.com/open_api/v1.2/user/info', timeout=300.0, headers={'User-Agent': 'test_user_agent', 'Access-Token': 'test_access_token', 'Accept': 'application/json'})
+        mock_get.assert_called_with(url='https://business-api.tiktok.com/open_api/v1.3/user/info', timeout=300.0, headers={'User-Agent': 'test_user_agent', 'Access-Token': 'test_access_token', 'Accept': 'application/json'})
 
     @mock.patch("tap_tiktok_ads.client.requests.Session.get")
     def test_business_url_in_check_access_token_when_string_passed_in_config(self, mock_get):
@@ -131,4 +131,4 @@ class TestSandboxUrl(unittest.TestCase):
         mock_get.return_value = get_response(200, {"code": 0, "message": "True"})
         client = TikTokClient(config.get("access_token"), [],  config.get('sandbox'), config.get("user_agent"))
         client.check_access_token()
-        mock_get.assert_called_with(url='https://business-api.tiktok.com/open_api/v1.2/user/info', timeout=300.0, headers={'User-Agent': 'test_user_agent', 'Access-Token': 'test_access_token', 'Accept': 'application/json'})
+        mock_get.assert_called_with(url='https://business-api.tiktok.com/open_api/v1.3/user/info', timeout=300.0, headers={'User-Agent': 'test_user_agent', 'Access-Token': 'test_access_token', 'Accept': 'application/json'})
