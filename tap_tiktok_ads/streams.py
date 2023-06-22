@@ -189,7 +189,7 @@ def transform_advertisers_records(records, bookmark_value):
     return transformed_records
 
 
-def get_bookmark_value(stream_name, bookmark_data, advertiser_id):
+def get_bookmark_value(stream_name, bookmark_data, advertiser_id, start_date):
     '''
     Returns bookmark value for any stream based on stream category(normal or stream with advertiser_id). Return None in 
     case of `advertisers` stream if bookmark is not present. For other streams return bookmark for each advertiser_id
@@ -197,11 +197,11 @@ def get_bookmark_value(stream_name, bookmark_data, advertiser_id):
     if stream_name in ENDPOINT_ADVERTISERS:
         if bookmark_data:
             return bookmark_data
-        return None
+        return start_date
     elif (stream_name in ENDPOINT_INSIGHTS or stream_name in ENDPOINT_AD_MANAGEMENT) and advertiser_id in bookmark_data:
         return bookmark_data[advertiser_id]
     else:
-        return None
+        return start_date
 
 
 class Stream():
@@ -268,7 +268,7 @@ class Stream():
         """
         bookmark_column = self.replication_keys[0] # pylint: disable=unsubscriptable-object
         bookmark_data = self.get_bookmark(stream.tap_stream_id)
-        bookmark_value = get_bookmark_value(stream.tap_stream_id, bookmark_data, advertiser_id)
+        bookmark_value = get_bookmark_value(stream.tap_stream_id, bookmark_data, advertiser_id, self.config['start_date'])
         transformed_records = pre_transform(stream.tap_stream_id, records, bookmark_value)
         sorted_records = sorted(transformed_records, key=lambda x: x[bookmark_column])
         for record in sorted_records:
