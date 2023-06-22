@@ -43,18 +43,18 @@ class TestBookmarks(unittest.TestCase):
         stream =  MockCatalog('advertisers', 'advertisers', ['create_time'])
         advertisers.process_batch(stream, [{'create_time': 1642114853}], 'test_acc_id')
         # Verify that the get_bookmark_value() is called with {} indicating empty state which is returned from the get_bookmark() function.
-        test_get_bk_value.assert_called_with('advertisers', {}, 'test_acc_id')
+        test_get_bk_value.assert_called_with('advertisers', {}, 'test_acc_id', 'test_start_date')
 
     @mock.patch('tap_tiktok_ads.streams.pre_transform')
     @mock.patch('tap_tiktok_ads.streams.transform_advertisers_records')
     def test_get_bookmark_value(self, test_transform_advertisers_records, test_pre_transform):
         '''
-        Verify that the get_bookmark_value() function returns None when state for the Advertisers stream is not passed.
+        Verify that the get_bookmark_value() function returns start_date when state for the Advertisers stream is not passed.
         '''
         config = {"start_date": "test_start_date", "user_agent": "test_user_agent", "access_token": "test_at", "accounts": ['test_acc_id']}
         state = {"bookmarks": {"campaigns": {"7052829480590606338": "2022-02-10T12:12:52.000000Z"}}}
         advertisers = Advertisers(MockClient(), config, state)
         stream =  MockCatalog('advertisers', 'advertisers', ['create_time'])
         advertisers.process_batch(stream, [{'create_time': 1642114853}], 'test_acc_id')
-        # Verify that the pre_transform() is called with None thus verifying that the get_bookmark_value() returned None.
-        test_pre_transform.assert_called_with('advertisers', [{'create_time': 1642114853}], None)
+        # Verify that the pre_transform() is called with 'test_start_date' thus verifying that the get_bookmark_value() returned 'test_start_date'.
+        test_pre_transform.assert_called_with('advertisers', [{'create_time': 1642114853}], 'test_start_date')
