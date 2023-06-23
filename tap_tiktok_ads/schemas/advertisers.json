@@ -5,10 +5,10 @@
   ],
   "additionalProperties": false,
   "properties": {
-    "id": {
+    "advertiser_id": {
       "type": [
         "null",
-        "integer"
+        "string"
       ]
     },
     "name": {
@@ -83,7 +83,7 @@
         "string"
       ]
     },
-    "phonenumber": {
+    "cellphone_number": {
       "type": [
         "null",
         "string"
@@ -107,7 +107,7 @@
         "string"
       ]
     },
-    "reason": {
+    "rejection_reason": {
       "type": [
         "null",
         "string"
@@ -125,7 +125,7 @@
         "string"
       ]
     },
-    "telephone": {
+    "telephone_number": {
       "type": [
         "null",
         "string"
@@ -144,6 +144,12 @@
       ]
     },
     "create_time": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "advertiser_account_type": {
       "type": [
         "null",
         "string"
