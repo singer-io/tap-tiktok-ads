@@ -336,7 +336,7 @@ class Advertisers(Stream):
         response = self.client.get(path=self.path, headers=headers,
                                      params=self.params)
         if response['message'] == 'OK':
-            records = response['data']
+            records = response['data']['list']
             self.process_batch(stream, records, None)
 
     def do_sync(self, stream):
