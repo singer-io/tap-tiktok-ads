@@ -324,7 +324,7 @@ class Stream():
 
 class Advertisers(Stream):
     tap_stream_id = "advertisers"
-    key_properties = ['id', 'create_time']
+    key_properties = ['advertiser_id', 'create_time']
     replication_keys  = ['create_time']
     path = "advertiser/info/"
 
