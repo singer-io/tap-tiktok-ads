@@ -8,13 +8,13 @@
     "advertiser_id": {
       "type": [
         "null",
-        "integer"
+        "string"
       ]
     },
     "ad_id": {
       "type": [
         "null",
-        "integer"
+        "string"
       ]
     },
     "ad_name": {
@@ -39,7 +39,7 @@
     "adgroup_id": {
       "type": [
         "null",
-        "integer"
+        "string"
       ]
     },
     "adgroup_name": {
@@ -51,7 +51,7 @@
     "campaign_id": {
       "type": [
         "null",
-        "integer"
+        "string"
       ]
     },
     "campaign_name": {

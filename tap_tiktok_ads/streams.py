@@ -385,7 +385,7 @@ class AdInsights(Insights):
     tap_stream_id = "ad_insights"
     key_properties = ['advertiser_id', 'ad_id', 'adgroup_id', 'campaign_id', 'stat_time_day']
     replication_keys  = ['stat_time_day']
-    path = "reports/integrated/get/"
+    path = "report/integrated/get/"
     params = {
         "service_type": "AUCTION",
         "report_type": "BASIC",
@@ -402,7 +402,7 @@ class AdInsightsByAgeAndGender(Insights):
     tap_stream_id = "ad_insights_by_age_and_gender"
     key_properties = ['advertiser_id', 'ad_id', 'adgroup_id', 'campaign_id', 'stat_time_day', 'age', 'gender']
     replication_keys  = ['stat_time_day']
-    path = "reports/integrated/get/"
+    path = "report/integrated/get/"
     params = {
         "service_type": "AUCTION",
         "report_type": "AUDIENCE",
@@ -421,7 +421,7 @@ class AdInsightsByCountry(Insights):
     tap_stream_id = "ad_insights_by_country"
     key_properties = ['advertiser_id', 'ad_id', 'adgroup_id', 'campaign_id', 'stat_time_day', 'country_code']
     replication_keys  = ['stat_time_day']
-    path = "reports/integrated/get/"
+    path = "report/integrated/get/"
     params = {
         "service_type": "AUCTION",
         "report_type": "AUDIENCE",
@@ -439,7 +439,7 @@ class AdInsightsByPlatform(Insights):
     tap_stream_id = "ad_insights_by_platform"
     key_properties = ['advertiser_id', 'ad_id', 'adgroup_id', 'campaign_id', 'stat_time_day', 'platform']
     replication_keys  = ['stat_time_day']
-    path = "reports/integrated/get/"
+    path = "report/integrated/get/"
     params = {
         "service_type": "AUCTION",
         "report_type": "AUDIENCE",
