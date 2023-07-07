@@ -8,11 +8,11 @@ This tap:
 
 - Pulls raw data from the [TikTok Marketing API](https://ads.tiktok.com/marketing_api/docs). 
 - Extracts the following resources from TikTok Marketing API for a single repository: 
-	- [Accounts](https://ads.tiktok.com/marketing_api/docs?id=1708503235186689) - Endpoint: https://business-api.tiktok.com/open_api/v1.2/advertiser/info/ 
-	- [Campaigns](https://ads.tiktok.com/marketing_api/docs?id=1708582970809346) - Endpoint: https://ads.tiktok.com/open_api/v1.2/campaign/get/ 
-	- [Adgroups](https://ads.tiktok.com/marketing_api/docs?id=1708503489590273) - Endpoint: https://ads.tiktok.com/open_api/v1.2/adgroup/get/ 
-	- [Ads](https://ads.tiktok.com/marketing_api/docs?id=1708572923161602) - Endpoint: https://business-api.tiktok.com/open_api/v1.2/ad/get/ 
-	- [Reporting](https://ads.tiktok.com/marketing_api/docs?id=1701890949889025) - Endpoint: https://ads.tiktok.com/open_api/v1.2/reports/integrated/get/ 
+	- [Accounts](https://ads.tiktok.com/marketing_api/docs?id=1708503235186689) - Endpoint: https://business-api.tiktok.com/open_api/v1.3/advertiser/info/ 
+	- [Campaigns](https://ads.tiktok.com/marketing_api/docs?id=1708582970809346) - Endpoint: https://ads.tiktok.com/open_api/v1.3/campaign/get/ 
+	- [Adgroups](https://ads.tiktok.com/marketing_api/docs?id=1708503489590273) - Endpoint: https://ads.tiktok.com/open_api/v1.3/adgroup/get/ 
+	- [Ads](https://ads.tiktok.com/marketing_api/docs?id=1708572923161602) - Endpoint: https://business-api.tiktok.com/open_api/v1.3/ad/get/ 
+	- [Reporting](https://ads.tiktok.com/marketing_api/docs?id=1701890949889025) - Endpoint: https://ads.tiktok.com/open_api/v1.3/report/integrated/get/ 
 		- [Ad Insights](https://ads.tiktok.com/marketing_api/docs?id=1707957200780290)
 		- [Ad Insights by Age and Gender](https://ads.tiktok.com/marketing_api/docs?id=1707957217727489)
 		- [Ad Insights by Country](https://ads.tiktok.com/marketing_api/docs?id=1707957217727489)
