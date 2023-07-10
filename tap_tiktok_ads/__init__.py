@@ -28,11 +28,7 @@ def main():
     # update string to list in the config
     args.config['accounts'] = accounts_list
 
-    with TikTokClient(access_token=args.config['access_token'],
-                      advertiser_id=args.config['accounts'],
-                      sandbox=args.config.get('sandbox', "false"),
-                      user_agent=args.config['user_agent'],
-                      request_timeout=args.config.get('request_timeout')) as tik_tok_client:
+    with TikTokClient(args.config) as tik_tok_client:
 
         # If discover flag was passed, run discovery mode and dump output to stdout
         if args.discover:

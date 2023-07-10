@@ -3,6 +3,7 @@
   "start_date": "2020-05-01T00:00:00Z",
   "user_agent": "user <email>",
   "accounts": "123456789, 123124142",
+  "include_deleted": "true",
   "sandbox": "true",
   "request_timeout": 300
 }
