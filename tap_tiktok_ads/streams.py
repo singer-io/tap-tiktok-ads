@@ -214,6 +214,7 @@ class Stream():
     req_advertiser_id = True
     params = {}
 
+
     def __init__(self,
                  client: TikTokClient,
                  config,
@@ -222,6 +223,7 @@ class Stream():
         self.config = config
         self.client = client
         self.page_size = int(config.get('page_size', 1000))
+        self.include_deleted = True if str(config.get('include_deleted', "false")).lower() == "true" else False
 
     def write_bookmark(self, stream, value):
         """
