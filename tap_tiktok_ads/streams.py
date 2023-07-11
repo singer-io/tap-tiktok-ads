@@ -274,7 +274,8 @@ class Stream():
         for record in sorted_records:
             with Transformer(integer_datetime_fmt=UNIX_MILLISECONDS_INTEGER_DATETIME_PARSING) as transformer:
                 # for 'insights' stream, 'advertiser_id' is not getting populated and it is one for the Primary Keys
-                record['advertiser_id'] = advertiser_id
+                if not isinstance(record.get("advertiser_id"), str):
+                    record['advertiser_id'] = advertiser_id
                 transformed_record = transformer.transform(record, stream.schema.to_dict(),
                                                            metadata.to_map(stream.metadata))
                 # write one or more rows to the stream:
