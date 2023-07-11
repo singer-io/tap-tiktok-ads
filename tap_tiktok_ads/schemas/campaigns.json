@@ -162,6 +162,12 @@
         "null",
         "number"
       ]
+    },
+    "current_status": {
+      "type": [
+        "null",
+        "string"
+      ]
     }
   }
 }
