@@ -43,7 +43,7 @@ class TikTokClient:
         self.__session = requests.Session()
         self.__base_url = None
         self.__verified = False
-        self.sandbox  = True if str(config.get('sandbox', "false")).lower() == "true" else False
+        self.sandbox  = True if str(config.get('sandbox') or "false").lower() == "true" else False
 
         # base URL prefix
         self.__base_url_prefix = 'business-api'
