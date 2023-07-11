@@ -360,6 +360,12 @@
         "null",
         "integer"
       ]
+    },
+    "current_status": {
+      "type": [
+        "null",
+        "string"
+      ]
     }
   }
 }

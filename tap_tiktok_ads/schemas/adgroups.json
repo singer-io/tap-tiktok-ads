@@ -655,6 +655,12 @@
         "null",
         "boolean"
       ]
+    },
+    "current_status": {
+      "type": [
+        "null",
+        "string"
+      ]
     }
   }
 }
