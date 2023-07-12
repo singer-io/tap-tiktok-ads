@@ -60,7 +60,7 @@
         "string"
       ]
     },
-    "placement": {
+    "placement_type": {
       "type": [
         "null",
         "string"
