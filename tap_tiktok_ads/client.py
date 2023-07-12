@@ -37,24 +37,27 @@ def should_retry(e):
 
 class TikTokClient:
     def __init__(self,
-                 config):
-        self.__access_token = config['access_token']
-        self.__user_agent = config.get('user_agent')
+                 access_token,
+                 advertiser_id,
+                 sandbox=False,
+                 user_agent=None,
+                 request_timeout=REQUEST_TIMEOUT):
+        self.__access_token = access_token
+        self.__user_agent = user_agent
         self.__session = requests.Session()
         self.__base_url = None
         self.__verified = False
-        self.sandbox  = True if str(config.get('sandbox') or "false").lower() == "true" else False
+        self.sandbox  = True if str(sandbox).lower() == "true" else False
 
         # base URL prefix
         self.__base_url_prefix = 'business-api'
         # if the account is sandbox, change the URL prefix
         if self.sandbox:
             self.__base_url_prefix = 'sandbox-ads'
-        self.__advertiser_id = config['accounts']
+        self.__advertiser_id = advertiser_id
 
         # set request timeout from config param "request_timeout" value
         # If value is 0,"0","" or not passed then it set default to 300 seconds.
-        request_timeout = config.get('request_timeout')
         if request_timeout and float(request_timeout):
             self.__request_timeout = float(request_timeout)
         else:
