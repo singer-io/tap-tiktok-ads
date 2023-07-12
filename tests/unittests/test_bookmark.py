@@ -29,7 +29,7 @@ class TestBookmarks(unittest.TestCase):
         transformed_records = transform_ad_management_records(records, bookmark_value)
         # Verify that the transformed records contains only the records with modify_time greater than the
         # bookmark, thus verifying correct comparision.
-        self.assertEqual(transformed_records, [{'modify_time': '2022-02-10 12:15:34'}])
+        self.assertEqual(transformed_records, [{'modify_time': '2022-02-10 12:15:34', 'current_status': 'ACTIVE'}])
 
     @mock.patch('tap_tiktok_ads.streams.get_bookmark_value')
     @mock.patch('tap_tiktok_ads.streams.transform_advertisers_records')
