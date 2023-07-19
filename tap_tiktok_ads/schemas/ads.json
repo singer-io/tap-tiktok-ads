@@ -361,11 +361,65 @@
         "integer"
       ]
     },
-    "current_status": {
+    "utm_params": {
       "type": [
         "null",
-        "string"
-      ]
+        "array"
+      ],
+      "items": {
+        "type": [
+          "null",
+          "object"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "key": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "value": {
+            "type": [
+              "null",
+              "string"
+            ]
+          }
+        }
+      }
+    },
+    "showcase_products": {
+      "type": [
+        "null",
+        "array"
+      ],
+      "items": {
+        "type": [
+          "null",
+          "object"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "item_group_id": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "store_id": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "catalog_id": {
+            "type": [
+              "null",
+              "string"
+            ]
+          }
+        }
+      }
     }
   }
 }

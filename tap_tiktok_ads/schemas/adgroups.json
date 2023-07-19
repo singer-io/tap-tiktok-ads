@@ -656,11 +656,71 @@
         "boolean"
       ]
     },
-    "current_status": {
+    "adgroup_app_profile_page_state": {
       "type": [
         "null",
         "string"
       ]
+    },
+    "delivery_mode": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "included_custom_actions": {
+      "type": [
+        "null",
+        "array"
+      ],
+      "items": {
+        "type": [
+          "null",
+          "object"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "days": {
+            "type": [
+              "null",
+              "integer"
+            ]
+          }
+        }
+      }
+    },
+    "excluded_custom_actions": {
+      "type": [
+        "null",
+        "array"
+      ],
+      "items": {
+        "type": [
+          "null",
+          "object"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "days": {
+            "type": [
+              "null",
+              "integer"
+            ]
+          }
+        }
+      }
     }
   }
 }
