@@ -61,7 +61,7 @@ class TestAccountsList(unittest.TestCase):
 
         # create expected config containing list of accounts
         expected_config = copy.deepcopy(config)
-        expected_config["accounts"] = [1, 2, 3]
+        expected_config["accounts"] = ['1', '2', '3']
 
         # verify the comma-separated string of accounts is converted to list of accounts
         self.assertEqual(actual_config, expected_config)
