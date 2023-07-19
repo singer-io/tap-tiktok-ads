@@ -6,7 +6,7 @@ from tap_tiktok_ads.client import TikTokClient
 from tap_tiktok_ads.discover import discover
 from tap_tiktok_ads.sync import sync
 
-REQUIRED_CONFIG_KEYS = ['start_date', 'user_agent', 'access_token', 'accounts']
+REQUIRED_CONFIG_KEYS = ['start_date', 'access_token', 'accounts']
 LOGGER = singer.get_logger()
 
 
@@ -31,7 +31,6 @@ def main():
     with TikTokClient(access_token=args.config['access_token'],
                       advertiser_id=args.config['accounts'],
                       sandbox=args.config.get('sandbox', "false"),
-                      user_agent=args.config['user_agent'],
                       request_timeout=args.config.get('request_timeout')) as tik_tok_client:
 
         # If discover flag was passed, run discovery mode and dump output to stdout

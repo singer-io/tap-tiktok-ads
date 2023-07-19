@@ -1,6 +1,6 @@
 from urllib.parse import urlencode
 import backoff
-
+import json
 import requests
 import backoff
 import singer
@@ -109,7 +109,7 @@ class TikTokClient:
                 "Access-Token": self.__access_token
             }
             params = {
-                "advertiser_ids": self.__advertiser_id
+                "advertiser_ids": json.dumps(self.__advertiser_id)
             }
             if self.__base_url_prefix == 'sandbox-ads':
                 return True

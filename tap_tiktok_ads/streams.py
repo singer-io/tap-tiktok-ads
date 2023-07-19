@@ -1,5 +1,5 @@
 from datetime import timedelta, datetime, timezone
-
+import json
 import singer
 from dateutil.parser import parse
 from singer.utils import now
@@ -343,7 +343,7 @@ class Advertisers(Stream):
     def do_sync(self, stream):
         """ Sync data from tap source for advertisers"""
         if 'accounts' in self.config and self.req_advertiser_id:
-            self.params['advertiser_ids'] = self.config['accounts']
+            self.params['advertiser_ids'] = json.dumps(self.config['accounts'])
             self.sync_advertisers(stream)
 
 class Campaigns(Stream):
