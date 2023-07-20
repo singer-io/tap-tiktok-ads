@@ -305,6 +305,12 @@
         "null",
         "string"
       ]
+    },
+    "rf_campaign_type": {
+      "type": [
+        "null",
+        "string"
+      ]
     }
   }
 }
