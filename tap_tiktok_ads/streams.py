@@ -75,7 +75,6 @@ AUCTION_FIELDS = """[
     "smart_target",
     "bid_strategy",
     "bid",
-    "aeo_type",
     "call_to_action",
     "image_mode",
     "billing_event"
@@ -124,7 +123,6 @@ AUDIENCE_FIELDS = """[
     "smart_target",
     "bid_strategy",
     "bid",
-    "aeo_type",
     "call_to_action",
     "billing_event"
 ]"""

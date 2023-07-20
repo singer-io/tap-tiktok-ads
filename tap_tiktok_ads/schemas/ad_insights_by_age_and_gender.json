@@ -294,12 +294,6 @@
         "string"
       ]
     },
-    "aeo_type": {
-      "type": [
-        "null",
-        "string"
-      ]
-    },
     "call_to_action": {
       "type": [
         "null",
