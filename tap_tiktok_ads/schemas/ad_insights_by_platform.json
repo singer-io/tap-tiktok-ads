@@ -209,6 +209,102 @@
         "null",
         "string"
       ]
+    },
+    "gross_impressions": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "is_smart_creative": {
+      "type": [
+        "null",
+        "boolean"
+      ]
+    },
+    "conversion_rate_v2": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "real_time_conversion_rate_v2": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "objective_type": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "split_test": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "campaign_budget": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "campaign_dedicate_type": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "opt_status": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "budget": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "smart_target": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "bid_strategy": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "bid": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "aeo_type": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "call_to_action": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "billing_event": {
+      "type": [
+        "null",
+        "string"
+      ]
     }
   }
 }

@@ -61,7 +61,24 @@ AUCTION_FIELDS = """[
     "tt_app_name",
     "mobile_app_id",
     "promotion_type",
-    "dpa_target_audience_type"
+    "dpa_target_audience_type",
+    "gross_impressions",
+    "is_smart_creative",
+    "conversion_rate_v2",
+    "real_time_conversion_rate_v2",
+    "app_promotion_type",
+    "split_test",
+    "campaign_budget",
+    "campaign_dedicate_type",
+    "opt_status",
+    "budget",
+    "smart_target",
+    "bid_strategy",
+    "bid",
+    "aeo_type",
+    "call_to_action",
+    "image_mode",
+    "billing_event"
 ]"""
 AUDIENCE_FIELDS = """[
     "ad_name",
@@ -92,7 +109,24 @@ AUDIENCE_FIELDS = """[
     "tt_app_name",
     "mobile_app_id",
     "promotion_type",
-    "dpa_target_audience_type"
+    "dpa_target_audience_type",
+    "gross_impressions",
+    "is_smart_creative",
+    "conversion_rate_v2",
+    "real_time_conversion_rate_v2",
+    "rf_campaign_type",
+    "objective_type",
+    "split_test",
+    "campaign_budget",
+    "campaign_dedicate_type",
+    "opt_status",
+    "budget",
+    "smart_target",
+    "bid_strategy",
+    "bid",
+    "aeo_type",
+    "call_to_action",
+    "billing_event"
 ]"""
 ENDPOINT_ADVERTISERS = [
     'advertisers'
@@ -396,7 +430,7 @@ class AdInsights(Insights):
             "stat_time_day"
         ]""",
         "metrics": AUCTION_FIELDS,
-        "lifetime": "false"
+        "query_lifetime": "false"
     }
 
 class AdInsightsByAgeAndGender(Insights):
@@ -415,7 +449,7 @@ class AdInsightsByAgeAndGender(Insights):
             "stat_time_day"
         ]""",
         "metrics": AUDIENCE_FIELDS,
-        "lifetime": "false"
+        "query_lifetime": "false"
     }
 
 class AdInsightsByCountry(Insights):
@@ -433,7 +467,7 @@ class AdInsightsByCountry(Insights):
             "stat_time_day"
         ]""",
         "metrics": AUDIENCE_FIELDS,
-        "lifetime": "false"
+        "query_lifetime": "false"
     }
 
 class AdInsightsByPlatform(Insights):
@@ -451,7 +485,7 @@ class AdInsightsByPlatform(Insights):
             "stat_time_day"
         ]""",
         "metrics": AUDIENCE_FIELDS,
-        "lifetime": "false"
+        "query_lifetime": "false"
     }
 
 STREAMS = {
