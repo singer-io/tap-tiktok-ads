@@ -67,7 +67,7 @@ class TiktokBase(unittest.TestCase):
         """Return all the data about all the streams"""
         return {
             "advertisers": {
-                self.PRIMARY_KEYS: {"id", "create_time"},
+                self.PRIMARY_KEYS: {"advertiser_id", "create_time"},
                 self.REPLICATION_METHOD: self.INCREMENTAL,
                 self.REPLICATION_KEYS: {"create_time"},
                 self.OBEYS_START_DATE: True
