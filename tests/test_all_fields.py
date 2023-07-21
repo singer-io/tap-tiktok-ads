@@ -111,6 +111,7 @@ class TiktokAllFieldsTest(TiktokBase):
                 # remove some fields as data cannot be generated / retrieved
                 fields = self.fields_to_remove.get(stream) or []
                 for field in fields:
-                    expected_all_keys.remove(field)
+                    if field in expected_all_keys:
+                        expected_all_keys.remove(field)
 
                 self.assertSetEqual(expected_all_keys, actual_all_keys)
