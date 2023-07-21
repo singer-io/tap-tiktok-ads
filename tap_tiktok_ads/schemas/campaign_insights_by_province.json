@@ -36,12 +36,6 @@
           "string"
         ]
       },
-      "user_action": {
-        "type": [
-          "null",
-          "string"
-        ]
-      },
       "spend": {
         "type": [
           "null",
