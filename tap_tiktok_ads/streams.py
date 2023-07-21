@@ -9,7 +9,7 @@ from tap_tiktok_ads.client import TikTokClient
 
 LOGGER = singer.get_logger()
 
-AUCTION_FIELDS = """[
+AUCTION_FIELDS = [
     "ad_name",
     "ad_text",
     "adgroup_id",
@@ -78,7 +78,7 @@ AUCTION_FIELDS = """[
     "call_to_action",
     "image_mode",
     "billing_event"
-]"""
+]
 AUDIENCE_FIELDS = [
     "campaign_name",
     "spend",
@@ -109,18 +109,18 @@ AUDIENCE_FIELDS = [
     "campaign_dedicate_type"
 ]
 AD_AUDIENCE_FIELDS = [
-    'ad_name',
-    'ad_text',
-    'adgroup_id',
-    'adgroup_name',
-    'campaign_id',
+    "ad_name",
+    "ad_text",
+    "adgroup_id",
+    "adgroup_name",
+    "campaign_id",
     "billing_event",
-    'dpa_target_audience_type',
+    "dpa_target_audience_type",
     "is_smart_creative",
-    'mobile_app_id',
-    'promotion_type',
-    'tt_app_id',
-    'tt_app_name',
+    "mobile_app_id",
+    "promotion_type",
+    "tt_app_id",
+    "tt_app_name",
     "opt_status",
     "budget",
     "smart_target",
@@ -431,7 +431,7 @@ class AdInsights(Insights):
             "ad_id",
             "stat_time_day"
         ]""",
-        "metrics": AUCTION_FIELDS,
+        "metrics": json.dumps(AUCTION_FIELDS),
         "query_lifetime": "false"
     }
 
