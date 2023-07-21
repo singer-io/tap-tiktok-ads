@@ -113,6 +113,12 @@ class TiktokBase(unittest.TestCase):
                 self.REPLICATION_METHOD: self.INCREMENTAL,
                 self.REPLICATION_KEYS: {"stat_time_day"},
                 self.OBEYS_START_DATE: True
+            },
+            "campaign_insights_by_province": {
+                self.PRIMARY_KEYS: {"advertiser_id", "campaign_id", "stat_time_day", "province_id"},
+                self.REPLICATION_METHOD: self.INCREMENTAL,
+                self.REPLICATION_KEYS: {"stat_time_day"},
+                self.OBEYS_START_DATE: True
             }
         }
 
