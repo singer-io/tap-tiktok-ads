@@ -231,13 +231,13 @@
     "conversion_rate_v2": {
       "type": [
         "null",
-        "string"
+        "number"
       ]
     },
     "real_time_conversion_rate_v2": {
       "type": [
         "null",
-        "string"
+        "number"
       ]
     },
     "objective_type": {
