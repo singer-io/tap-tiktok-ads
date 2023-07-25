@@ -7,7 +7,7 @@ spec](https://github.com/singer-io/getting-started/blob/master/SPEC.md).
 This tap: 
 
 - Pulls raw data from the [TikTok Marketing API](https://ads.tiktok.com/marketing_api/docs). 
-- Extracts the following resources from TikTok Marketing API for a single repository: 
+- Extracts the following resources from TikTok Marketing API for a single repository:
 	- [Accounts](https://ads.tiktok.com/marketing_api/docs?id=1739593083610113) - Endpoint: https://business-api.tiktok.com/open_api/v1.3/advertiser/info/ 
 	- [Campaigns](https://ads.tiktok.com/marketing_api/docs?id=1739315828649986) - Endpoint: https://ads.tiktok.com/open_api/v1.3/campaign/get/ 
 	- [Adgroups](https://ads.tiktok.com/marketing_api/docs?id=1739314558673922) - Endpoint: https://ads.tiktok.com/open_api/v1.3/adgroup/get/ 
@@ -17,6 +17,7 @@ This tap:
 		- [Ad Insights by Age and Gender](https://ads.tiktok.com/marketing_api/docs?id=1738864928947201)
 		- [Ad Insights by Country](https://ads.tiktok.com/marketing_api/docs?id=1738864928947201)
 		- [Ad Insights by Platform](https://ads.tiktok.com/marketing_api/docs?id=1738864928947201)
+        - [Campaign Insights by Province](https://ads.tiktok.com/marketing_api/docs?id=1738864928947201)
 - Outputs the schema for each resource
 - Incrementally pulls data based on the input state
 
