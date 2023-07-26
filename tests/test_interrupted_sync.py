@@ -50,7 +50,7 @@ class TiktokAdsInterruptedSyncTest(TiktokBase):
         catalog_entries = [ce for ce in found_catalogs if ce["tap_stream_id"] in expected_streams]
 
         # Catalog selection
-        self.select_found_catalogs(conn_id, catalog_entries)
+        self.select_found_catalogs(conn_id, catalog_entries, only_streams=expected_streams)
 
         # Run a sync job
         self.run_and_verify_sync(conn_id)
