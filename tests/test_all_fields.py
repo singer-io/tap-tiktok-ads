@@ -64,7 +64,7 @@ class TiktokAllFieldsTest(TiktokBase):
         found_catalogs = self.run_and_verify_check_mode(conn_id)
 
         # table and field selection
-        self.select_found_catalogs(conn_id, found_catalogs)
+        self.select_found_catalogs(conn_id, found_catalogs, only_streams=expected_streams)
 
         # grab metadata after performing table-and-field selection to set expectations
         stream_to_all_catalog_fields = dict() # used for asserting all fields are replicated

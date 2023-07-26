@@ -39,7 +39,7 @@ class TiktokBookmarksTest(TiktokBase):
         expected_streams = self.expected_streams()  - self.unsupported_streams
 
         found_catalogs = self.run_and_verify_check_mode(conn_id)
-        self.select_found_catalogs(conn_id, found_catalogs)
+        self.select_found_catalogs(conn_id, found_catalogs, only_streams=expected_streams)
 
         # Run a sync job using orchestrator
         first_sync_record_count = self.run_and_verify_sync(conn_id)
