@@ -6,7 +6,14 @@ class TiktokAllFieldsTest(TiktokBase):
     # fields which is data is not generated
     fields_to_remove = {
         'campaigns': [
-            'status'
+            'status',
+            'app_promotion_type',
+            'special_industries',
+            'secondary_status',
+            'app_id',
+            'campaign_app_profile_page_state',
+            'rf_campaign_type',
+            'campaign_product_source'
             ],
         'ads': [
             'dpa_fallback_type',
@@ -17,7 +24,24 @@ class TiktokAllFieldsTest(TiktokBase):
             'item_duet_status',
             'tiktok_item_id',
             'status',
-            'promotional_music_disabled'],
+            'promotional_music_disabled',
+            'sku_ids',
+            'shopping_ads_fallback_type',
+            'utm_params',
+            'product_set_id',
+            'showcase_products',
+            'shopping_ads_video_package_id',
+            'shopping_deeplink_type',
+            'product_specific_type',
+            'dynamic_destination',
+            'catalog_id',
+            'dynamic_format',
+            'tracking_offline_event_set_ids',
+            'secondary_status',
+            'item_group_ids',
+            'vertical_video_strategy',
+            'tracking_app_id',
+            'carousel_image_index'],
         'adgroups': [
             'cpv_video_duration',
             'targeting_expansion',
@@ -38,7 +62,19 @@ class TiktokAllFieldsTest(TiktokBase):
             'android_osv',
             'roas_bid',
             'device_models',
-            'carriers_v2'
+            'carriers_v2',
+            'video_download',
+            'interest_category_v2',
+            'is_comment_disable',
+            'shopping_ads_retargeting_type',
+            'excluded_audience',
+            'min_ios_version',
+            'ios14_targeting',
+            'secondary_status',
+            'interest_keywords',
+            'audience',
+            'location',
+            'min_android_version'
             ],
         'ad_insights_by_age_and_gender': ['user_action'],
         'ad_insights_by_platform': ['user_action'],
