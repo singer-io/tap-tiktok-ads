@@ -34,7 +34,7 @@ class TiktokStartDateTest(TiktokBase):
         ### First Sync
         ##########################################################################
 
-        expected_streams = self.expected_streams() - { "advertisers", "ad_insights", "ad_insights_by_age_and_gender", "ad_insights_by_country", "ad_insights_by_platform"}
+        expected_streams = self.expected_streams() - self.unsupported_streams - {"campaign_insights_by_province"}
 
         conn_id_1 = connections.ensure_connection(self, original_properties=False)
         runner.run_check_mode(self, conn_id_1)
