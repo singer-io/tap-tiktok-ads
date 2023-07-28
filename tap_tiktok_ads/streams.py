@@ -9,7 +9,7 @@ from tap_tiktok_ads.client import TikTokClient
 
 LOGGER = singer.get_logger()
 
-AUCTION_FIELDS = """[
+AUCTION_FIELDS = [
     "ad_name",
     "ad_text",
     "adgroup_id",
@@ -61,14 +61,25 @@ AUCTION_FIELDS = """[
     "tt_app_name",
     "mobile_app_id",
     "promotion_type",
-    "dpa_target_audience_type"
-]"""
-AUDIENCE_FIELDS = """[
-    "ad_name",
-    "ad_text",
-    "adgroup_id",
-    "adgroup_name",
-    "campaign_id",
+    "dpa_target_audience_type",
+    "gross_impressions",
+    "is_smart_creative",
+    "conversion_rate_v2",
+    "real_time_conversion_rate_v2",
+    "app_promotion_type",
+    "split_test",
+    "campaign_budget",
+    "campaign_dedicate_type",
+    "opt_status",
+    "budget",
+    "smart_target",
+    "bid_strategy",
+    "bid",
+    "call_to_action",
+    "image_mode",
+    "billing_event"
+]
+AUDIENCE_FIELDS = [
     "campaign_name",
     "spend",
     "cpc",
@@ -88,12 +99,36 @@ AUDIENCE_FIELDS = """[
     "real_time_result",
     "real_time_cost_per_result",
     "real_time_result_rate",
-    "tt_app_id",
-    "tt_app_name",
+    "gross_impressions",
+    "conversion_rate_v2",
+    "real_time_conversion_rate_v2",
+    "rf_campaign_type",
+    "objective_type",
+    "split_test",
+    "campaign_budget",
+    "campaign_dedicate_type"
+]
+AD_AUDIENCE_FIELDS = [
+    "ad_name",
+    "ad_text",
+    "adgroup_id",
+    "adgroup_name",
+    "campaign_id",
+    "billing_event",
+    "dpa_target_audience_type",
+    "is_smart_creative",
     "mobile_app_id",
     "promotion_type",
-    "dpa_target_audience_type"
-]"""
+    "tt_app_id",
+    "tt_app_name",
+    "opt_status",
+    "budget",
+    "smart_target",
+    "bid_strategy",
+    "bid",
+    "call_to_action",
+    "promotion_type",
+]
 ENDPOINT_ADVERTISERS = [
     'advertisers'
 ]
@@ -106,7 +141,8 @@ ENDPOINT_INSIGHTS = [
     'ad_insights',
     'ad_insights_by_age_and_gender',
     'ad_insights_by_country',
-    'ad_insights_by_platform'
+    'ad_insights_by_platform',
+    'campaign_insights_by_province'
 ]
 
 def get_date_batches(start_date, end_date):
@@ -419,8 +455,8 @@ class AdInsights(Insights):
             "ad_id",
             "stat_time_day"
         ]""",
-        "metrics": AUCTION_FIELDS,
-        "lifetime": "false"
+        "metrics": json.dumps(AUCTION_FIELDS),
+        "query_lifetime": "false"
     }
 
 class AdInsightsByAgeAndGender(Insights):
@@ -438,8 +474,8 @@ class AdInsightsByAgeAndGender(Insights):
             "gender",
             "stat_time_day"
         ]""",
-        "metrics": AUDIENCE_FIELDS,
-        "lifetime": "false"
+        "metrics": json.dumps(AUDIENCE_FIELDS + AD_AUDIENCE_FIELDS),
+        "query_lifetime": "false"
     }
 
 class AdInsightsByCountry(Insights):
@@ -456,8 +492,8 @@ class AdInsightsByCountry(Insights):
             "country_code",
             "stat_time_day"
         ]""",
-        "metrics": AUDIENCE_FIELDS,
-        "lifetime": "false"
+        "metrics": json.dumps(AUDIENCE_FIELDS + AD_AUDIENCE_FIELDS),
+        "query_lifetime": "false"
     }
 
 class AdInsightsByPlatform(Insights):
@@ -474,7 +510,25 @@ class AdInsightsByPlatform(Insights):
             "platform",
             "stat_time_day"
         ]""",
-        "metrics": AUDIENCE_FIELDS,
+        "metrics": json.dumps(AUDIENCE_FIELDS + AD_AUDIENCE_FIELDS),
+        "query_lifetime": "false"
+    }
+
+class CampaignInsightsByProvince(Insights):
+    tap_stream_id = "campaign_insights_by_province"
+    key_properties = ['advertiser_id', 'campaign_id', 'stat_time_day', 'province_id']
+    replication_keys  = ['stat_time_day']
+    path = "report/integrated/get/"
+    params = {
+        "service_type": "AUCTION",
+        "report_type": "AUDIENCE",
+        "data_level": "AUCTION_CAMPAIGN",
+        "dimensions": """[
+            "campaign_id",
+            "province_id",
+            "stat_time_day"
+        ]""",
+        "metrics": json.dumps(AUDIENCE_FIELDS),
         "lifetime": "false"
     }
 
@@ -486,5 +540,6 @@ STREAMS = {
     'ad_insights': AdInsights,
     'ad_insights_by_age_and_gender': AdInsightsByAgeAndGender,
     'ad_insights_by_country': AdInsightsByCountry,
-    'ad_insights_by_platform': AdInsightsByPlatform
+    'ad_insights_by_platform': AdInsightsByPlatform,
+    'campaign_insights_by_province': CampaignInsightsByProvince
 }
