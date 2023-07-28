@@ -13,8 +13,7 @@ MAX_TRIES = 5
 REQUEST_TIMEOUT = 300
 
 LOGGER = singer.get_logger()
-
-ENDPOINT_BASE = "https://{api}.tiktok.com/open_api/v1.3"
+ENDPOINT_VERSION = "v1.3"
 
 # pylint: disable=missing-class-docstring
 class TikTokAdsClientError(Exception):
@@ -29,7 +28,7 @@ def should_retry(e):
     error_code = response.json().get("code")
     # Backoff in case of below error codes. Refer doc: https://ads.tiktok.com/marketing_api/docs?rid=xmtaqatxqj8&id=1737172488964097
     # for more information.
-    if error_code in (40200, 40201, 40202, 40700, 50000, 50002):
+    if error_code in (40100, 40200, 40201, 40202, 40700, 50000, 50002):
         return True
     if (type(e) == Exception and type(e.args[0][1]) == ConnectionResetError) or type(e) == ConnectionResetError:
         # Tap raises Exception: ConnectionResetError(104, 'Connection reset by peer').
@@ -90,7 +89,7 @@ class TikTokClient:
         headers['Access-Token'] = self.__access_token
         headers['Accept'] = 'application/json'
         response = self.__session.get(
-            url='https://{}.tiktok.com/open_api/v1.3/user/info'.format(self.__base_url_prefix),
+            url='https://{}.tiktok.com/open_api/{}/user/info'.format(self.__base_url_prefix, ENDPOINT_VERSION),
             headers=headers,
             timeout=self.__request_timeout)
 
@@ -134,7 +133,7 @@ class TikTokClient:
             self.__verified = self.check_access_token()
 
         if not url and self.__base_url is None:
-            self.__base_url = 'https://{}.tiktok.com/open_api/v1.3'.format(self.__base_url_prefix)
+            self.__base_url = 'https://{}.tiktok.com/open_api/{}'.format(self.__base_url_prefix, ENDPOINT_VERSION)
 
         if not url and path:
             url = f'{self.__base_url}/{path}'

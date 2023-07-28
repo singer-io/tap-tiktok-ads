@@ -67,7 +67,7 @@ class TiktokBase(unittest.TestCase):
         """Return all the data about all the streams"""
         return {
             "advertisers": {
-                self.PRIMARY_KEYS: {"id", "create_time"},
+                self.PRIMARY_KEYS: {"advertiser_id", "create_time"},
                 self.REPLICATION_METHOD: self.INCREMENTAL,
                 self.REPLICATION_KEYS: {"create_time"},
                 self.OBEYS_START_DATE: True
@@ -110,6 +110,12 @@ class TiktokBase(unittest.TestCase):
             },
             "ad_insights_by_platform": {
                 self.PRIMARY_KEYS: {"advertiser_id", "ad_id", "adgroup_id", "campaign_id", "stat_time_day", "platform"},
+                self.REPLICATION_METHOD: self.INCREMENTAL,
+                self.REPLICATION_KEYS: {"stat_time_day"},
+                self.OBEYS_START_DATE: True
+            },
+            "campaign_insights_by_province": {
+                self.PRIMARY_KEYS: {"advertiser_id", "campaign_id", "stat_time_day", "province_id"},
                 self.REPLICATION_METHOD: self.INCREMENTAL,
                 self.REPLICATION_KEYS: {"stat_time_day"},
                 self.OBEYS_START_DATE: True

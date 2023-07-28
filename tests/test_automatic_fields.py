@@ -19,7 +19,7 @@ class TiktokAutomaticFieldsTest(TiktokBase):
         found_catalogs = self.run_and_verify_check_mode(conn_id)
 
         # de-select all the fields
-        self.select_found_catalogs(conn_id, found_catalogs, deselect_all_fields=True)
+        self.select_found_catalogs(conn_id, found_catalogs, deselect_all_fields=True, only_streams=expected_streams)
 
         # run sync
         record_count_by_stream = self.run_and_verify_sync(conn_id)
