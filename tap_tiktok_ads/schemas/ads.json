@@ -420,6 +420,12 @@
           }
         }
       }
+    },
+    "current_status": {
+      "type": [
+        "null",
+        "string"
+      ]
     }
   }
 }
