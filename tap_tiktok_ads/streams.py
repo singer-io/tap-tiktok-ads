@@ -199,6 +199,9 @@ def transform_ad_management_records(records, bookmark_value):
     """
     transformed_records = []
     for record in records:
+        # Setting the custom 'current_status' as 'ACTIVE', Tiktok does not differentiate between ACTIVE/DELETE records in response.
+        if "current_status" not in record:
+            record["current_status"] = "ACTIVE"
         if 'modify_time' not in record:
             record['modify_time'] = record['create_time']
         # In case of an adgroup request, transform 'is_comment_disabled' type from integer to boolean
@@ -347,6 +350,27 @@ class Stream():
                 total_records = response['data']['page_info']['total_number']
                 records = records + response['data']['list']
             page = page + 1
+
+        # Exclusively query to retrieve the deleted records for streams - Ads, AdGroups and Campaigns
+        if stream.tap_stream_id in ENDPOINT_AD_MANAGEMENT and str(self.config.get('include_deleted') or "false").lower() == "true":
+            LOGGER.info(f"Fetching the deleted records for stream - {stream.tap_stream_id}")
+            deleted_records = []
+            total_records = 0
+            page = 1
+            # Add the 'filtering' query param
+            self.params['filtering'] = json.dumps({"primary_status": "STATUS_DELETE"})
+            while (len(deleted_records) < total_records) or (page == 1):
+                self.params['page'] = page
+                response = self.client.get(path=self.path, headers=headers,
+                                            params=self.params)
+                if response['message'] == 'OK':
+                    total_records = response['data']['page_info']['total_number']
+                    deleted_records = deleted_records + response['data']['list']
+                page = page + 1
+            # Setting the custom 'current_status' as 'DELETE', Tiktok does not differentiate between ACTIVE/DELETE records in response.
+            for item in deleted_records:
+                item["current_status"] = "DELETE"
+            records = records + deleted_records
         self.process_batch(stream, records, advertiser_id)
 
     def do_sync(self, stream):
