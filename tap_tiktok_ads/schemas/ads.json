@@ -8,13 +8,13 @@
     "advertiser_id": {
       "type": [
         "null",
-        "integer"
+        "string"
       ]
     },
     "campaign_id": {
       "type": [
         "null",
-        "integer"
+        "string"
       ]
     },
     "campaign_name": {
@@ -26,7 +26,7 @@
     "adgroup_id": {
       "type": [
         "null",
-        "integer"
+        "string"
       ]
     },
     "adgroup_name": {
@@ -38,7 +38,7 @@
     "ad_id": {
       "type": [
         "null",
-        "integer"
+        "string"
       ]
     },
     "ad_name": {
@@ -56,16 +56,16 @@
     "card_id": {
       "type": [
         "null",
-        "integer"
+        "string"
       ]
     },
-    "status": {
+    "secondary_status": {
       "type": [
         "null",
         "string"
       ]
     },
-    "opt_status": {
+    "operation_status": {
       "type": [
         "null",
         "string"
@@ -143,7 +143,7 @@
         "string"
       ]
     },
-    "profile_image": {
+    "profile_image_url": {
       "type": [
         "null",
         "string"
@@ -161,13 +161,13 @@
         "string"
       ]
     },
-    "open_url": {
+    "deeplink": {
       "type": [
         "null",
         "string"
       ]
     },
-    "open_url_type": {
+    "deeplink_type": {
       "type": [
         "null",
         "string"
@@ -188,16 +188,16 @@
     "page_id": {
       "type": [
         "null",
-        "integer"
+        "number"
       ]
     },
-    "vast_moat": {
+    "vast_moat_enabled": {
       "type": [
         "null",
         "boolean"
       ]
     },
-    "is_creative_authorized": {
+    "creative_authorized": {
       "type": [
         "null",
         "boolean"
@@ -223,19 +223,19 @@
       ],
       "format": "date-time"
     },
-    "dpa_fallback_type": {
+    "shopping_ads_fallback_type": {
       "type": [
         "null",
         "string"
       ]
     },
-    "dpa_open_url_type": {
+    "shopping_deeplink_type": {
       "type": [
         "null",
         "string"
       ]
     },
-    "dpa_video_tpl_id": {
+    "shopping_ads_video_package_id": {
       "type": [
         "null",
         "string"
@@ -254,6 +254,174 @@
       ]
     },
     "item_stitch_status": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "product_specific_type": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "catalog_id": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "item_group_ids": {
+      "type": [
+        "null",
+        "array"
+      ],
+      "items": {
+        "type": [
+          "null",
+          "string"
+        ]
+      }
+    },
+    "product_set_id": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "sku_ids": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "dynamic_format": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "vertical_video_strategy": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "dynamic_destination": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "brand_safety_vast_url": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "viewability_postbid_partner": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "viewability_vast_url": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "tracking_app_id": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "music_id": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "tracking_offline_event_set_ids": {
+      "type": [
+        "null",
+        "array"
+      ],
+      "items": {
+        "type": [
+          "null",
+          "string"
+        ]
+      }
+    },
+    "carousel_image_index": {
+      "type": [
+        "null",
+        "integer"
+      ]
+    },
+    "utm_params": {
+      "type": [
+        "null",
+        "array"
+      ],
+      "items": {
+        "type": [
+          "null",
+          "object"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "key": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "value": {
+            "type": [
+              "null",
+              "string"
+            ]
+          }
+        }
+      }
+    },
+    "showcase_products": {
+      "type": [
+        "null",
+        "array"
+      ],
+      "items": {
+        "type": [
+          "null",
+          "object"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "item_group_id": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "store_id": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "catalog_id": {
+            "type": [
+              "null",
+              "string"
+            ]
+          }
+        }
+      }
+    },
+    "current_status": {
       "type": [
         "null",
         "string"

@@ -8,19 +8,19 @@
     "advertiser_id": {
       "type": [
         "null",
-        "integer"
+        "string"
       ]
     },
     "adgroup_id": {
       "type": [
         "null",
-        "integer"
+        "string"
       ]
     },
     "campaign_id": {
       "type": [
         "null",
-        "integer"
+        "string"
       ]
     },
     "adgroup_name": {
@@ -35,7 +35,7 @@
         "string"
       ]
     },
-    "placement": {
+    "placements": {
       "type": [
         "null",
         "array"
@@ -47,7 +47,7 @@
         ]
       }
     },
-    "enable_inventory_filter": {
+    "inventory_filter_enabled": {
       "type": [
         "null",
         "boolean"
@@ -62,10 +62,10 @@
     "app_id": {
       "type": [
         "null",
-        "integer"
+        "string"
       ]
     },
-    "external_type": {
+    "promotion_type": {
       "type": [
         "null",
         "string"
@@ -86,16 +86,16 @@
     "pixel_id": {
       "type": [
         "null",
-        "integer"
+        "string"
       ]
     },
-    "external_action": {
+    "optimization_event": {
       "type": [
         "null",
         "string"
       ]
     },
-    "deep_external_action": {
+    "secondary_optimization_event": {
       "type": [
         "null",
         "string"
@@ -179,7 +179,7 @@
         ]
       }
     },
-    "age": {
+    "age_groups": {
       "type": [
         "null",
         "array"
@@ -209,7 +209,7 @@
         ]
       }
     },
-    "operation_system": {
+    "operating_systems": {
       "type": [
         "null",
         "array"
@@ -221,7 +221,7 @@
         ]
       }
     },
-    "connection_type": {
+    "network_types": {
       "type": [
         "null",
         "array"
@@ -233,7 +233,7 @@
         ]
       }
     },
-    "device_price": {
+    "device_price_ranges": {
       "type": [
         "null",
         "array"
@@ -241,17 +241,17 @@
       "items": {
         "type": [
           "null",
-          "integer"
+          "number"
         ]
       }
     },
-    "android_osv": {
+    "min_android_version": {
       "type": [
         "null",
         "string"
       ]
     },
-    "ios_target_device": {
+    "ios14_targeting": {
       "type": [
         "null",
         "string"
@@ -269,7 +269,7 @@
         ]
       }
     },
-    "ios_osv": {
+    "min_ios_version": {
       "type": [
         "null",
         "string"
@@ -313,7 +313,7 @@
         "string"
       ]
     },
-    "optimize_goal": {
+    "optimization_goal": {
       "type": [
         "null",
         "string"
@@ -346,7 +346,7 @@
     "skip_learning_phase": {
       "type": [
         "null",
-        "integer"
+        "boolean"
       ]
     },
     "bid_type": {
@@ -355,13 +355,13 @@
         "string"
       ]
     },
-    "bid": {
+    "bid_price": {
       "type": [
         "null",
         "number"
       ]
     },
-    "conversion_bid": {
+    "conversion_bid_price": {
       "type": [
         "null",
         "number"
@@ -373,19 +373,19 @@
         "string"
       ]
     },
-    "deep_cpabid": {
+    "deep_cpa_bid": {
       "type": [
         "null",
         "number"
       ]
     },
-    "status": {
+    "secondary_status": {
       "type": [
         "null",
         "string"
       ]
     },
-    "opt_status": {
+    "operation_status": {
       "type": [
         "null",
         "string"
@@ -439,7 +439,7 @@
         ]
       }
     },
-    "action_v2": {
+    "actions": {
       "type": [
         "null",
         "array"
@@ -451,7 +451,7 @@
         ],
         "additionalProperties": false,
         "properties": {
-          "action_categories": {
+          "action_category_ids": {
             "type": [
               "null",
               "array"
@@ -459,14 +459,14 @@
             "items": {
               "type": [
                 "null",
-                "integer"
+                "string"
               ]
             }
           },
           "action_period": {
             "type": [
               "null",
-              "integer"
+              "number"
             ]
           },
           "action_scene": {
@@ -475,7 +475,7 @@
               "string"
             ]
           },
-          "user_actions": {
+          "video_user_actions": {
             "type": [
               "null",
               "array"
@@ -490,34 +490,34 @@
         }
       }
     },
-    "rf_buy_type": {
+    "rf_purchased_type": {
       "type": [
         "null",
         "string"
       ]
     },
-    "buy_impression": {
+    "purchased_impression": {
       "type": [
         "null",
-        "integer"
+        "number"
       ]
     },
-    "buy_reach": {
+    "purchased_reach": {
       "type": [
         "null",
-        "integer"
+        "number"
       ]
     },
-    "rf_predict_cpr": {
+    "rf_estimated_cpr": {
       "type": [
         "null",
-        "integer"
+        "number"
       ]
     },
-    "rf_predict_frequency": {
+    "rf_estimated_frequency": {
       "type": [
         "null",
-        "integer"
+        "number"
       ]
     },
     "pangle_audience_package_include": {
@@ -553,13 +553,13 @@
     "catalog_id": {
       "type": [
         "null",
-        "integer"
+        "string"
       ]
     },
     "product_set_id": {
       "type": [
         "null",
-        "integer"
+        "string"
       ]
     },
     "catalog_authorized_bc": {
@@ -568,13 +568,13 @@
         "integer"
       ]
     },
-    "dpa_retargeting_type": {
+    "shopping_ads_retargeting_type": {
       "type": [
         "null",
         "string"
       ]
     },
-    "brand_safety": {
+    "brand_safety_type": {
       "type": [
         "null",
         "string"
@@ -622,7 +622,7 @@
             ]
           }
         },
-        "enable_expansion": {
+        "expansion_enabled": {
           "type": [
             "null",
             "boolean"
@@ -644,16 +644,88 @@
       ],
       "format": "date-time"
     },
-    "daily_retention_ratio": {
+    "next_day_retention": {
       "type": [
         "null",
         "number"
       ]
     },
-    "is_share_disable": {
+    "share_disabled": {
       "type": [
         "null",
         "boolean"
+      ]
+    },
+    "adgroup_app_profile_page_state": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "delivery_mode": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "included_custom_actions": {
+      "type": [
+        "null",
+        "array"
+      ],
+      "items": {
+        "type": [
+          "null",
+          "object"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "days": {
+            "type": [
+              "null",
+              "integer"
+            ]
+          }
+        }
+      }
+    },
+    "excluded_custom_actions": {
+      "type": [
+        "null",
+        "array"
+      ],
+      "items": {
+        "type": [
+          "null",
+          "object"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "days": {
+            "type": [
+              "null",
+              "integer"
+            ]
+          }
+        }
+      }
+    },
+    "current_status": {
+      "type": [
+        "null",
+        "string"
       ]
     }
   }

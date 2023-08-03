@@ -7,16 +7,17 @@ spec](https://github.com/singer-io/getting-started/blob/master/SPEC.md).
 This tap: 
 
 - Pulls raw data from the [TikTok Marketing API](https://ads.tiktok.com/marketing_api/docs). 
-- Extracts the following resources from TikTok Marketing API for a single repository: 
-	- [Accounts](https://ads.tiktok.com/marketing_api/docs?id=1708503235186689) - Endpoint: https://business-api.tiktok.com/open_api/v1.2/advertiser/info/ 
-	- [Campaigns](https://ads.tiktok.com/marketing_api/docs?id=1708582970809346) - Endpoint: https://ads.tiktok.com/open_api/v1.2/campaign/get/ 
-	- [Adgroups](https://ads.tiktok.com/marketing_api/docs?id=1708503489590273) - Endpoint: https://ads.tiktok.com/open_api/v1.2/adgroup/get/ 
-	- [Ads](https://ads.tiktok.com/marketing_api/docs?id=1708572923161602) - Endpoint: https://business-api.tiktok.com/open_api/v1.2/ad/get/ 
-	- [Reporting](https://ads.tiktok.com/marketing_api/docs?id=1701890949889025) - Endpoint: https://ads.tiktok.com/open_api/v1.2/reports/integrated/get/ 
-		- [Ad Insights](https://ads.tiktok.com/marketing_api/docs?id=1707957200780290)
-		- [Ad Insights by Age and Gender](https://ads.tiktok.com/marketing_api/docs?id=1707957217727489)
-		- [Ad Insights by Country](https://ads.tiktok.com/marketing_api/docs?id=1707957217727489)
-		- [Ad Insights by Platform](https://ads.tiktok.com/marketing_api/docs?id=1707957217727489)
+- Extracts the following resources from TikTok Marketing API for a single repository:
+	- [Accounts](https://ads.tiktok.com/marketing_api/docs?id=1739593083610113) - Endpoint: https://business-api.tiktok.com/open_api/v1.3/advertiser/info/ 
+	- [Campaigns](https://ads.tiktok.com/marketing_api/docs?id=1739315828649986) - Endpoint: https://ads.tiktok.com/open_api/v1.3/campaign/get/ 
+	- [Adgroups](https://ads.tiktok.com/marketing_api/docs?id=1739314558673922) - Endpoint: https://ads.tiktok.com/open_api/v1.3/adgroup/get/ 
+	- [Ads](https://ads.tiktok.com/marketing_api/docs?id=1735735588640770) - Endpoint: https://business-api.tiktok.com/open_api/v1.3/ad/get/ 
+	- [Reporting](https://ads.tiktok.com/marketing_api/docs?id=1751087777884161) - Endpoint: https://ads.tiktok.com/open_api/v1.3/report/integrated/get/ 
+		- [Ad Insights](https://ads.tiktok.com/marketing_api/docs?id=1738864915188737)
+		- [Ad Insights by Age and Gender](https://ads.tiktok.com/marketing_api/docs?id=1738864928947201)
+		- [Ad Insights by Country](https://ads.tiktok.com/marketing_api/docs?id=1738864928947201)
+		- [Ad Insights by Platform](https://ads.tiktok.com/marketing_api/docs?id=1738864928947201)
+        - [Campaign Insights by Province](https://ads.tiktok.com/marketing_api/docs?id=1738864928947201)
 - Outputs the schema for each resource
 - Incrementally pulls data based on the input state
 
