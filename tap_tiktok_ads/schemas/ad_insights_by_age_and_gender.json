@@ -8,13 +8,13 @@
     "advertiser_id": {
       "type": [
         "null",
-        "integer"
+        "string"
       ]
     },
     "ad_id": {
       "type": [
         "null",
-        "integer"
+        "string"
       ]
     },
     "ad_name": {
@@ -39,7 +39,7 @@
     "adgroup_id": {
       "type": [
         "null",
-        "integer"
+        "string"
       ]
     },
     "adgroup_name": {
@@ -51,7 +51,7 @@
     "campaign_id": {
       "type": [
         "null",
-        "integer"
+        "string"
       ]
     },
     "campaign_name": {
@@ -211,6 +211,102 @@
       ]
     },
     "dpa_target_audience_type": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "gross_impressions": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "is_smart_creative": {
+      "type": [
+        "null",
+        "boolean"
+      ]
+    },
+    "conversion_rate_v2": {
+      "type": [
+        "null",
+        "number"
+      ]
+    },
+    "real_time_conversion_rate_v2": {
+      "type": [
+        "null",
+        "number"
+      ]
+    },
+    "objective_type": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "split_test": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "campaign_budget": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "campaign_dedicate_type": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "opt_status": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "budget": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "smart_target": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "bid_strategy": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "bid": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "call_to_action": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "billing_event": {
+      "type": [
+        "null",
+        "string"
+      ]
+    },
+    "rf_campaign_type": {
       "type": [
         "null",
         "string"
