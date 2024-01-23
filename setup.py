@@ -11,7 +11,7 @@ setup(
     py_modules=["tap_tiktok_ads"],
     install_requires=[
         "singer-python==6.0.0",
-        "requests==2.31.2",
+        "requests==2.31.0",
     ],
     extras_require={
         "test": [
