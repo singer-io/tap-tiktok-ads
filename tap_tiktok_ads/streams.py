@@ -270,24 +270,26 @@ class Stream():
         bookmark_data = self.get_bookmark(stream.tap_stream_id)
         bookmark_value = get_bookmark_value(stream.tap_stream_id, bookmark_data, advertiser_id)
         transformed_records = pre_transform(stream.tap_stream_id, records, bookmark_value)
-        sorted_records = sorted(transformed_records, key=lambda x: x[bookmark_column])
-        for record in sorted_records:
+        # sorted_records = sorted(transformed_records, key=lambda x: x[bookmark_column])
+        max_bookmark = bookmark_value
+        for record in transformed_records:
             with Transformer(integer_datetime_fmt=UNIX_MILLISECONDS_INTEGER_DATETIME_PARSING) as transformer:
                 # for 'insights' stream, 'advertiser_id' is not getting populated and it is one for the Primary Keys
                 record['advertiser_id'] = advertiser_id
                 transformed_record = transformer.transform(record, stream.schema.to_dict(),
                                                            metadata.to_map(stream.metadata))
                 # write one or more rows to the stream:
-                singer.write_record(stream.tap_stream_id, transformed_record)
                 if bookmark_column:
-                    # update bookmark to latest value
-                    if stream.tap_stream_id in ENDPOINT_ADVERTISERS:
-                        self.write_bookmark(stream.tap_stream_id, transformed_record[bookmark_column])
-                    else:
-                        if bookmark_data is None:
-                            bookmark_data = {}
-                        bookmark_data[advertiser_id] = transformed_record[bookmark_column]
-                        self.write_bookmark(stream.tap_stream_id, bookmark_data)
+                    max_bookmark = max(transformed_record[bookmark_column], max_bookmark)
+                singer.write_record(stream.tap_stream_id, transformed_record)
+        # update bookmark to latest value
+        if stream.tap_stream_id in ENDPOINT_ADVERTISERS:
+            self.write_bookmark(stream.tap_stream_id, max_bookmark)
+        else:
+            if bookmark_data is None:
+                bookmark_data = {}
+            bookmark_data[advertiser_id] = max_bookmark
+            self.write_bookmark(stream.tap_stream_id, bookmark_data)
 
     def sync_pages(self, stream):
         """
