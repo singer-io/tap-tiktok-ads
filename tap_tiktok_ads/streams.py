@@ -9,6 +9,8 @@ from tap_tiktok_ads.client import TikTokClient
 
 LOGGER = singer.get_logger()
 
+LOOKBACK_WINDOW = 2
+
 AUCTION_FIELDS = [
     "ad_name",
     "ad_text",
@@ -288,12 +290,16 @@ class Stream():
     # and end_date into batches of 30 days max.
     def get_date_batches(self, stream_id, advertiser_id):
         """
-            Returns batches with start_date and end_date for the date_windowing using bookmark/start_date
+        Returns batches with start_date and end_date for the date_windowing using bookmark/start_date
+        Adjusts the start_date and end_date by subtracting the LOOKBACK_WINDOW (in days).
         """
         if ('bookmarks' in self.state) and (stream_id in self.state['bookmarks'] and (str(advertiser_id) in self.state['bookmarks'][stream_id])):
             start_date = parse(self.state['bookmarks'][stream_id][str(advertiser_id)])
         else:
             start_date = parse(self.config['start_date'])
+
+        # Apply the LOOKBACK_WINDOW by subtracting days
+        start_date = start_date - timedelta(days=LOOKBACK_WINDOW)
 
         if 'end_date' in self.config:
             end_date = parse(self.config['end_date'])
