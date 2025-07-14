@@ -22,10 +22,11 @@ class TiktokBase(unittest.TestCase):
     unsupported_streams =  {
             # as we are running tests on sandbox account, the api call fails for the following stream despite using the sandbox url
             "advertisers",
-            "ad_insights", 
-            "ad_insights_by_age_and_gender", 
-            "ad_insights_by_country", 
-            "ad_insights_by_platform"
+            "ad_insights",
+            "ad_insights_by_age_and_gender",
+            "ad_insights_by_country",
+            "ad_insights_by_platform",
+            "insights",
         }
 
     def tap_name(self):
