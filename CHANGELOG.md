@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.1.1
+ * Bumps dependency versions for twistlock compliance
+ * Updates test to pass circle build
+ * [#30](https://github.com/singer-io/tap-tiktok-ads/pull/30)
+
 ## 1.1.0
  * Updates for python 3.11 [#26](https://github.com/singer-io/tap-tiktok-ads/pull/26)
 
