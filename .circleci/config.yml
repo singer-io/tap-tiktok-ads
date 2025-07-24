@@ -27,9 +27,9 @@ jobs:
           name: 'Unit Tests'
           command: |
             source /usr/local/share/virtualenvs/tap-tiktok-ads/bin/activate
-	    uv pip install pytest coverage parameterized
+            uv pip install pytest coverage parameterized
             coverage run -m pytest tests/unittests
-	    coverage html
+            coverage html
       - store_test_results:
           path: test_output/report.xml
       - store_artifacts:
