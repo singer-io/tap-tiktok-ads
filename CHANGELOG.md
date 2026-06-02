@@ -1,5 +1,9 @@
 # Changelog
 
+# 1.1.2
+  * Bump requests to 2.33.0 for security updates [#30](https://github.com/singer-io/tap-tiktok-ads/pull/30)
+
+
 ## 1.1.1
  * Bumps dependency versions for twistlock compliance
  * Updates test to pass circle build
