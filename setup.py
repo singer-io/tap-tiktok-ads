@@ -3,7 +3,7 @@ from setuptools import setup
 
 setup(
     name="tap-tiktok-ads",
-    version="1.1.1",
+    version="1.1.2",
     description="Singer.io tap for extracting data",
     author="Stitch",
     url="http://singer.io",
@@ -11,7 +11,7 @@ setup(
     py_modules=["tap_tiktok_ads"],
     install_requires=[
         "singer-python==6.0.1",
-        "requests==2.32.4",
+        "requests==2.33.0",
     ],
     extras_require={
         "test": [
