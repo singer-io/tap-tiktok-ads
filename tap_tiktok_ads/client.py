@@ -22,6 +22,11 @@ class TikTokAdsClientError(Exception):
         self.message = message
         self.response = response
 
+
+class TikTokForbiddenError(TikTokAdsClientError):
+    """Raised when the API returns a 403 Forbidden or error code 40002 (no permission)."""
+    pass
+
 def should_retry(e):
     """ Return true if exception is required to retry otherwise return false """
     response = e.response
@@ -40,12 +45,14 @@ class TikTokClient:
                  advertiser_id,
                  sandbox=False,
                  user_agent=None,
-                 request_timeout=REQUEST_TIMEOUT):
+                 request_timeout=REQUEST_TIMEOUT,
+                 config=None):
         self.__access_token = access_token
         self.__user_agent = user_agent
         self.__session = requests.Session()
         self.__base_url = None
         self.__verified = False
+        self.config = config or {}
         self.sandbox  = True if str(sandbox).lower() == "true" else False
 
         # base URL prefix
@@ -166,6 +173,10 @@ class TikTokClient:
             response = self.__session.request(method, url + query, timeout=self.__request_timeout, **kwargs)
             timer.tags[metrics.Tag.http_status_code] = response.status_code
 
+        if response.status_code == 403:
+            raise TikTokForbiddenError(
+                f'HTTP-error-code: 403, Error: Forbidden - credentials lack access.', response
+            )
         if response.status_code != 200:
             raise Exception(f'Error code: {response.status_code}')
 
@@ -178,6 +189,8 @@ class TikTokClient:
         if "Service error:" in message:
             message = "Error encountered accessing the accounts with the given account ids. Kindly check your account ids."
 
+        if error_code == 40002: # No permission / Authorization denied
+            raise TikTokForbiddenError(message, response)
         if error_code != 0: # `0` error code indicates successful request
             raise TikTokAdsClientError(message, response) # raise the exception with the message retrieved
         return json_response

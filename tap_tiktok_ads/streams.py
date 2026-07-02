@@ -5,7 +5,7 @@ from dateutil.parser import parse
 from singer.utils import now
 from singer import utils, Transformer, UNIX_MILLISECONDS_INTEGER_DATETIME_PARSING, metadata
 
-from tap_tiktok_ads.client import TikTokClient
+from tap_tiktok_ads.client import TikTokClient, TikTokForbiddenError, TikTokAdsClientError
 
 LOGGER = singer.get_logger()
 
@@ -251,6 +251,7 @@ class Stream():
     replication_method = 'INCREMENTAL'
     path = None
     req_advertiser_id = True
+    parent = None
     params = {}
 
     def __init__(self,
@@ -260,7 +261,33 @@ class Stream():
         self.state = state
         self.config = config
         self.client = client
-        self.page_size = int(config.get('page_size', 1000))
+        self.page_size = int(self.config.get('page_size', 1000))
+
+    def check_access(self) -> bool:
+        """
+        Verify that the API credentials have read access to this stream.
+        Returns True if accessible, False if a TikTokForbiddenError is raised.
+        Child streams always return True (access is governed by the parent check).
+        """
+        if self.parent:
+            return True
+        try:
+            params = dict(self.params)
+            accounts = self.client.config.get('accounts', [])
+            if accounts and self.req_advertiser_id:
+                params['advertiser_id'] = accounts[0]
+            params['page_size'] = 1
+            self.client.get(path=self.path, headers={}, params=params)
+            return True
+        except TikTokForbiddenError as exc:
+            LOGGER.warning(
+                "Unauthorized Stream: %s, excluding from catalog. HTTP-Error-Message: '%s'",
+                self.__class__.__name__,
+                str(exc)
+            )
+            return False
+        except TikTokAdsClientError:
+            raise
 
     def write_bookmark(self, stream, value):
         """
@@ -389,6 +416,22 @@ class Advertisers(Stream):
     replication_keys  = ['create_time']
     path = "advertiser/info/"
 
+    def check_access(self) -> bool:
+        try:
+            accounts = self.client.config.get('accounts', [])
+            params = {'advertiser_ids': json.dumps(accounts[:1])}
+            self.client.get(path=self.path, headers={}, params=params)
+            return True
+        except TikTokForbiddenError as exc:
+            LOGGER.warning(
+                "Unauthorized Stream: %s, excluding from catalog. HTTP-Error-Message: '%s'",
+                self.__class__.__name__,
+                str(exc)
+            )
+            return False
+        except TikTokAdsClientError:
+            raise
+
     def sync_advertisers(self, stream):
         """Returns records of advertisers for the processing"""
         headers = {
@@ -428,6 +471,32 @@ class Ads(Stream):
     params = {}
 
 class Insights(Stream):
+
+    def check_access(self) -> bool:
+        """
+        Override check_access to include the required date parameters for insights endpoints.
+        """
+        try:
+            from datetime import timedelta
+            params = dict(self.params)
+            accounts = self.client.config.get('accounts', [])
+            if accounts:
+                params['advertiser_id'] = accounts[0]
+            params['page_size'] = 1
+            today = now().date()
+            params['start_date'] = (today - timedelta(days=7)).isoformat()
+            params['end_date'] = today.isoformat()
+            self.client.get(path=self.path, headers={}, params=params)
+            return True
+        except TikTokForbiddenError as exc:
+            LOGGER.warning(
+                "Unauthorized Stream: %s, excluding from catalog. HTTP-Error-Message: '%s'",
+                self.__class__.__name__,
+                str(exc)
+            )
+            return False
+        except TikTokAdsClientError:
+            raise
 
     def do_sync(self, stream):
         """ Sync data from tap source for insight related stream"""

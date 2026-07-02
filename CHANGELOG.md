@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.2.0
+  * Streams the credentials cannot access (403 / error code 40002) are now excluded from the catalog during discovery instead of raising an error [#SAC-30941](https://github.com/singer-io/tap-tiktok-ads)
+  * Added `TikTokForbiddenError` exception class for HTTP 403 and TikTok permission-denied (error code 40002) responses
+  * Added `check_access()` method to `Stream` base class, with overrides in `Advertisers` and `Insights` subclasses
+  * Added unit tests for discovery access checks (`tests/unittests/test_discovery.py`)
+  * Bump version for request to 2.34.2 and singer-python to 6.8.0
+
 # 1.1.2
   * Bump requests to 2.33.0 for security updates [#30](https://github.com/singer-io/tap-tiktok-ads/pull/30)
 

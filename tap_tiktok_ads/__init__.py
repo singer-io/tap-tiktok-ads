@@ -32,18 +32,19 @@ def main():
     with TikTokClient(access_token=args.config['access_token'],
                       advertiser_id=args.config['accounts'],
                       sandbox=args.config.get('sandbox', "false"),
-                      request_timeout=args.config.get('request_timeout')) as tik_tok_client:
+                      request_timeout=args.config.get('request_timeout'),
+                      config=args.config) as tik_tok_client:
 
         # If discover flag was passed, run discovery mode and dump output to stdout
         if args.discover:
-            catalog = discover()
+            catalog = discover(tik_tok_client)
             catalog.dump()
         # Otherwise run in sync mode
         else:
             if args.catalog:
                 catalog = args.catalog
             else:
-                catalog = discover()
+                catalog = discover(tik_tok_client)
             sync(tik_tok_client, args.config, args.state, catalog)
 
 

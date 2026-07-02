@@ -6,13 +6,16 @@ from tap_tiktok_ads import main
 # mock TikTokClient class
 class MockTikTokClient:
     def __init__(self, *args, **kwargs):
-        pass
+        self.config = kwargs.get("config", {})
 
     def __enter__(self):
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         pass
+
+    def get(self, url=None, path=None, **kwargs):
+        return {"code": 0, "message": "OK", "data": {"list": []}}
 
 # mock singer.parse_args
 class MockParseArgs:
