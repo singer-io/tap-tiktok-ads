@@ -6,20 +6,6 @@ from tap_tiktok_ads.discover import _apply_access_checks, _prune_inaccessible_ch
 from tap_tiktok_ads.streams import STREAMS
 
 
-class MockResponse:
-    def __init__(self, status_code, json_data, headers=None):
-        self.status_code = status_code
-        self._json = json_data
-        self.headers = headers
-
-    def json(self):
-        return self._json
-
-
-def get_response(status_code, json_data=None, headers=None):
-    return MockResponse(status_code, json_data or {}, headers)
-
-
 class MockClient:
     """A minimal TikTokClient stand-in for unit tests."""
 

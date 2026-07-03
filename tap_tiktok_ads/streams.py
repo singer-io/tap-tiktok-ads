@@ -273,7 +273,7 @@ class Stream():
             return True
         try:
             params = dict(self.params)
-            accounts = self.client.config.get('accounts', [])
+            accounts = self.config.get('accounts', [])
             if accounts and self.req_advertiser_id:
                 params['advertiser_id'] = accounts[0]
             params['page_size'] = 1
@@ -353,7 +353,7 @@ class Stream():
                     else:
                         if bookmark_data is None:
                             bookmark_data = {}
-                        bookmark_data[advertiser_id] = transformed_record[bookmark_column]
+                        bookmark_data = {**bookmark_data, advertiser_id: transformed_record[bookmark_column]}
                         self.write_bookmark(stream.tap_stream_id, bookmark_data)
 
     def sync_pages(self, stream):
@@ -418,7 +418,7 @@ class Advertisers(Stream):
 
     def check_access(self) -> bool:
         try:
-            accounts = self.client.config.get('accounts', [])
+            accounts = self.config.get('accounts', [])
             params = {'advertiser_ids': json.dumps(accounts[:1])}
             self.client.get(path=self.path, headers={}, params=params)
             return True
@@ -479,7 +479,7 @@ class Insights(Stream):
         try:
             from datetime import timedelta
             params = dict(self.params)
-            accounts = self.client.config.get('accounts', [])
+            accounts = self.config.get('accounts', [])
             if accounts:
                 params['advertiser_id'] = accounts[0]
             params['page_size'] = 1
