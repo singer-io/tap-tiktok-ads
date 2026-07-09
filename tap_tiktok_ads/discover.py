@@ -51,7 +51,7 @@ def _apply_access_checks(client, schemas: dict, field_metadata: dict) -> None:
         )
     elif inaccessible_streams:
         LOGGER.warning(
-            "No 'read' access to stream(s): %s. Excluded from catalog.",
+            "Unauthorized streams excluded from catalog: %s",
             ", ".join(inaccessible_streams),
         )
 
