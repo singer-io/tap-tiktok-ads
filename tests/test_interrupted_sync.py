@@ -41,7 +41,14 @@ class TiktokAdsInterruptedSyncTest(TiktokBase):
         self.start_date = self.get_properties()["start_date"]
 
         conn_id = connections.ensure_connection(self)
-        expected_streams = self.expected_streams() - {"advertisers", "ad_insights", "ad_insights_by_age_and_gender", "ad_insights_by_country", "ad_insights_by_platform"}
+        expected_streams = self.expected_streams() - {
+            "advertisers",
+            "ad_insights",
+            "ad_insights_by_age_and_gender",
+            "ad_insights_by_country",
+            "ad_insights_by_platform",
+            "campaign_insights_by_province",
+        }
 
         # Run check mode
         found_catalogs = self.run_and_verify_check_mode(conn_id)
