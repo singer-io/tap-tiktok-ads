@@ -174,6 +174,12 @@ class TikTokClient:
             timer.tags[metrics.Tag.http_status_code] = response.status_code
 
         if response.status_code == 403:
+            try:
+                request_id = response.json().get('request_id')
+                if request_id:
+                    LOGGER.error('TikTok API request_id: %s', request_id)
+            except Exception:
+                pass
             raise TikTokForbiddenError(
                 f'HTTP-error-code: 403, Error: Forbidden - credentials lack access.', response
             )
