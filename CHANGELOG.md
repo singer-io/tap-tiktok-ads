@@ -1,5 +1,9 @@
 # Changelog
 
+
+## 1.2.1
+  * Log TikTok API request_id on error responses [#38](https://github.com/singer-io/tap-tiktok-ads/pull/38)
+
 ## 1.2.0
   * Skip inaccessible streams (HTTP 403 / TikTok error 40002) during discovery instead of failing. [#37](https://github.com/singer-io/tap-tiktok-ads/pull/37)
   * Update requests to 2.32.4 and singer-python to 6.8.0.

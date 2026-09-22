@@ -174,10 +174,22 @@ class TikTokClient:
             timer.tags[metrics.Tag.http_status_code] = response.status_code
 
         if response.status_code == 403:
+            try:
+                request_id = response.json().get('request_id')
+                if request_id:
+                    LOGGER.error('TikTok API request_id: %s', request_id)
+            except Exception:
+                pass
             raise TikTokForbiddenError(
                 f'HTTP-error-code: 403, Error: Forbidden - credentials lack access.', response
             )
         if response.status_code != 200:
+            try:
+                request_id = response.json().get('request_id')
+                if request_id:
+                    LOGGER.error('TikTok API request_id: %s', request_id)
+            except Exception:
+                pass
             raise Exception(f'Error code: {response.status_code}')
 
         try:
@@ -186,12 +198,17 @@ class TikTokClient:
             json_response = {}
         error_code = json_response.get("code")
         message = json_response.get('message', 'Unknown Error occurred.')
+        request_id = json_response.get('request_id')
         if "Service error:" in message:
             message = "Error encountered accessing the accounts with the given account ids. Kindly check your account ids."
 
         if error_code == 40002: # No permission / Authorization denied
+            if request_id:
+                LOGGER.error('TikTok API request_id: %s', request_id)
             raise TikTokForbiddenError(message, response)
         if error_code != 0: # `0` error code indicates successful request
+            if request_id:
+                LOGGER.error('TikTok API request_id: %s', request_id)
             raise TikTokAdsClientError(message, response) # raise the exception with the message retrieved
         return json_response
 
